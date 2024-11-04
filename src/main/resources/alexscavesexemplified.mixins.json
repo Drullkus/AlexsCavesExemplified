@@ -1,0 +1,14 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "package": "org.crimsoncrips.alexscavesexemplified.mixins",
+  "compatibilityLevel": "JAVA_8",
+  "refmap": "alexscavesexemplified.refmap.json",
+  "mixins": [
+  ],
+  "client": [
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
+}
