@@ -7,6 +7,7 @@
   "mixins": [
   ],
   "client": [
+    "mobs.ACESpelunkeryTable"
   ],
   "injectors": {
     "defaultRequire": 1
