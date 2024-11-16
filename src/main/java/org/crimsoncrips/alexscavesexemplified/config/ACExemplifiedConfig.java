@@ -6,6 +6,8 @@ public class ACExemplifiedConfig {
 
     public static boolean REDOABLE_SPELUNKY_ENABLED;
     public static boolean GLUTTONY_ENABLED;
+    public static boolean REGULAR_REFERENCE_ENABLED;
+
     public static int SPELUNKY_ATTEMPTS_AMOUNT;
 
 
@@ -14,6 +16,7 @@ public class ACExemplifiedConfig {
             SPELUNKY_ATTEMPTS_AMOUNT = ACEConfigHolder.EXEMPLIFIED.SPELUNKY_ATTEMPTS_AMOUNT.get();
             REDOABLE_SPELUNKY_ENABLED = ACEConfigHolder.EXEMPLIFIED.REDOABLE_SPELUNKY_ENABLED.get();
             GLUTTONY_ENABLED = ACEConfigHolder.EXEMPLIFIED.GLUTTONY_ENABLED.get();
+            REGULAR_REFERENCE_ENABLED = ACEConfigHolder.EXEMPLIFIED.REGULAR_REFERENCE_ENABLED.get();
 
 
 

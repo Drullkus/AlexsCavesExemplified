@@ -1,4 +1,4 @@
-package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
+package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 
 import com.github.alexmodguy.alexscaves.AlexsCaves;
 import com.github.alexmodguy.alexscaves.client.gui.SpelunkeryTableScreen;
@@ -6,7 +6,6 @@ import com.github.alexmodguy.alexscaves.server.inventory.SpelunkeryTableMenu;
 import com.github.alexmodguy.alexscaves.server.message.SpelunkeryTableChangeMessage;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.player.Inventory;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;

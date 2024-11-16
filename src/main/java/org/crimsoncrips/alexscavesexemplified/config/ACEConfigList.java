@@ -7,6 +7,7 @@ public class ACEConfigList {
 
 
     public final ForgeConfigSpec.BooleanValue GLUTTONY_ENABLED;
+    public final ForgeConfigSpec.BooleanValue REGULAR_REFERENCE_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue REDOABLE_SPELUNKY_ENABLED;
 
@@ -21,6 +22,8 @@ public class ACEConfigList {
          this.SPELUNKY_ATTEMPTS_AMOUNT = buildInt(builder, "SPELUNKY_ATTEMPTS_AMOUNT", " ", 5, 1, Integer.MAX_VALUE, "Amount of tries you get for the spelunky table per tablet");
         builder.push("Candy Cavity");
         this.GLUTTONY_ENABLED = buildBoolean(builder, "GLUTTONY_ENABLED", " ", true, "Whether blocks inside candy cavity, can be eaten by right clicking");
+        builder.push("Gumbeeper");
+        this.REGULAR_REFERENCE_ENABLED = buildBoolean(builder, "REGULAR_REFERENCE_ENABLED", " ", true, "Whether Gumbeepers will attack, Blue jays and Raccoons in Alexs Mobs");
 
     }
 

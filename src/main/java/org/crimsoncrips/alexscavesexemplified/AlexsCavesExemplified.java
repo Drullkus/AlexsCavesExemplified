@@ -1,6 +1,9 @@
 package org.crimsoncrips.alexscavesexemplified;
 
 
+import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.item.GumballEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.GumbeeperEntity;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
