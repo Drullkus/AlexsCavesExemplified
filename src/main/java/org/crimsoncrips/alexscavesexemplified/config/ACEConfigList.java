@@ -11,6 +11,11 @@ public class ACEConfigList {
 
     public final ForgeConfigSpec.BooleanValue REDOABLE_SPELUNKY_ENABLED;
 
+    public final ForgeConfigSpec.BooleanValue GINGERBREAD_AMPUTATION_ENABLED;
+
+    public final ForgeConfigSpec.BooleanValue GINGERBREAD_HIVEMIND_ENABLED;
+
+
     public final ForgeConfigSpec.IntValue SPELUNKY_ATTEMPTS_AMOUNT;
     
 
@@ -22,6 +27,12 @@ public class ACEConfigList {
          this.SPELUNKY_ATTEMPTS_AMOUNT = buildInt(builder, "SPELUNKY_ATTEMPTS_AMOUNT", " ", 5, 1, Integer.MAX_VALUE, "Amount of tries you get for the spelunky table per tablet");
         builder.push("Candy Cavity");
         this.GLUTTONY_ENABLED = buildBoolean(builder, "GLUTTONY_ENABLED", " ", true, "Whether blocks inside candy cavity, can be eaten by right clicking");
+
+        builder.push("Gingerbread Man");
+        this.GINGERBREAD_AMPUTATION_ENABLED = buildBoolean(builder, "GINGERBREAD_AMPUTATION_ENABLED", " ", true, "Whether Gingerbread Men can be amputated with an axe");
+        this.GINGERBREAD_HIVEMIND_ENABLED = buildBoolean(builder, "GINGERBREAD_HIVEMIND_ENABLED", " ", true, "Whether Gingerbread Men will attack you if you attack one of them.");
+
+        builder.pop();
         builder.push("Gumbeeper");
         this.REGULAR_REFERENCE_ENABLED = buildBoolean(builder, "REGULAR_REFERENCE_ENABLED", " ", true, "Whether Gumbeepers will attack, Blue jays and Raccoons in Alexs Mobs");
 

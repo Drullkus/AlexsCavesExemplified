@@ -1,5 +1,6 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
+import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
@@ -16,9 +17,13 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.AxeItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -41,7 +46,7 @@ public class ACExemplifiedEvents {
         LivingEntity livingEntity = event.getEntity();
 
 
-        if (ACExemplifiedConfig.GLUTTONY_ENABLED){
+        if (ACExemplifiedConfig.GLUTTONY_ENABLED) {
             if (blockState.is(ACExexmplifiedTagRegistry.CONSUMABLE_BLOCKS)) {
                 ParticleOptions particle = new BlockParticleOption(ParticleTypes.BLOCK, blockState);
 
@@ -78,9 +83,24 @@ public class ACExemplifiedEvents {
             }
 
 
-
         }
 
     }
 
+    @SubscribeEvent
+    public void onInteractWithEntity(PlayerInteractEvent.EntityInteract event) {
+        Player player = event.getEntity();
+        ItemStack itemStack = event.getItemStack();
+        RandomSource random = player.getRandom();
+        if (event.getTarget() instanceof GingerbreadManEntity gingerbreadMan) {
+            if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.GINGERBREAD_AMPUTATION_ENABLED) {
+                if (gingerbreadMan.hasBothLegs()) {
+                    gingerbreadMan.setLostLimb(gingerbreadMan.getRandom().nextBoolean(), false, true);
+                } else if (gingerbreadMan.getRandom().nextInt(2) == 0) {
+                    gingerbreadMan.setLostLimb(gingerbreadMan.getRandom().nextBoolean(), true, true);
+                }
+            }
+        }
+
+    }
 }

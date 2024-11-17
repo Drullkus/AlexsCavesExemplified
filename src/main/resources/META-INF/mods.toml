@@ -61,3 +61,19 @@ mandatory = true
 versionRange = "${minecraft_version_range}"
 ordering = "NONE"
 side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "alexscaves"
+mandatory = true
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange = "[2.0.2]"
+ordering = "NONE"
+side = "BOTH"
+
+[[dependencies."${mod_id}"]]
+modId = "alexsmobs"
+mandatory = false
+# This version range declares a minimum of the current minecraft version up to but not including the next major version
+versionRange = "[1.22.9]"
+ordering = "NONE"
+side = "BOTH"
