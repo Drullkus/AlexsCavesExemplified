@@ -1,7 +1,13 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
+import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
+import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
+import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
+import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
+import com.github.alexthe666.alexsmobs.entity.EntityCockroach;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -20,17 +26,27 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.Items;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
+import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
+
+import java.util.Iterator;
+
+import static com.github.alexthe666.alexsmobs.block.BlockLeafcutterAntChamber.FUNGUS;
 
 
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -102,5 +118,39 @@ public class ACExemplifiedEvents {
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) {
+        LivingEntity livingEntity = livingTickEvent.getEntity();
+
+
+
+    }
+
+    @SubscribeEvent
+    public void blockBreak(BlockEvent.BreakEvent breakEvent){
+        BlockState blockState = breakEvent.getState();
+        Level level = (Level) breakEvent.getLevel();
+        if (ACExemplifiedConfig.BURST_OUT_ENABLED) {
+            if (blockState.is(ACExexmplifiedTagRegistry.BURST_BLOCKS) && breakEvent.getLevel().getRandom().nextDouble() < 0.02) {
+                if (level.getBiome(breakEvent.getPos()).is(ACBiomeRegistry.FORLORN_HOLLOWS)){
+                    if (level.getRandom().nextBoolean()) {
+                        ACEntityRegistry.UNDERZEALOT.get().spawn((ServerLevel) level, BlockPos.containing(breakEvent.getPos().getX(), breakEvent.getPos().getY(), breakEvent.getPos().getZ()), MobSpawnType.MOB_SUMMONED);
+                    } else {
+                        ACEntityRegistry.CORRODENT.get().spawn((ServerLevel) level, BlockPos.containing(breakEvent.getPos().getX(), breakEvent.getPos().getY(), breakEvent.getPos().getZ()), MobSpawnType.MOB_SUMMONED);
+                    }
+                }
+
+            }
+        }
+
+    }
+
+    public boolean curiosLight(Player player){
+        if (ModList.get().isLoaded("curiouslanterns")) {
+            ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
+            return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
+        } else return false;
     }
 }

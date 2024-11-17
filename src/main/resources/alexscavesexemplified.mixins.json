@@ -6,8 +6,12 @@
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
     "misc.ACESpelunkeryTable",
+    "mobs.ACECorrodent",
     "mobs.ACEGingerbreadMan",
-    "mobs.ACEGumbeeper"
+    "mobs.ACEGloomoth",
+    "mobs.ACEGumbeeper",
+    "mobs.ACEUnderzealot",
+    "mobs.ACEVesper"
   ],
   "injectors": {
     "defaultRequire": 1

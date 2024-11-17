@@ -11,8 +11,10 @@ import net.minecraft.world.level.block.Block;
 
 
 public class ACExexmplifiedTagRegistry {
+    public static final TagKey<Block> BURST_BLOCKS = registerBlockTag("burst_blocks");
 
     public static final TagKey<Block> CONSUMABLE_BLOCKS = registerBlockTag("consumable_blocks");
+    public static final TagKey<Item> LIGHT = registerItemTag("light");
 
     public ACExexmplifiedTagRegistry() {
     }
