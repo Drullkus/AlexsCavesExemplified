@@ -39,7 +39,7 @@ public abstract class ACEUnderzealot extends Monster {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         UnderzealotEntity underzealot = (UnderzealotEntity)(Object)this;
-        if (ACExemplifiedConfig.FORLORN_LIGHT_FEAR_ENABLED){
+        if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED){
 
             underzealot.targetSelector.addGoal(2, new ACEMobTargetClosePlayers(underzealot, 40, 12.0F,livingEntity -> {
                 return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && !(livingEntity instanceof Player player && curiosLight(player));
@@ -58,7 +58,7 @@ public abstract class ACEUnderzealot extends Monster {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
-        if (!ACExemplifiedConfig.FORLORN_LIGHT_FEAR_ENABLED)
+        if (!ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED)
             return;
         LivingEntity target = this.getTarget();
         if (target == null)
@@ -79,7 +79,7 @@ public abstract class ACEUnderzealot extends Monster {
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 12))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
-        return !ACExemplifiedConfig.FORLORN_LIGHT_FEAR_ENABLED;
+        return !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
     }
 
 }

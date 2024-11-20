@@ -1,13 +1,18 @@
 package org.crimsoncrips.alexscavesexemplified;
 
 
+import com.crimsoncrips.alexsmobsinteraction.enchantment.AMIEnchantmentRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.GumballEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GumbeeperEntity;
+import com.github.alexthe666.alexsmobs.ClientProxy;
+import com.github.alexthe666.alexsmobs.CommonProxy;
+import com.github.alexthe666.alexsmobs.client.event.ClientEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
@@ -25,10 +30,12 @@ public class AlexsCavesExemplified {
 
     public static final String MODID = "alexscavesexemplified";
 
+
     public AlexsCavesExemplified() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onModConfigEvent);
         MinecraftForge.EVENT_BUS.register(new ACExemplifiedEvents());
+        MinecraftForge.EVENT_BUS.register(new ClientEvents());
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::setup);
 

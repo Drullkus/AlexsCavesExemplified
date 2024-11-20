@@ -12,6 +12,7 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -28,6 +29,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
+import java.util.Objects;
+
 
 @Mixin(VesperEntity.class)
 public abstract class ACEVesper extends Monster {
@@ -40,9 +43,15 @@ public abstract class ACEVesper extends Monster {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         VesperEntity vesper = (VesperEntity)(Object)this;
-        if (ACExemplifiedConfig.FORLORN_LIGHT_FEAR_ENABLED){
+        if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED){
             this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, Player.class,livingEntity -> {
                 return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && !(livingEntity instanceof Player player && curiosLight(player));
+            }));
+
+            this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, UnderzealotEntity.class, livingEntity -> {
+                if (livingEntity instanceof UnderzealotEntity underzealot){
+                    return underzealot.getFirstPassenger() instanceof VesperEntity;
+                } else return false;
             }));
 
             vesper.goalSelector.addGoal(1, new AvoidEntityGoal<>(vesper, LivingEntity.class, 4.0F, 1.5, 2, (livingEntity) -> {
@@ -50,11 +59,15 @@ public abstract class ACEVesper extends Monster {
             }));
 
         }
+
+        if (ACExemplifiedConfig.VESPER_CANNIBALIZE_ENABLED){
+            this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, Bat.class, Objects::nonNull));
+        }
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
-        if (!ACExemplifiedConfig.FORLORN_LIGHT_FEAR_ENABLED)
+        if (!ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED)
             return;
         LivingEntity target = this.getTarget();
         if (target == null)
@@ -75,7 +88,7 @@ public abstract class ACEVesper extends Monster {
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 7))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
-        return !ACExemplifiedConfig.FORLORN_LIGHT_FEAR_ENABLED;
+        return !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
     }
 
 }

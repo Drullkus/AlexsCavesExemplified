@@ -8,13 +8,14 @@ import net.minecraft.tags.TagKey;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.material.Fluid;
 
 
 public class ACExexmplifiedTagRegistry {
     public static final TagKey<Block> BURST_BLOCKS = registerBlockTag("burst_blocks");
-
     public static final TagKey<Block> CONSUMABLE_BLOCKS = registerBlockTag("consumable_blocks");
     public static final TagKey<Item> LIGHT = registerItemTag("light");
+
 
     public ACExexmplifiedTagRegistry() {
     }

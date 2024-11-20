@@ -5,15 +5,24 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
+    "misc.ACEDreadbowItem",
+    "misc.ACEItemEntity",
+    "misc.ACEResistorShield",
     "misc.ACESpelunkeryTable",
+    "mobs.ACECaniac",
     "mobs.ACECorrodent",
+    "mobs.ACEDarkArrow",
+    "mobs.ACEFrostmintSpear",
     "mobs.ACEGingerbreadMan",
     "mobs.ACEGloomoth",
     "mobs.ACEGumbeeper",
     "mobs.ACEUnderzealot",
-    "mobs.ACEVesper"
+    "mobs.ACEVesper",
+    "mobs.ACEWatcher"
   ],
   "injectors": {
     "defaultRequire": 1
-  }
+  },
+  "client": [
+  ]
 }

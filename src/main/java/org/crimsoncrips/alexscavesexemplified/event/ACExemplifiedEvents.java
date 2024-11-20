@@ -1,9 +1,14 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
+import com.github.alexmodguy.alexscaves.AlexsCaves;
+import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.item.DarkArrowEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
+import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
+import com.github.alexmodguy.alexscaves.server.message.UpdateItemTagMessage;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
 import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
@@ -12,7 +17,9 @@ import net.minecraft.core.BlockPos;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.BlockTags;
@@ -20,6 +27,7 @@ import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
@@ -32,6 +40,8 @@ import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -41,11 +51,15 @@ import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.mixins.misc.ACEDreadbowItem;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.Iterator;
+import java.util.Objects;
 
+import static com.github.alexmodguy.alexscaves.server.item.DarknessArmorItem.canChargeUp;
+import static com.github.alexmodguy.alexscaves.server.item.DarknessArmorItem.hasMeter;
 import static com.github.alexthe666.alexsmobs.block.BlockLeafcutterAntChamber.FUNGUS;
 
 
@@ -66,7 +80,7 @@ public class ACExemplifiedEvents {
             if (blockState.is(ACExexmplifiedTagRegistry.CONSUMABLE_BLOCKS)) {
                 ParticleOptions particle = new BlockParticleOption(ParticleTypes.BLOCK, blockState);
 
-                if (livingEntity instanceof Player player) {
+                if (livingEntity instanceof Player player && player.isCrouching()) {
                     MobEffectInstance hunger = player.getEffect(MobEffects.HUNGER);
                     if (hunger != null) {
                         if (!hunger.isInfiniteDuration()) {
@@ -120,13 +134,7 @@ public class ACExemplifiedEvents {
 
     }
 
-    @SubscribeEvent
-    public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) {
-        LivingEntity livingEntity = livingTickEvent.getEntity();
 
-
-
-    }
 
     @SubscribeEvent
     public void blockBreak(BlockEvent.BreakEvent breakEvent){
@@ -143,14 +151,45 @@ public class ACExemplifiedEvents {
                 }
 
             }
+            if (blockState.is(ACBlockRegistry.PEERING_COPROLITH.get()) && breakEvent.getLevel().getRandom().nextDouble() < 0.4){
+                if (level.getBiome(breakEvent.getPos()).is(ACBiomeRegistry.FORLORN_HOLLOWS)){
+                    ACEntityRegistry.CORRODENT.get().spawn((ServerLevel) level, BlockPos.containing(breakEvent.getPos().getX(), breakEvent.getPos().getY(), breakEvent.getPos().getZ()), MobSpawnType.MOB_SUMMONED);
+                }
+            }
         }
 
     }
 
-    public boolean curiosLight(Player player){
-        if (ModList.get().isLoaded("curiouslanterns")) {
-            ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
-            return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
-        } else return false;
+    @SubscribeEvent
+    public void killEvent(LivingDeathEvent killEvent){
+        LivingEntity killer;
+        LivingEntity killed = killEvent.getEntity();
+        Level level;
+        if (killEvent.getEntity().getLastAttacker() != null && killed != null) {
+            killer = killEvent.getEntity().getLastAttacker();
+            level = killer.level();
+
+            if (killer instanceof Player player && hasMeter(player)) {
+                ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
+                if (stack.is(ACItemRegistry.CLOAK_OF_DARKNESS.get())) {
+                    if (!level.isClientSide) {
+                        CompoundTag tag = stack.getOrCreateTag();
+                        int charge = tag.getInt("CloakCharge");
+                        boolean flag = false;
+                        if (canChargeUp(stack)) {
+                            System.out.println(charge);
+                            tag.putInt("CloakCharge", charge + 100);
+                            flag = true;
+                        }
+                        if (flag) {
+                            AlexsCaves.sendNonLocal(new UpdateItemTagMessage(player.getId(), stack), (ServerPlayer) player);
+                        }
+                    }
+                }
+            }
+        }
+
     }
+
 }
+
