@@ -160,36 +160,5 @@ public class ACExemplifiedEvents {
 
     }
 
-    @SubscribeEvent
-    public void killEvent(LivingDeathEvent killEvent){
-        LivingEntity killer;
-        LivingEntity killed = killEvent.getEntity();
-        Level level;
-        if (killEvent.getEntity().getLastAttacker() != null && killed != null) {
-            killer = killEvent.getEntity().getLastAttacker();
-            level = killer.level();
-
-            if (killer instanceof Player player && hasMeter(player)) {
-                ItemStack stack = player.getItemBySlot(EquipmentSlot.CHEST);
-                if (stack.is(ACItemRegistry.CLOAK_OF_DARKNESS.get())) {
-                    if (!level.isClientSide) {
-                        CompoundTag tag = stack.getOrCreateTag();
-                        int charge = tag.getInt("CloakCharge");
-                        boolean flag = false;
-                        if (canChargeUp(stack)) {
-                            System.out.println(charge);
-                            tag.putInt("CloakCharge", charge + 100);
-                            flag = true;
-                        }
-                        if (flag) {
-                            AlexsCaves.sendNonLocal(new UpdateItemTagMessage(player.getId(), stack), (ServerPlayer) player);
-                        }
-                    }
-                }
-            }
-        }
-
-    }
-
 }
 
