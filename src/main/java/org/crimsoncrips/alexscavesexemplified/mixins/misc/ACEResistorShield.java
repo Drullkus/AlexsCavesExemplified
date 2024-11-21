@@ -37,14 +37,14 @@ import static com.github.alexmodguy.alexscaves.server.item.ResistorShieldItem.is
 
 
 @Mixin(ResistorShieldItem.class)
-public abstract class ACEResistorShield extends ShieldItem {
+public class ACEResistorShield extends ShieldItem {
 
 
     public ACEResistorShield(Properties pProperties) {
         super(pProperties);
     }
 
-    @Inject(method = "onUseTick", at = @At("TAIL"),remap = false)
+    @Inject(method = "onUseTick", at = @At("TAIL"))
     private void getMaxLoadTime(Level level, LivingEntity living, ItemStack stack, int timeUsing, CallbackInfo ci) {
         boolean scarlet = isScarlet(stack);
         AABB bashBox = living.getBoundingBox().inflate(5, 1, 5);

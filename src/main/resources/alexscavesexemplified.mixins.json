@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.crimsoncrips.alexscavesexemplified.mixins",
-  "compatibilityLevel": "JAVA_8",
+  "compatibilityLevel": "JAVA_17",
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
     "misc.ACEDreadbowItem",

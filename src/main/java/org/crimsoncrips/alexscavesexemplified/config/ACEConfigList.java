@@ -39,6 +39,7 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue AMPLIFIED_FROSTMINT_EXPLOSION_ENABLED;
     public final ForgeConfigSpec.BooleanValue FROSTMINT_SOLIDIFIED_ENABLED;
     public final ForgeConfigSpec.BooleanValue CANIAC_SENSITIVITY;
+    public final ForgeConfigSpec.BooleanValue IRRADIATION_WASHOFF_ENABLED;
 
 
     public final ForgeConfigSpec.IntValue SPELUNKY_ATTEMPTS_AMOUNT;
@@ -77,19 +78,20 @@ public class ACEConfigList {
         this.FORLORN_LIGHT_EFFECT_ENABLED = buildBoolean(builder, "FORLORN_LIGHT_EFFECT_ENABLED", " ", true, "Whether most forlorn mammals are effected when a player holds light");
         this.BURST_OUT_ENABLED = buildBoolean(builder, "BURST_OUT_ENABLED", " ", true, "Whether breaking Forlorn Hollows blocks has a chance to burst out Underzealots or Corrodents");
         this.PIERCE_DARK_ARROWS_ENABLED = buildBoolean(builder, "NON_PIERCE_DARK_ARROWS_ENABLED", " ", true, "Whether darkness arrows pierce or not");
-
-
         builder.push("Corrodent");
         this.CORRODENT_CONVERSION_ENABLED = buildBoolean(builder, "CORRODENT_CONVERSION_ENABLED", " ", true, "Whether corrodents can be converted to underzealots through ritual");
         builder.pop();
-
         builder.push("Vesper");
         this.VESPER_CANNIBALIZE_ENABLED = buildBoolean(builder, "VESPER_CANNIBALIZE_ENABLED", " ", true, "Whether vespers attack bats wondering by");
         builder.pop();
         builder.push("Watcher");
         this.STABILIZER_COMPATIBILITY_ENABLED = buildBoolean(builder, "STABILIZER_COMPATIBILITY_ENABLED", " ", true, "Whether the Stabilizer enchantment from Alexs Mobs Interaction negates possession from the Watcher");
-
         builder.pop();
+        builder.pop();
+        builder.push("Toxic Caves");
+        this.IRRADIATION_WASHOFF_ENABLED = buildBoolean(builder, "IRRADIATION_WASHOFF_ENABLED", " ", true, "Whether Irradiation wears off faster when in water");
+
+
         builder.pop();
         builder.push("Goofy Mode");
         this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Whether Relentless Darkness dreadbow has no cooldown on its firing");

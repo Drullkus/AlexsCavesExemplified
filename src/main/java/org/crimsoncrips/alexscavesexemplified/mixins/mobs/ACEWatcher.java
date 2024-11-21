@@ -19,25 +19,17 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(WatcherEntity.class)
-public abstract class ACEWatcher extends Monster {
-
-
-    protected ACEWatcher(EntityType<? extends Monster> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-
-
-
+public abstract class ACEWatcher {
 
     @WrapOperation(method = "attemptPossession", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/WatcherEntity;canPossessTargetEntity(Lnet/minecraft/world/entity/Entity;)Z"),remap = false)
-    private boolean bypassExpensiveCalculationIfNecessary(WatcherEntity instance, Entity playerData, Operation<Boolean> original) {
-        if (ACExemplifiedConfig.STABILIZER_COMPATIBILITY_ENABLED && ModList.get().isLoaded("alexsmobsinteraction") && playerData instanceof Player player && player.getItemBySlot(EquipmentSlot.HEAD).getEnchantmentLevel(AMIEnchantmentRegistry.STABILIZER.get()) > 0){
-           return false;
-        } else return original.call(instance,playerData);
+    private boolean attemptPossesion(WatcherEntity instance, Entity playerData, Operation<Boolean> original) {
+        boolean returning = false;
+        if (ModList.get().isLoaded("alexsmobsinteraction")){
+            if (ACExemplifiedConfig.STABILIZER_COMPATIBILITY_ENABLED && playerData instanceof Player player && player.getItemBySlot(EquipmentSlot.HEAD).getEnchantmentLevel(AMIEnchantmentRegistry.STABILIZER.get()) > 0) {
+                returning = true;
+            }
+        }
 
-
-
-
-
+        return returning;
     }
 }

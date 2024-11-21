@@ -1,47 +1,38 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
-import com.github.alexmodguy.alexscaves.AlexsCaves;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import com.github.alexmodguy.alexscaves.server.block.GeothermalVentBlock;
+import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.item.DarkArrowEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
-import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
-import com.github.alexmodguy.alexscaves.server.message.UpdateItemTagMessage;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
-import com.github.alexthe666.alexsmobs.block.AMBlockRegistry;
-import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
-import com.github.alexthe666.alexsmobs.entity.EntityCockroach;
+import net.mehvahdjukaar.supplementaries.reg.ModParticles;
+import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Position;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.nbt.CompoundTag;
+import net.minecraft.data.DataGenerator;
+import net.minecraft.data.PackOutput;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
-import net.minecraft.sounds.SoundSource;
-import net.minecraft.tags.BlockTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.entity.EntityJoinLevelEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
+import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -51,16 +42,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.mixins.misc.ACEDreadbowItem;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
-
-import java.util.Iterator;
-import java.util.Objects;
-
-import static com.github.alexmodguy.alexscaves.server.item.DarknessArmorItem.canChargeUp;
-import static com.github.alexmodguy.alexscaves.server.item.DarknessArmorItem.hasMeter;
-import static com.github.alexthe666.alexsmobs.block.BlockLeafcutterAntChamber.FUNGUS;
+import org.crimsoncrips.alexscavesexemplified.datagen.ACELootModifierProvider;
 
 
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -158,6 +140,50 @@ public class ACExemplifiedEvents {
             }
         }
 
+    }
+
+    @SubscribeEvent
+    public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) {
+        LivingEntity livingEntity = livingTickEvent.getEntity();
+        if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED){
+            MobEffectInstance irradiated = livingEntity.getEffect(ACEffectRegistry.IRRADIATED.get());
+            if (irradiated != null && livingEntity.getRandom().nextDouble() < 0.05 && (livingEntity.isInWater() || livingEntity.getBlockStateOn().is(Blocks.WATER_CAULDRON))) {
+                livingEntity.removeEffect(irradiated.getEffect());
+                livingEntity.addEffect(new MobEffectInstance(irradiated.getEffect(), irradiated.getDuration() - 100, irradiated.getAmplifier()));
+            }
+        }
+
+        if (true){
+            if (livingEntity.getBlockStateOn().is(ACBlockRegistry.GEOTHERMAL_VENT.get())){
+                BlockState blockState = new BlockState()
+                if (livingEntity.g.getFluidState().getFluidType() == ACFluidRegistry.ACID_FLUID_TYPE.get()){
+                    System.out.println("TRUE!!!");
+                }
+            }
+        }
+    }
+
+    @SubscribeEvent
+    public void rightClickItem(PlayerInteractEvent.RightClickItem event) {
+        Player player = event.getEntity();
+        Level level = event.getLevel();
+
+        if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED && ModList.get().isLoaded("supplementaries")){
+            MobEffectInstance irradiated = player.getEffect(ACEffectRegistry.IRRADIATED.get());
+            if (irradiated != null && player.getMainHandItem().is(ModRegistry.SOAP.get()) && (player.isInWater() || player.getBlockStateOn().is(Blocks.WATER_CAULDRON))) {
+                player.removeEffect(irradiated.getEffect());
+                player.addEffect(new MobEffectInstance(irradiated.getEffect(), irradiated.getDuration() - 1000, irradiated.getAmplifier()));
+
+                for (int i = 0; i < 10; i++){
+                    double d1 = player.getRandom().nextGaussian() * 0.02;
+                    double d2 = player.getRandom().nextGaussian() * 0.02;
+                    double d3 = player.getRandom().nextGaussian() * 0.02;
+
+                    level.addParticle(ModParticles.SUDS_PARTICLE.get(), player.getX(), player.getY() + 0.5, player.getZ(), d1 * 2, d2 * 2, d3 * 2);
+                }
+                player.gameEvent(GameEvent.ITEM_INTERACT_START);
+            }
+        }
     }
 
 }

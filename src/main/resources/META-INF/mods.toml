@@ -66,7 +66,7 @@ side = "BOTH"
 modId = "alexscaves"
 mandatory = true
 # This version range declares a minimum of the current minecraft version up to but not including the next major version
-versionRange = "[2.0.2]"
+versionRange = "[2.0.2,)"
 ordering = "NONE"
 side = "BOTH"
 
@@ -117,6 +117,13 @@ side="BOTH"
 modId="alexsmobsinteraction"
 mandatory=false
 versionRange="[4.3,)"
+ordering="NONE"
+side="BOTH"
+
+[[dependencies."${mod_id}"]]
+modId="supplementaries"
+mandatory=false
+versionRange="[forge_1.20-2.13.27,)"
 ordering="NONE"
 side="BOTH"
 
