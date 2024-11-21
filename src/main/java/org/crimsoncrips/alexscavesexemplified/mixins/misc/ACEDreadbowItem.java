@@ -25,6 +25,8 @@ import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
+import java.util.Properties;
+
 import static com.github.alexmodguy.alexscaves.server.item.DreadbowItem.*;
 
 

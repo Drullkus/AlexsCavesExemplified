@@ -154,10 +154,24 @@ public class ACExemplifiedEvents {
         }
 
         if (true){
-            if (livingEntity.getBlockStateOn().is(ACBlockRegistry.GEOTHERMAL_VENT.get())){
-                BlockState blockState = new BlockState()
-                if (livingEntity.g.getFluidState().getFluidType() == ACFluidRegistry.ACID_FLUID_TYPE.get()){
-                    System.out.println("TRUE!!!");
+            BlockState blockState = livingEntity.getBlockStateOn();
+            if (blockState.is(ACBlockRegistry.GEOTHERMAL_VENT.get())){
+                if (blockState.getValue(GeothermalVentBlock.SMOKE_TYPE) == 1){
+                    if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED){
+                        MobEffectInstance irradiated = livingEntity.getEffect(ACEffectRegistry.IRRADIATED.get());
+                        if (irradiated != null && livingEntity.getRandom().nextDouble() < 0.05) {
+                            livingEntity.removeEffect(irradiated.getEffect());
+                            livingEntity.addEffect(new MobEffectInstance(irradiated.getEffect(), irradiated.getDuration() - 100, irradiated.getAmplifier()));
+                        }
+                    }
+                }
+                if (blockState.getValue(GeothermalVentBlock.SMOKE_TYPE) == 2){
+                    livingEntity.setSecondsOnFire(5);
+                }
+                if (blockState.getValue(GeothermalVentBlock.SMOKE_TYPE) == 3){
+                    if(!livingEntity.hasEffect(ACEffectRegistry.IRRADIATED.get())){
+                        livingEntity.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 400, 1));
+                    }
                 }
             }
         }
@@ -184,6 +198,14 @@ public class ACExemplifiedEvents {
                 player.gameEvent(GameEvent.ITEM_INTERACT_START);
             }
         }
+    }
+    @SubscribeEvent
+    public static void gatherData(GatherDataEvent event){
+        DataGenerator generator = event.getGenerator();
+        PackOutput packOutput = generator.getPackOutput();
+        generator.addProvider(event.includeServer(),new ACELootModifierProvider(packOutput));
+
+        generator.addProvider(event.includeServer(), new ACELootModifierProvider(packOutput));
     }
 
 }
