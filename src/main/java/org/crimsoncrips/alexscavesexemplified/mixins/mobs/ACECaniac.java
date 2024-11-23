@@ -46,12 +46,12 @@ public abstract class ACECaniac extends Monster {
 
     @Override
     public boolean isSensitiveToWater() {
-        return ACExemplifiedConfig.CANIAC_SENSITIVITY;
+        return ACExemplifiedConfig.CANIAC_SENSITIVITY_ENABLED;
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
-        if (ACExemplifiedConfig.CANIAC_SENSITIVITY){
+        if (ACExemplifiedConfig.CANIAC_SENSITIVITY_ENABLED){
             this.goalSelector.addGoal(1, new WaterAvoidingRandomStrollGoal(this, 0.5, 1.0000001E-5F));
         }
     }

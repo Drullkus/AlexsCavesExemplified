@@ -20,6 +20,9 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue CORRODENT_CONVERSION_ENABLED;
 
 
+    public final ForgeConfigSpec.BooleanValue NUCLEAR_PISTONATION_ENABLED;
+
+
 
 
 
@@ -31,6 +34,10 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue VESPER_CANNIBALIZE_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue VANILLA_ADAPTIONS_ENABLED;
+    public final ForgeConfigSpec.BooleanValue JELLYBEAN_HARVESTING_CHANGES_ENABLED;
+
+
+    public final ForgeConfigSpec.BooleanValue FLY_TRAP_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue RATATATATATA_ENABLED;
 
@@ -38,8 +45,11 @@ public class ACEConfigList {
 
     public final ForgeConfigSpec.BooleanValue AMPLIFIED_FROSTMINT_EXPLOSION_ENABLED;
     public final ForgeConfigSpec.BooleanValue FROSTMINT_SOLIDIFIED_ENABLED;
-    public final ForgeConfigSpec.BooleanValue CANIAC_SENSITIVITY;
+    public final ForgeConfigSpec.BooleanValue CANIAC_SENSITIVITY_ENABLED;
     public final ForgeConfigSpec.BooleanValue IRRADIATION_WASHOFF_ENABLED;
+    public final ForgeConfigSpec.BooleanValue GAMMAROACH_FOODING_ENABLED;
+
+    public final ForgeConfigSpec.DoubleValue CHARGED_CAVE_CREEPER_CHANCE;
 
 
     public final ForgeConfigSpec.IntValue SPELUNKY_ATTEMPTS_AMOUNT;
@@ -51,7 +61,8 @@ public class ACEConfigList {
         builder.push("General");
          this.REDOABLE_SPELUNKY_ENABLED = buildBoolean(builder, "REDOABLE_SPELUNKY_ENABLED", " ", true, "Whether it gives you back the tablet when exiting the spelunky table");
          this.SPELUNKY_ATTEMPTS_AMOUNT = buildInt(builder, "SPELUNKY_ATTEMPTS_AMOUNT", " ", 5, 1, Integer.MAX_VALUE, "Amount of tries you get for the spelunky table per tablet");
-        this.VANILLA_ADAPTIONS_ENABLED = buildBoolean(builder, "VANILLA_ADAPTIONS_ENABLED", " ", true, "Whether vanilla enchantments adapts to weapons (ex.Dreadbow, etc..)");
+         this.VANILLA_ADAPTIONS_ENABLED = buildBoolean(builder, "VANILLA_ADAPTIONS_ENABLED", " ", true, "Whether vanilla enchantments adapts to weapons (ex.Dreadbow, etc..)");
+         this.CHARGED_CAVE_CREEPER_CHANCE = buildDouble(builder, "CHARGED_CAVE_CREEPER_CHANCE", " ", 0.2,0.0,1.0, "Chances of creepers from caves to be charged (0 for disable)");
 
 
 
@@ -61,7 +72,7 @@ public class ACEConfigList {
         this.FROSTMINT_SOLIDIFIED_ENABLED = buildBoolean(builder, "FROSTMINT_SOLIDIFIED_ENABLED", " ", true, "Frostmint Spears causes liquid blocks to freeze at the cost of the spear");
 
         builder.push("Caniac");
-        this.CANIAC_SENSITIVITY = buildBoolean(builder, "CANIAC_SENSITIVITY", " ", true, "Whether Caniac dissolve in water and will actively avoid it");
+        this.CANIAC_SENSITIVITY_ENABLED = buildBoolean(builder, "CANIAC_SENSITIVITY_ENABLED", " ", true, "Whether Caniac dissolve in water and will actively avoid it");
          builder.pop();
         builder.push("Gingerbread Man");
         this.GINGERBREAD_AMPUTATION_ENABLED = buildBoolean(builder, "GINGERBREAD_AMPUTATION_ENABLED", " ", true, "Whether Gingerbread Men can be amputated with an axe");
@@ -69,6 +80,9 @@ public class ACEConfigList {
         builder.pop();
         builder.push("Gumbeeper");
         this.REGULAR_REFERENCE_ENABLED = buildBoolean(builder, "REGULAR_REFERENCE_ENABLED", " ", true, "Whether Gumbeepers will attack, Blue jays and Raccoons in Alexs Mobs");
+        builder.pop();
+        builder.push("Gummy Bear");
+        this.JELLYBEAN_HARVESTING_CHANGES_ENABLED = buildBoolean(builder, "JELLYBEAN_HARVESTING_CHANGES_ENABLED", " ", true, "Jellybean harvesting is changed where amount of jellybeans is made the longer they hibernate");
         builder.pop();
         
         
@@ -88,13 +102,21 @@ public class ACEConfigList {
         this.STABILIZER_COMPATIBILITY_ENABLED = buildBoolean(builder, "STABILIZER_COMPATIBILITY_ENABLED", " ", true, "Whether the Stabilizer enchantment from Alexs Mobs Interaction negates possession from the Watcher");
         builder.pop();
         builder.pop();
+
         builder.push("Toxic Caves");
         this.IRRADIATION_WASHOFF_ENABLED = buildBoolean(builder, "IRRADIATION_WASHOFF_ENABLED", " ", true, "Whether Irradiation wears off faster when in water");
+        builder.push("Gammaroach");
+        this.GAMMAROACH_FOODING_ENABLED = buildBoolean(builder, "GAMMAROACH_FOODING_ENABLED", " ", true, "Whether gammaroaches hunt dropped food");
+        builder.pop();
+
+        builder.push("Primordial Caves");
+        this.FLY_TRAP_ENABLED = buildBoolean(builder, "FLY_TRAP_ENABLED", " ", true, "Flytraps close shut when a fly (From Alexs Mobs) comes into contact with it");
 
 
         builder.pop();
         builder.push("Goofy Mode");
         this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Whether Relentless Darkness dreadbow has no cooldown on its firing");
+        this.NUCLEAR_PISTONATION_ENABLED = buildBoolean(builder, "NUCLEAR_PISTONATION_ENABLED", " ", false, "Whether Nuclear Bombs can be pushed by piston (therefore duplicatable)");
 
 
     }
@@ -104,6 +126,10 @@ public class ACEConfigList {
     }
 
     private static ForgeConfigSpec.IntValue buildInt(ForgeConfigSpec.Builder builder, String name, String catagory, int defaultValue, int min, int max, String comment){
+        return builder.comment(comment).translation(name).defineInRange(name, defaultValue, min, max);
+    }
+
+    private static ForgeConfigSpec.DoubleValue buildDouble(ForgeConfigSpec.Builder builder, String name, String catagory, double defaultValue, double min, double max, String comment){
         return builder.comment(comment).translation(name).defineInRange(name, defaultValue, min, max);
     }
 }

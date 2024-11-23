@@ -1,12 +1,21 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
+import com.crimsoncrips.alexsmobsinteraction.config.AMInteractionConfig;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.block.GeothermalVentBlock;
+import com.github.alexmodguy.alexscaves.server.block.PottedFlytrapBlock;
 import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.GumbeeperEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.NucleeperEntity;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
+import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
+import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
+import com.github.alexthe666.alexsmobs.entity.EntityCrimsonMosquito;
+import com.github.alexthe666.alexsmobs.entity.EntityFly;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
@@ -19,21 +28,29 @@ import net.minecraft.data.PackOutput;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
+import net.minecraft.world.damagesource.DamageSources;
+import net.minecraft.world.damagesource.DamageType;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.AxeItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.entity.living.LivingDeathEvent;
 import net.minecraftforge.event.entity.living.LivingEvent;
+import net.minecraftforge.event.entity.living.MobSpawnEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -44,9 +61,28 @@ import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.datagen.ACELootModifierProvider;
 
+import java.util.Objects;
+
 
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ACExemplifiedEvents {
+
+    @SubscribeEvent
+    public void onEntityFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event) {
+        final var entity = event.getEntity();
+
+        if (entity instanceof GumbeeperEntity gumbeeper){
+            if (entity.getRandom().nextDouble() < ACExemplifiedConfig.CHARGED_CAVE_CREEPER_CHANCE){
+                gumbeeper.setCharged(true);
+            }
+        }
+        if (entity instanceof NucleeperEntity nucleeper){
+            if (entity.getRandom().nextDouble() < ACExemplifiedConfig.CHARGED_CAVE_CREEPER_CHANCE){
+                nucleeper.setCharged(true);
+            }
+        }
+
+    }
 
 
     @SubscribeEvent
@@ -116,6 +152,24 @@ public class ACExemplifiedEvents {
 
     }
 
+    @SubscribeEvent
+    public void onEntityDeath(LivingDeathEvent deathEvent) {
+        LivingEntity died = deathEvent.getEntity();
+
+        if (died instanceof NucleeperEntity nucleeper){
+            if (deathEvent.getSource().is(DamageTypes.PLAYER_EXPLOSION) || deathEvent.getSource().is(DamageTypes.EXPLOSION) || deathEvent.getSource().is(ACDamageTypes.NUKE)){
+                NuclearExplosionEntity explosion = ACEntityRegistry.NUCLEAR_EXPLOSION.get().create(nucleeper.level());
+                explosion.copyPosition(nucleeper);
+                explosion.setSize(nucleeper.isCharged() ? 1.75F : 1F);
+                if(!nucleeper.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)){
+                    explosion.setNoGriefing(true);
+                }
+                nucleeper.level().addFreshEntity(explosion);
+            }
+        }
+
+    }
+
 
 
     @SubscribeEvent
@@ -145,6 +199,19 @@ public class ACExemplifiedEvents {
     @SubscribeEvent
     public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) {
         LivingEntity livingEntity = livingTickEvent.getEntity();
+        if (ACExemplifiedConfig.FLY_TRAP_ENABLED && livingEntity instanceof EntityFly fly && ModList.get().isLoaded("alexsmobs")){
+            BlockState blockState = fly.getFeetBlockState();
+            BlockPos blockPos = new BlockPos(fly.getBlockX(),fly.getBlockY(),fly.getBlockZ());
+            if (blockState.is(ACBlockRegistry.FLYTRAP.get())){
+                 if (blockState.getValue(PottedFlytrapBlock.OPEN)){
+                     livingEntity.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
+                     fly.captureDrops();
+                     fly.kill();
+                     livingEntity.level().setBlock(blockPos, blockState.setValue(PottedFlytrapBlock.OPEN, false), 2);
+                 }
+            }
+        }
+
         if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED){
             MobEffectInstance irradiated = livingEntity.getEffect(ACEffectRegistry.IRRADIATED.get());
             if (irradiated != null && livingEntity.getRandom().nextDouble() < 0.05 && (livingEntity.isInWater() || livingEntity.getBlockStateOn().is(Blocks.WATER_CAULDRON))) {
@@ -155,7 +222,7 @@ public class ACExemplifiedEvents {
 
         if (true){
             BlockState blockState = livingEntity.getBlockStateOn();
-            if (blockState.is(ACBlockRegistry.GEOTHERMAL_VENT.get())){
+            if (blockState.getBlock() instanceof GeothermalVentBlock){
                 if (blockState.getValue(GeothermalVentBlock.SMOKE_TYPE) == 1){
                     if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED){
                         MobEffectInstance irradiated = livingEntity.getEffect(ACEffectRegistry.IRRADIATED.get());
@@ -195,17 +262,8 @@ public class ACExemplifiedEvents {
 
                     level.addParticle(ModParticles.SUDS_PARTICLE.get(), player.getX(), player.getY() + 0.5, player.getZ(), d1 * 2, d2 * 2, d3 * 2);
                 }
-                player.gameEvent(GameEvent.ITEM_INTERACT_START);
             }
         }
-    }
-    @SubscribeEvent
-    public static void gatherData(GatherDataEvent event){
-        DataGenerator generator = event.getGenerator();
-        PackOutput packOutput = generator.getPackOutput();
-        generator.addProvider(event.includeServer(),new ACELootModifierProvider(packOutput));
-
-        generator.addProvider(event.includeServer(), new ACELootModifierProvider(packOutput));
     }
 
 }
