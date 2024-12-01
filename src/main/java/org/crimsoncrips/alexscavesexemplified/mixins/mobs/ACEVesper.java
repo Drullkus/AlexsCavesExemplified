@@ -48,16 +48,18 @@ public abstract class ACEVesper extends Monster {
                 return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && !(livingEntity instanceof Player player && curiosLight(player));
             }));
 
+            vesper.goalSelector.addGoal(1, new AvoidEntityGoal<>(vesper, LivingEntity.class, 4.0F, 1.5, 2, (livingEntity) -> {
+                return vesper.getLastAttacker() != livingEntity && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || (livingEntity instanceof Player player && curiosLight(player))) ;
+            }));
+
+        }
+
+        if (ACExemplifiedConfig.ANTI_SACRIFICE_ENABLED){
             this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, UnderzealotEntity.class, livingEntity -> {
                 if (livingEntity instanceof UnderzealotEntity underzealot){
                     return underzealot.getFirstPassenger() instanceof VesperEntity;
                 } else return false;
             }));
-
-            vesper.goalSelector.addGoal(1, new AvoidEntityGoal<>(vesper, LivingEntity.class, 4.0F, 1.5, 2, (livingEntity) -> {
-                return vesper.getLastAttacker() != livingEntity && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || (livingEntity instanceof Player player && curiosLight(player))) ;
-            }));
-
         }
 
         if (ACExemplifiedConfig.VESPER_CANNIBALIZE_ENABLED){

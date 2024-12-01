@@ -39,7 +39,7 @@ public abstract class ACEItemEntity extends Entity {
         BlockState blockState = this.getBlockStateOn();
         Level level = this.level();
 
-        if (ACExemplifiedConfig.AMPLIFIED_FROSTMINT_EXPLOSION_ENABLED){
+        if (ACExemplifiedConfig.AMPLIFIED_FROSTMINT_ENABLED){
             if (this.getItem().is(ACItemRegistry.FROSTMINT_SPEAR.get()) || this.getItem().is(ACBlockRegistry.FROSTMINT.get().asItem())) {
                 if (blockState.getFluidState().getFluidType() == ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get() && !level.isClientSide) {
                     FrostmintExplosion explosion = new FrostmintExplosion(level, this, this.getX() + 0.5F, this.getY() + 0.5F, this.getZ() + 0.5F, 4.0F, Explosion.BlockInteraction.DESTROY_WITH_DECAY, false);

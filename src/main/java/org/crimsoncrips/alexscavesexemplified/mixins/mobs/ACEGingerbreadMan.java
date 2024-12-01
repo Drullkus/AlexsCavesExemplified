@@ -23,7 +23,7 @@ public abstract class ACEGingerbreadMan extends Monster {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         GingerbreadManEntity gingerbreadMan = (GingerbreadManEntity)(Object)this;
-        if (ACExemplifiedConfig.GINGERBREAD_HIVEMIND_ENABLED) gingerbreadMan.targetSelector.addGoal(1, (new ACEHurtByTargetGoal(gingerbreadMan)).setAlertOthers(new Class[0]));
+        if (ACExemplifiedConfig.HIVE_MIND_ENABLED) gingerbreadMan.targetSelector.addGoal(1, (new ACEHurtByTargetGoal(gingerbreadMan)).setAlertOthers(new Class[0]));
     }
 
 }

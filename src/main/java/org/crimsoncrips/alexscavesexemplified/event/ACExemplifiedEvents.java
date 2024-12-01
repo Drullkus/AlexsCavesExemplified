@@ -14,6 +14,7 @@ import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
+import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityCrimsonMosquito;
 import com.github.alexthe666.alexsmobs.entity.EntityFly;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
@@ -141,7 +142,7 @@ public class ACExemplifiedEvents {
         ItemStack itemStack = event.getItemStack();
         RandomSource random = player.getRandom();
         if (event.getTarget() instanceof GingerbreadManEntity gingerbreadMan) {
-            if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.GINGERBREAD_AMPUTATION_ENABLED) {
+            if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.AMPUTATION_ENABLED) {
                 if (gingerbreadMan.hasBothLegs()) {
                     gingerbreadMan.setLostLimb(gingerbreadMan.getRandom().nextBoolean(), false, true);
                 } else if (gingerbreadMan.getRandom().nextInt(2) == 0) {
@@ -240,6 +241,20 @@ public class ACExemplifiedEvents {
                         livingEntity.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 400, 1));
                     }
                 }
+            }
+        }
+
+        if(ACExemplifiedConfig.EXEMPLIFIED_IRRADIATION_ENABLED){
+            MobEffectInstance irradiated = livingEntity.getEffect(ACEffectRegistry.IRRADIATED.get());
+            if (irradiated != null && irradiated.getAmplifier() >= 2) {
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 60, 0));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 60, 0));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.DIG_SLOWDOWN, 60, 0));
+                livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 0));
+
+                if (ModList.get().isLoaded("alexsmobs"))
+                    livingEntity.addEffect(new MobEffectInstance(AMEffectRegistry.EXSANGUINATION.get(), 60, 0));
             }
         }
     }

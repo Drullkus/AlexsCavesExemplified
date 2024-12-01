@@ -1,6 +1,7 @@
 package org.crimsoncrips.alexscavesexemplified;
 
 
+import com.crimsoncrips.alexsmobsinteraction.enchantment.AMIEnchantmentRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -13,6 +14,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.enchantment.ACEEnchants;
 import org.crimsoncrips.alexscavesexemplified.event.ACExemplifiedEvents;
 import org.crimsoncrips.alexscavesexemplified.loot.ACELootModifiers;
 
@@ -29,6 +31,7 @@ public class AlexsCavesExemplified {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
         modEventBus.addListener(this::onModConfigEvent);
         ACELootModifiers.register(modEventBus);
+        ACEEnchants.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACExemplifiedEvents());
         MinecraftForge.EVENT_BUS.register(this);
         modEventBus.addListener(this::setup);

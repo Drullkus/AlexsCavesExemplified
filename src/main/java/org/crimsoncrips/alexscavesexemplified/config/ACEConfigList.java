@@ -11,7 +11,8 @@ public class ACEConfigList {
 
     public final ForgeConfigSpec.BooleanValue REDOABLE_SPELUNKY_ENABLED;
 
-    public final ForgeConfigSpec.BooleanValue GINGERBREAD_AMPUTATION_ENABLED;
+    public final ForgeConfigSpec.BooleanValue AMPUTATION_ENABLED;
+    public final ForgeConfigSpec.BooleanValue EXEMPLIFIED_IRRADIATION_ENABLED;
 
 
     public final ForgeConfigSpec.BooleanValue FORLORN_LIGHT_EFFECT_ENABLED;
@@ -27,24 +28,23 @@ public class ACEConfigList {
 
 
 
-    public final ForgeConfigSpec.BooleanValue GINGERBREAD_HIVEMIND_ENABLED;
+    public final ForgeConfigSpec.BooleanValue HIVE_MIND_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue STABILIZER_COMPATIBILITY_ENABLED;
+    public final ForgeConfigSpec.BooleanValue ANTI_SACRIFICE_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue VESPER_CANNIBALIZE_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue VANILLA_ADAPTIONS_ENABLED;
-    public final ForgeConfigSpec.BooleanValue JELLYBEAN_HARVESTING_CHANGES_ENABLED;
+    public final ForgeConfigSpec.BooleanValue JELLYBEAN_CHANGES_ENABLED;
 
 
     public final ForgeConfigSpec.BooleanValue FLY_TRAP_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue RATATATATATA_ENABLED;
 
-    public final ForgeConfigSpec.BooleanValue PIERCE_DARK_ARROWS_ENABLED;
-
-    public final ForgeConfigSpec.BooleanValue AMPLIFIED_FROSTMINT_EXPLOSION_ENABLED;
-    public final ForgeConfigSpec.BooleanValue FROSTMINT_SOLIDIFIED_ENABLED;
+    public final ForgeConfigSpec.BooleanValue AMPLIFIED_FROSTMINT_ENABLED;
+    public final ForgeConfigSpec.BooleanValue SOLIDIFIED_ENABLED;
     public final ForgeConfigSpec.BooleanValue CANIAC_SENSITIVITY_ENABLED;
     public final ForgeConfigSpec.BooleanValue IRRADIATION_WASHOFF_ENABLED;
     public final ForgeConfigSpec.BooleanValue GAMMAROACH_FOODING_ENABLED;
@@ -68,21 +68,21 @@ public class ACEConfigList {
 
         builder.push("Candy Cavity");
         this.GLUTTONY_ENABLED = buildBoolean(builder, "GLUTTONY_ENABLED", " ", true, "Whether blocks inside candy cavity, can be eaten by right clicking");
-        this.AMPLIFIED_FROSTMINT_EXPLOSION_ENABLED = buildBoolean(builder, "AMPLIFIED_FROSTMINT_EXPLOSION_ENABLED", " ", true, "Item and spear entity explodes as well in Purple Soda");
-        this.FROSTMINT_SOLIDIFIED_ENABLED = buildBoolean(builder, "FROSTMINT_SOLIDIFIED_ENABLED", " ", true, "Frostmint Spears causes liquid blocks to freeze at the cost of the spear");
+        this.AMPLIFIED_FROSTMINT_ENABLED = buildBoolean(builder, "AMPLIFIED_FROSTMINT_ENABLED", " ", true, "Item and spear entity explodes as well in Purple Soda");
+        this.SOLIDIFIED_ENABLED = buildBoolean(builder, "SOLIDIFIED_ENABLED", " ", true, "Frostmint Spears causes liquid blocks to freeze at the cost of the spear");
 
         builder.push("Caniac");
         this.CANIAC_SENSITIVITY_ENABLED = buildBoolean(builder, "CANIAC_SENSITIVITY_ENABLED", " ", true, "Whether Caniac dissolve in water and will actively avoid it");
          builder.pop();
         builder.push("Gingerbread Man");
-        this.GINGERBREAD_AMPUTATION_ENABLED = buildBoolean(builder, "GINGERBREAD_AMPUTATION_ENABLED", " ", true, "Whether Gingerbread Men can be amputated with an axe");
-        this.GINGERBREAD_HIVEMIND_ENABLED = buildBoolean(builder, "GINGERBREAD_HIVEMIND_ENABLED", " ", true, "Whether Gingerbread Men will attack you if you attack one of them.");
+        this.AMPUTATION_ENABLED = buildBoolean(builder, "AMPUTATION_ENABLED", " ", true, "Whether Gingerbread Men can be amputated with an axe");
+        this.HIVE_MIND_ENABLED = buildBoolean(builder, "HIVE_MIND_ENABLED", " ", true, "Whether Gingerbread Men will attack you if you attack one of them.");
         builder.pop();
         builder.push("Gumbeeper");
         this.REGULAR_REFERENCE_ENABLED = buildBoolean(builder, "REGULAR_REFERENCE_ENABLED", " ", true, "Whether Gumbeepers will attack, Blue jays and Raccoons in Alexs Mobs");
         builder.pop();
         builder.push("Gummy Bear");
-        this.JELLYBEAN_HARVESTING_CHANGES_ENABLED = buildBoolean(builder, "JELLYBEAN_HARVESTING_CHANGES_ENABLED", " ", true, "Jellybean harvesting is changed where amount of jellybeans is made the longer they hibernate");
+        this.JELLYBEAN_CHANGES_ENABLED = buildBoolean(builder, "JELLYBEAN_CHANGES_ENABLED", " ", true, "Jellybean harvesting is changed where amount of jellybeans is made the longer they hibernate");
         builder.pop();
         
         
@@ -91,11 +91,12 @@ public class ACEConfigList {
         builder.push("Forlorn Hollows");
         this.FORLORN_LIGHT_EFFECT_ENABLED = buildBoolean(builder, "FORLORN_LIGHT_EFFECT_ENABLED", " ", true, "Whether most forlorn mammals are effected when a player holds light");
         this.BURST_OUT_ENABLED = buildBoolean(builder, "BURST_OUT_ENABLED", " ", true, "Whether breaking Forlorn Hollows blocks has a chance to burst out Underzealots or Corrodents");
-        this.PIERCE_DARK_ARROWS_ENABLED = buildBoolean(builder, "NON_PIERCE_DARK_ARROWS_ENABLED", " ", true, "Whether darkness arrows pierce or not");
         builder.push("Corrodent");
         this.CORRODENT_CONVERSION_ENABLED = buildBoolean(builder, "CORRODENT_CONVERSION_ENABLED", " ", true, "Whether corrodents can be converted to underzealots through ritual");
         builder.pop();
         builder.push("Vesper");
+        this.ANTI_SACRIFICE_ENABLED = buildBoolean(builder, "ANTI_SACRIFICE_ENABLED", " ", true, "Whether vespers attack underzealots sacrificing vespers");
+
         this.VESPER_CANNIBALIZE_ENABLED = buildBoolean(builder, "VESPER_CANNIBALIZE_ENABLED", " ", true, "Whether vespers attack bats wondering by");
         builder.pop();
         builder.push("Watcher");
@@ -104,6 +105,8 @@ public class ACEConfigList {
         builder.pop();
 
         builder.push("Toxic Caves");
+        this.EXEMPLIFIED_IRRADIATION_ENABLED = buildBoolean(builder, "EXEMPLIFIED_IRRADIATION_ENABLED", " ", true, "Whether Irradiation gives debuffs to players when high enough");
+
         this.IRRADIATION_WASHOFF_ENABLED = buildBoolean(builder, "IRRADIATION_WASHOFF_ENABLED", " ", true, "Whether Irradiation wears off faster when in water");
         builder.push("Gammaroach");
         this.GAMMAROACH_FOODING_ENABLED = buildBoolean(builder, "GAMMAROACH_FOODING_ENABLED", " ", true, "Whether gammaroaches hunt dropped food");

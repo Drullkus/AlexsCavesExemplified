@@ -53,7 +53,7 @@ public abstract class ACEGummybear extends Animal {
     @Override
     public boolean hurt(DamageSource damageSource, float pAmount) {
 
-        if (ACExemplifiedConfig.JELLYBEAN_HARVESTING_CHANGES_ENABLED){
+        if (ACExemplifiedConfig.JELLYBEAN_CHANGES_ENABLED){
             Entity entity = damageSource.getEntity();
             if (entity != null) {
                 this.sleepFor = 0;
@@ -94,7 +94,7 @@ public abstract class ACEGummybear extends Animal {
 
     @ModifyExpressionValue(method = "mobInteract", at = @At(value = "INVOKE", target = "Lnet/minecraft/util/RandomSource;nextInt(I)I"))
     private int onlyFlyIfAllowed(int original) {
-        if (ACExemplifiedConfig.JELLYBEAN_HARVESTING_CHANGES_ENABLED) {
+        if (ACExemplifiedConfig.JELLYBEAN_CHANGES_ENABLED) {
             return this.jellybeansToMake;
         } else return original;
     }

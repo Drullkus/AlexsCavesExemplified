@@ -58,7 +58,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
     private void tick(CallbackInfo ci) {
         Level level = this.level();
         if (this.isInFluidType()){
-            if (ACExemplifiedConfig.AMPLIFIED_FROSTMINT_EXPLOSION_ENABLED && this.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get()) && !level.isClientSide) {
+            if (ACExemplifiedConfig.AMPLIFIED_FROSTMINT_ENABLED && this.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get()) && !level.isClientSide) {
                 FrostmintExplosion explosion = new FrostmintExplosion(level, this, this.getX() + 0.5F, this.getY() + 0.5F, this.getZ() + 0.5F, 4.0F, Explosion.BlockInteraction.DESTROY_WITH_DECAY, false);
                 explosion.explode();
                 explosion.finalizeExplosion(true);
@@ -80,7 +80,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
         Level level = this.level();
 
 
-        if (!this.exploded && ACExemplifiedConfig.FROSTMINT_SOLIDIFIED_ENABLED) {
+        if (!this.exploded && ACExemplifiedConfig.SOLIDIFIED_ENABLED) {
             solidifyBlock(Blocks.WATER,Blocks.ICE,level,blockPos);
             solidifyBlock(Blocks.LAVA,Blocks.BASALT,level,blockPos);
             solidifyBlock(ACBlockRegistry.PURPLE_SODA.get(), ACBlockRegistry.SUGAR_GLASS.get(), level,blockPos);
