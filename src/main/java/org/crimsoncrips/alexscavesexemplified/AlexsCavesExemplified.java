@@ -1,8 +1,11 @@
 package org.crimsoncrips.alexscavesexemplified;
 
 
-import com.crimsoncrips.alexsmobsinteraction.enchantment.AMIEnchantmentRegistry;
+import biomesoplenty.worldgen.feature.misc.DripstoneSplatterFeature;
+import com.crimsoncrips.alexsmobsinteraction.effect.AMIEffects;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.CauldronBlock;
+import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -12,8 +15,11 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
+import net.minecraftforge.network.NetworkRegistry;
+import net.minecraftforge.network.simple.SimpleChannel;
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.enchantment.ACEEnchants;
 import org.crimsoncrips.alexscavesexemplified.event.ACExemplifiedEvents;
 import org.crimsoncrips.alexscavesexemplified.loot.ACELootModifiers;
@@ -34,7 +40,12 @@ public class AlexsCavesExemplified {
         ACEEnchants.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACExemplifiedEvents());
         MinecraftForge.EVENT_BUS.register(this);
+        ACEEffects.EFFECT_REGISTER.register(modEventBus);
+        ACEEffects.POTION_REGISTER.register(modEventBus);
+
+
         modEventBus.addListener(this::setup);
+
 
         // Register our mod's ForgeConfigSpec so that Forge can create and load the config file for us
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, ACEConfigHolder.EXEMPLIFIED_SPEC, "alexscavesexemplified.toml");
@@ -53,7 +64,10 @@ public class AlexsCavesExemplified {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
+        AMIEffects.init();
     }
+
+
 
 
     public static ResourceLocation prefix(String name) {

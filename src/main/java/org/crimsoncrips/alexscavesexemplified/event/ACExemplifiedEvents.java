@@ -1,15 +1,19 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
+import biomesoplenty.api.block.BOPBlocks;
 import com.crimsoncrips.alexsmobsinteraction.config.AMInteractionConfig;
+import com.crimsoncrips.alexsmobsinteraction.effect.AMIEffects;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.block.GeothermalVentBlock;
 import com.github.alexmodguy.alexscaves.server.block.PottedFlytrapBlock;
 import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GumbeeperEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.NucleeperEntity;
+import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
@@ -34,12 +38,9 @@ import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.AxeItem;
-import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.*;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -49,9 +50,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.data.event.GatherDataEvent;
-import net.minecraftforge.event.entity.living.LivingDeathEvent;
-import net.minecraftforge.event.entity.living.LivingEvent;
-import net.minecraftforge.event.entity.living.MobSpawnEvent;
+import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -61,7 +60,11 @@ import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.datagen.ACELootModifierProvider;
+import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
+import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 
+import java.awt.event.ItemEvent;
+import java.util.Iterator;
 import java.util.Objects;
 
 
@@ -200,6 +203,31 @@ public class ACExemplifiedEvents {
     @SubscribeEvent
     public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) {
         LivingEntity livingEntity = livingTickEvent.getEntity();
+        Level level = livingEntity.level();
+
+        if (ACExemplifiedConfig.STICKY_SODA_ENABLED && livingEntity.getFeetBlockState().is(ACBlockRegistry.PURPLE_SODA.get())){
+            livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 90, 0));
+        }
+
+        if (ACExemplifiedConfig.PURPLE_LEATHERED_ENABLED) {
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.HEAD),level,livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.FEET),level,livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.CHEST),level,livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.LEGS),level,livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND),level,livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND),level,livingEntity);
+        }
+
+        if (true){
+            Iterator<GingerbreadManEntity> var4 = level.getEntitiesOfClass(GingerbreadManEntity.class, livingEntity.getBoundingBox().inflate(10, 5, 10)).iterator();
+            while (var4.hasNext()) {
+                LivingEntity entity = var4.next();
+                if (entity instanceof GingerbreadManEntity gingerbreadMan && !gingerbreadMan.isOvenSpawned() && livingEntity.getUseItem().is(ACItemRegistry.GINGERBREAD_CRUMBS.get())) {
+                    gingerbreadMan.setTarget(livingEntity);
+                }
+            }
+        }
+
         if (ACExemplifiedConfig.FLY_TRAP_ENABLED && livingEntity instanceof EntityFly fly && ModList.get().isLoaded("alexsmobs")){
             BlockState blockState = fly.getFeetBlockState();
             BlockPos blockPos = new BlockPos(fly.getBlockX(),fly.getBlockY(),fly.getBlockZ());
@@ -215,13 +243,13 @@ public class ACExemplifiedEvents {
 
         if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED){
             MobEffectInstance irradiated = livingEntity.getEffect(ACEffectRegistry.IRRADIATED.get());
-            if (irradiated != null && livingEntity.getRandom().nextDouble() < 0.05 && (livingEntity.isInWater() || livingEntity.getBlockStateOn().is(Blocks.WATER_CAULDRON))) {
+            if (irradiated != null && livingEntity.getRandom().nextDouble() < 0.05 && (livingEntity.isInWater() || livingEntity.getBlockStateOn().is(Blocks.WATER_CAULDRON) || livingEntity.isInWaterRainOrBubble())) {
                 livingEntity.removeEffect(irradiated.getEffect());
                 livingEntity.addEffect(new MobEffectInstance(irradiated.getEffect(), irradiated.getDuration() - 100, irradiated.getAmplifier()));
             }
         }
 
-        if (true){
+        if (ACExemplifiedConfig.GEOTHERMAL_EFFECTS_ENABLED){
             BlockState blockState = livingEntity.getBlockStateOn();
             if (blockState.getBlock() instanceof GeothermalVentBlock){
                 if (blockState.getValue(GeothermalVentBlock.SMOKE_TYPE) == 1){
@@ -232,21 +260,22 @@ public class ACExemplifiedEvents {
                             livingEntity.addEffect(new MobEffectInstance(irradiated.getEffect(), irradiated.getDuration() - 100, irradiated.getAmplifier()));
                         }
                     }
+                    if (livingEntity.isOnFire()) livingEntity.setRemainingFireTicks(livingEntity.getRemainingFireTicks() - 30);
                 }
                 if (blockState.getValue(GeothermalVentBlock.SMOKE_TYPE) == 2){
                     livingEntity.setSecondsOnFire(5);
                 }
                 if (blockState.getValue(GeothermalVentBlock.SMOKE_TYPE) == 3){
                     if(!livingEntity.hasEffect(ACEffectRegistry.IRRADIATED.get())){
-                        livingEntity.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 400, 1));
+                        livingEntity.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 400, 0));
                     }
                 }
             }
         }
 
-        if(ACExemplifiedConfig.EXEMPLIFIED_IRRADIATION_ENABLED){
+        if(ACExemplifiedConfig.EXEMPLIFIED_IRRADIATION_AMOUNT > 0){
             MobEffectInstance irradiated = livingEntity.getEffect(ACEffectRegistry.IRRADIATED.get());
-            if (irradiated != null && irradiated.getAmplifier() >= 2) {
+            if (irradiated != null && irradiated.getAmplifier() >= ACExemplifiedConfig.EXEMPLIFIED_IRRADIATION_AMOUNT - 1) {
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 60, 0));
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.HUNGER, 60, 0));
@@ -256,6 +285,10 @@ public class ACExemplifiedEvents {
                 if (ModList.get().isLoaded("alexsmobs"))
                     livingEntity.addEffect(new MobEffectInstance(AMEffectRegistry.EXSANGUINATION.get(), 60, 0));
             }
+        }
+
+        if (ACExemplifiedConfig.RABIES_ENABLED && !level.isClientSide && livingEntity.isInWaterRainOrBubble() && livingEntity.hasEffect(ACEEffects.RABIAL.get())) {
+            livingEntity.hurt(ACEDamageTypes.causeRabialDamage(level.registryAccess()), 1.0F);
         }
     }
 
@@ -278,6 +311,27 @@ public class ACExemplifiedEvents {
                     level.addParticle(ModParticles.SUDS_PARTICLE.get(), player.getX(), player.getY() + 0.5, player.getZ(), d1 * 2, d2 * 2, d3 * 2);
                 }
             }
+        }
+    }
+
+    @SubscribeEvent
+    public void livingDamage(LivingDamageEvent livingDamageEvent) {
+        Entity damager = livingDamageEvent.getSource().getEntity();
+        LivingEntity damaged = livingDamageEvent.getEntity();
+
+
+        if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED && ModList.get().isLoaded("supplementaries")){
+            if (damager instanceof CorrodentEntity){
+              damaged.addEffect(new MobEffectInstance(ACEEffects.RABIAL.get(), 300, 0));
+            }
+        }
+    }
+
+    private void checkLeatherArmor(ItemStack item, Level level, LivingEntity living){
+        DyeableLeatherItem dyeableLeatherItem = new DyeableLeatherItem() {};
+        Item[] leatherItems = {Items.LEATHER_BOOTS, Items.LEATHER_HELMET, Items.LEATHER_LEGGINGS, Items.LEATHER_CHESTPLATE, Items.LEATHER_HORSE_ARMOR};
+        if (item.is(leatherItems[level.random.nextInt(0, 5)]) && living.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get()) && !dyeableLeatherItem.hasCustomColor(item)) {
+            dyeableLeatherItem.setColor(item, 0Xb839e6);
         }
     }
 

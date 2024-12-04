@@ -1,14 +1,14 @@
 package org.crimsoncrips.alexscavesexemplified.enchantment;
 
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
+import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 
-public class ACEBasicEnchantment extends Enchantment {
+public class ACEAtomicMagnetism extends Enchantment {
 
 
-    public ACEBasicEnchantment(Rarity p_44676_, EnchantmentCategory p_44677_, EquipmentSlot... p_44678_) {
+    public ACEAtomicMagnetism(Rarity p_44676_, EnchantmentCategory p_44677_, EquipmentSlot... p_44678_) {
         super(p_44676_, p_44677_, p_44678_);
     }
 
@@ -23,5 +23,14 @@ public class ACEBasicEnchantment extends Enchantment {
 
     public boolean isAllowedOnBooks() {
         return true;
+    }
+
+    @Override
+    public String getDescriptionId() {
+        if (ACExemplifiedConfig.RESISTOR_MAGNETISM) {
+            return "enchantment.alexscavesexemplified.atomic_magnetism";
+        } else {
+            return "alexscavesexemplified.feature_disabled";
+        }
     }
 }

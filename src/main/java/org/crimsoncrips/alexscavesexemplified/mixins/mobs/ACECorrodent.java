@@ -51,21 +51,12 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
     private void registerGoals(CallbackInfo ci) {
         CorrodentEntity corrodent = (CorrodentEntity)(Object)this;
         if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED){
-            System.out.println("registerGoal");
             corrodent.targetSelector.addGoal(2, new MobTarget3DGoal(corrodent, Player.class, false,10, livingEntity -> {
                 return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && (livingEntity instanceof Player player && !curiosLight(player));
             }));
             
         }
 
-        if (ACExemplifiedConfig.CORRODENT_CONVERSION_ENABLED){
-            corrodent.goalSelector.addGoal(1, new AvoidEntityGoal<>(corrodent, LivingEntity.class, 10F, 0.2, 0.4, Objects::nonNull){
-                @Override
-                public boolean canContinueToUse() {
-                    return super.canContinueToUse() && corrodent.getHealth() <= 0.50F * corrodent.getMaxHealth();
-                }
-            });
-        }
 
     }
 
@@ -107,7 +98,6 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
         LivingEntity target = this.getTarget();
         if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED && target != this.getLastAttacker() && target != null) {
             if (target.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || target instanceof Player player && curiosLight(player)) {
-                System.out.println("testing");
                 this.setTarget(null);
             }
         }
@@ -122,7 +112,6 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 8))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
-        System.out.println("remove");
         return !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
     }
 

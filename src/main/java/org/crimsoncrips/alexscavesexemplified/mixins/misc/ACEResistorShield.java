@@ -54,19 +54,20 @@ public class ACEResistorShield extends ShieldItem {
 
     @Inject(method = "onUseTick", at = @At("TAIL"))
     private void getMaxLoadTime(Level level, LivingEntity living, ItemStack stack, int timeUsing, CallbackInfo ci) {
-        int i = this.getUseDuration(stack) - timeUsing;
-        boolean scarlet = isScarlet(stack);
-        AABB bashBox = living.getBoundingBox().inflate(5, 1, 5);
-        for (ItemEntity entity : living.level().getEntitiesOfClass(ItemEntity.class, bashBox)) {
-            if (entity.distanceTo(living) <= 4 && (entity.getItem().is(ACTagRegistry.MAGNETIC_ITEMS) || stack.getEnchantmentLevel(ACEEnchants.ATOMIC_MAGNETISM.get()) > 0) && (i >= 10 && i % 5 == 0)) {
-                Vec3 arcVec = living.position().add(0, 0.65F * living.getBbHeight(), 0).subtract(entity.position());
-                if (scarlet) {
-                    if(arcVec.length() > living.getBbWidth()){
-                        entity.setDeltaMovement(entity.getDeltaMovement().scale(0.3F).add(arcVec.normalize().scale(0.7F)));
-                    }
-                } else {
-                    if(arcVec.length() > living.getBbWidth()){
-                        entity.setDeltaMovement(entity.getDeltaMovement().scale(-0.3F).add(arcVec.normalize().scale(-0.7F)));
+        if (ACExemplifiedConfig.RESISTOR_MAGNETISM) {
+            int i = this.getUseDuration(stack) - timeUsing;
+            boolean scarlet = isScarlet(stack);
+            for (ItemEntity entity : living.level().getEntitiesOfClass(ItemEntity.class, living.getBoundingBox().inflate(5, 1, 5))) {
+                if (entity.distanceTo(living) <= 4 && (i >= 10 && i % 5 == 0) && (entity.getItem().is(ACTagRegistry.MAGNETIC_ITEMS) || stack.getEnchantmentLevel(ACEEnchants.ATOMIC_MAGNETISM.get()) > 0)) {
+                    Vec3 arcVec = living.position().add(0, 0.65F * living.getBbHeight(), 0).subtract(entity.position());
+                    if (scarlet) {
+                        if (arcVec.length() > living.getBbWidth()) {
+                            entity.setDeltaMovement(entity.getDeltaMovement().scale(0.3F).add(arcVec.normalize().scale(0.7F)));
+                        }
+                    } else {
+                        if (arcVec.length() > living.getBbWidth()) {
+                            entity.setDeltaMovement(entity.getDeltaMovement().scale(-0.3F).add(arcVec.normalize().scale(-0.7F)));
+                        }
                     }
                 }
             }

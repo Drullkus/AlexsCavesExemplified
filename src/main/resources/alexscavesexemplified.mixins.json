@@ -5,6 +5,8 @@
   "compatibilityLevel": "JAVA_17",
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
+    "external_mobs.ACEItemEntity",
+    "external_mobs.ACEThrownPotion",
     "misc.ACEDreadbowItem",
     "misc.ACEItemEntity",
     "misc.ACENuclearBomb",

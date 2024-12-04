@@ -224,7 +224,6 @@ public abstract class ACEDreadbowItem extends ProjectileWeaponItem {
 
     @Inject(method = "getMaxLoadTime", at = @At("HEAD"),cancellable = true,remap = false)
     private static void getMaxLoadTime(ItemStack stack, CallbackInfoReturnable<Integer> cir) {
-        cir.cancel();
         cir.setReturnValue(loadTime(stack));
     }
 

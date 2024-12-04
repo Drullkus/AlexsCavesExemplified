@@ -1,0 +1,18 @@
+{
+  "item.alexscavesexemplified.ace_book": "ACE Book",
+  "alexscavesexemplified.feature_disabled" :  "Feature Disabled",
+
+  "ace_book.description":"Welcome to a exemplified reality!",
+  "ace_book.title":"Alexs Caves Exemplified",
+
+  "alexscavesexemplified.potion.rabial": "Rabial Infection",
+  "effect.alexscavesexemplified.rabial.description": "Nervous System Disease",
+  "item.minecraft.splash_potion.effect.rabial": "Splash Potion of Rabial",
+  "item.minecraft.tipped_arrow.effect.rabial": "Arrow of Rabial",
+  "item.minecraft.lingering_potion.effect.rabial": "Lingering Potion of Rabial",
+  "item.minecraft.potion.effect.rabial": "Potion of Rabial",
+
+
+  "death.attack.rabial_0": "%s suffered from water with Rabies"
+}
+
