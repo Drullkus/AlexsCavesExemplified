@@ -3,6 +3,7 @@ package org.crimsoncrips.alexscavesexemplified;
 
 import biomesoplenty.worldgen.feature.misc.DripstoneSplatterFeature;
 import com.crimsoncrips.alexsmobsinteraction.effect.AMIEffects;
+import com.github.alexthe666.alexsmobs.client.event.ClientEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
@@ -17,6 +18,7 @@ import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.network.NetworkRegistry;
 import net.minecraftforge.network.simple.SimpleChannel;
+import org.crimsoncrips.alexscavesexemplified.client.event.ACEClientEvents;
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
@@ -42,6 +44,7 @@ public class AlexsCavesExemplified {
         MinecraftForge.EVENT_BUS.register(this);
         ACEEffects.EFFECT_REGISTER.register(modEventBus);
         ACEEffects.POTION_REGISTER.register(modEventBus);
+        MinecraftForge.EVENT_BUS.register(new ACEClientEvents());
 
 
         modEventBus.addListener(this::setup);
