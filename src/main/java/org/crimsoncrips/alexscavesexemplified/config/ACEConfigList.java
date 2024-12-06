@@ -55,11 +55,13 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue GAMMAROACH_FOODING_ENABLED;
 
     public final ForgeConfigSpec.DoubleValue CHARGED_CAVE_CREEPER_CHANCE;
-    public final ForgeConfigSpec.BooleanValue RESISTOR_MAGNETISM;
+    public final ForgeConfigSpec.BooleanValue RESISTOR_MAGNETISM_ENABLED;
     public final ForgeConfigSpec.BooleanValue PURPLE_LEATHERED_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue STICKY_SODA_ENABLED;
-
+    public final ForgeConfigSpec.BooleanValue PRIMORDIAL_OXYGEN_ENABLED;
+    public final ForgeConfigSpec.BooleanValue VOLCANIC_SACRIFICE_ENABLED;
+    public final ForgeConfigSpec.BooleanValue RADIANT_WRATH_ENABLED;
     public final ForgeConfigSpec.IntValue SPELUNKY_ATTEMPTS_AMOUNT;
     
 
@@ -80,6 +82,7 @@ public class ACEConfigList {
         this.SOLIDIFIED_ENABLED = buildBoolean(builder, "SOLIDIFIED_ENABLED", " ", true, "Frostmint Spears causes liquid blocks to freeze at the cost of the spear");
         this.PURPLE_LEATHERED_ENABLED = buildBoolean(builder, "PURPLE_LEATHERED_ENABLED", " ", true, "Whether purple soda, purples non-dyed leather armor");
         this.STICKY_SODA_ENABLED = buildBoolean(builder, "STICKY_SODA_ENABLED", " ", true, "Whether purple soda causes stickyness when in it");
+        this.RADIANT_WRATH_ENABLED = buildBoolean(builder, "RADIANT_WRATH_ENABLED", " ", true, "Having Radiant Essence amplifies the attacks of Sugar Staff");
 
         builder.push("Caniac");
         this.CANIAC_SENSITIVITY_ENABLED = buildBoolean(builder, "CANIAC_SENSITIVITY_ENABLED", " ", true, "Whether Caniac dissolve in water and will actively avoid it");
@@ -128,11 +131,15 @@ public class ACEConfigList {
 
         builder.push("Primordial Caves");
         this.FLY_TRAP_ENABLED = buildBoolean(builder, "FLY_TRAP_ENABLED", " ", true, "Flytraps close shut when a fly (From Alexs Mobs) comes into contact with it");
+        this.PRIMORDIAL_OXYGEN_ENABLED = buildBoolean(builder, "PRIMORDIAL_OXYGEN_ENABLED", " ", true, "Whether you are weaker inside Primordial Caves due to the oxygen");
+        builder.push("Atlatitan");
+        this.VOLCANIC_SACRIFICE_ENABLED = buildBoolean(builder, "VOLCANIC_SACRIFICE_ENABLED", " ", true, "Whether atlatitan eggs or babies can be sacrificed to a volcano to refresh its lux cooldown");
+        builder.pop();
         builder.pop();
 
 
         builder.push("Magnetic Caves");
-        this.RESISTOR_MAGNETISM = buildBoolean(builder, "RESISTOR_MAGNETISM", " ", true, "Resistor Shield attracts/repels magnetic items, or more..");
+        this.RESISTOR_MAGNETISM_ENABLED = buildBoolean(builder, "RESISTOR_MAGNETISM_ENABLED", " ", true, "Resistor Shield attracts/repels magnetic items, or more..");
 
 
         builder.pop();

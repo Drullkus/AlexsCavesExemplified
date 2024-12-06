@@ -2,7 +2,11 @@ package org.crimsoncrips.alexscavesexemplified.effect;
 
 import com.crimsoncrips.alexsmobsinteraction.config.AMInteractionConfig;
 import com.github.alexthe666.alexsmobs.client.particle.AMParticleRegistry;
+import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
+import com.github.alexthe666.alexsmobs.entity.EntityEnderiophage;
+import net.minecraft.client.particle.DripParticle;
 import net.minecraft.core.particles.ParticleOptions;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
@@ -12,6 +16,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigList;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 
 import java.util.UUID;
 
@@ -30,6 +35,20 @@ public class ACERabial extends MobEffect {
         } else {
             return "alexscavesexemplified.feature_disabled";
         }
+    }
+
+    private int lastDuration = -1;
+
+    public void applyEffectTick(LivingEntity entity, int amplifier) {
+        if (lastDuration <= 1) {
+            int rabialLevel = amplifier + 1;
+            entity.hurt(ACEDamageTypes.causeEndRabialDamage(entity.level().registryAccess()), rabialLevel * 10);
+        }
+    }
+
+    public boolean isDurationEffectTick(int duration, int amplifier) {
+        lastDuration = duration;
+        return duration > 0;
     }
 
 

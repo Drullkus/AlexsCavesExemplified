@@ -28,7 +28,7 @@ public class ACEEffects {
     public static final DeferredRegister<Potion> POTION_REGISTER = DeferredRegister.create(ForgeRegistries.POTIONS, AlexsCavesExemplified.MODID);
 
     public static final RegistryObject<MobEffect> RABIAL = EFFECT_REGISTER.register("rabial", ACERabial::new);
-    public static final RegistryObject<Potion> RABIAL_POTION = POTION_REGISTER.register("rabial", ()-> new Potion(new MobEffectInstance(RABIAL.get(), 1600)));
+    public static final RegistryObject<Potion> RABIAL_POTION = POTION_REGISTER.register("rabial", ()-> new Potion(new MobEffectInstance(RABIAL.get(), 72000)));
 
 
     public static ItemStack createPotion(Potion potion){

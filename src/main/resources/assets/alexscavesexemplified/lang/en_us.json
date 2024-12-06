@@ -13,6 +13,7 @@
   "item.minecraft.potion.effect.rabial": "Potion of Rabial",
 
 
-  "death.attack.rabial_0": "%s suffered from water with Rabies"
+  "death.attack.rabial_water_0": "%s suffered from water with Rabies",
+  "death.attack.rabial_end_0": "%s died to Rabies"
 }
 

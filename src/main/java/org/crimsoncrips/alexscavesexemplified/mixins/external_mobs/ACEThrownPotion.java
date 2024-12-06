@@ -1,27 +1,16 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.external_mobs;
 
-import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import net.minecraft.world.effect.MobEffectInstance;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.animal.axolotl.Axolotl;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
-import net.minecraft.world.item.DyeableLeatherItem;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.phys.AABB;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -42,7 +31,7 @@ public abstract class ACEThrownPotion extends ThrowableItemProjectile {
             double d0 = this.distanceToSqr(livingentity);
             if (d0 < 16.0D) {
                 if (livingentity.hasEffect(ACEEffects.RABIAL.get()) && ACExemplifiedConfig.RABIES_ENABLED) {
-                    livingentity.hurt(ACEDamageTypes.causeRabialDamage(livingentity.level().registryAccess()), 1.0F);
+                    livingentity.hurt(ACEDamageTypes.causeRabialWaterDamage(livingentity.level().registryAccess()), 1.0F);
                 }
 
                 if (ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED){

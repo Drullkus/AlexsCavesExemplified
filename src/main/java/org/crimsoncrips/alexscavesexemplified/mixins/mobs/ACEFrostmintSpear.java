@@ -11,6 +11,7 @@ import com.github.alexmodguy.alexscaves.server.misc.ACAdvancementTriggerRegistry
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.simibubi.create.AllFluids;
 import net.minecraft.core.BlockPos;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.player.Player;
@@ -67,6 +68,10 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
                 }
                 this.discard();
             }
+        }
+
+        if (ACExemplifiedConfig.RADIANT_WRATH_ENABLED && this.tickCount > 200){
+            this.discard();
         }
     }
 

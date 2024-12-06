@@ -1,13 +1,11 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
-import biomesoplenty.api.block.BOPBlocks;
-import com.crimsoncrips.alexsmobsinteraction.config.AMInteractionConfig;
-import com.crimsoncrips.alexsmobsinteraction.effect.AMIEffects;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.block.GeothermalVentBlock;
 import com.github.alexmodguy.alexscaves.server.block.PottedFlytrapBlock;
 import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
@@ -16,40 +14,35 @@ import com.github.alexmodguy.alexscaves.server.entity.living.NucleeperEntity;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
-import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
-import com.github.alexthe666.alexsmobs.entity.EntityCrimsonMosquito;
 import com.github.alexthe666.alexsmobs.entity.EntityFly;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Position;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
-import net.minecraft.data.DataGenerator;
-import net.minecraft.data.PackOutput;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.damagesource.DamageSources;
-import net.minecraft.world.damagesource.DamageType;
 import net.minecraft.world.damagesource.DamageTypes;
+import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
+import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
+import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.TntBlock;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.data.event.GatherDataEvent;
+import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
@@ -59,13 +52,10 @@ import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.datagen.ACELootModifierProvider;
 import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 
-import java.awt.event.ItemEvent;
 import java.util.Iterator;
-import java.util.Objects;
 
 
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -84,6 +74,21 @@ public class ACExemplifiedEvents {
             if (entity.getRandom().nextDouble() < ACExemplifiedConfig.CHARGED_CAVE_CREEPER_CHANCE){
                 nucleeper.setCharged(true);
             }
+        }
+
+    }
+
+    @SubscribeEvent
+    public void onLevelJoin(EntityJoinLevelEvent event) {
+        final var entity = event.getEntity();
+
+        if (entity.getType().is(ACExexmplifiedTagRegistry.CAN_RABIES) && entity instanceof Mob mob && ACExemplifiedConfig.RABIES_ENABLED){
+            mob.targetSelector.addGoal(2, new MobTarget3DGoal(mob, LivingEntity.class, false,10, LivingEntity::isAlive){
+                @Override
+                public boolean canUse() {
+                    return super.canUse() && mob.hasEffect(ACEEffects.RABIAL.get());
+                }
+            });
         }
 
     }
@@ -201,6 +206,16 @@ public class ACExemplifiedEvents {
     }
 
     @SubscribeEvent
+    public void mobBreathe(LivingBreatheEvent livingTickEvent) {
+        LivingEntity livingEntity = livingTickEvent.getEntity();
+        Level level = livingEntity.level();
+        if (ACExemplifiedConfig.PRIMORDIAL_OXYGEN_ENABLED && livingEntity instanceof Player player && level.getBiome(player.getOnPos()).is(ACBiomeRegistry.PRIMORDIAL_CAVES)){
+            livingTickEvent.setConsumeAirAmount(5);
+        }
+
+    }
+
+    @SubscribeEvent
     public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) {
         LivingEntity livingEntity = livingTickEvent.getEntity();
         Level level = livingEntity.level();
@@ -288,7 +303,7 @@ public class ACExemplifiedEvents {
         }
 
         if (ACExemplifiedConfig.RABIES_ENABLED && !level.isClientSide && livingEntity.isInWaterRainOrBubble() && livingEntity.hasEffect(ACEEffects.RABIAL.get())) {
-            livingEntity.hurt(ACEDamageTypes.causeRabialDamage(level.registryAccess()), 1.0F);
+            livingEntity.hurt(ACEDamageTypes.causeRabialWaterDamage(level.registryAccess()), 1.0F);
         }
     }
 
@@ -320,10 +335,8 @@ public class ACExemplifiedEvents {
         LivingEntity damaged = livingDamageEvent.getEntity();
 
 
-        if(ACExemplifiedConfig.IRRADIATION_WASHOFF_ENABLED && ModList.get().isLoaded("supplementaries")){
-            if (damager instanceof CorrodentEntity){
-              damaged.addEffect(new MobEffectInstance(ACEEffects.RABIAL.get(), 300, 0));
-            }
+        if(ACExemplifiedConfig.RABIES_ENABLED && damager instanceof LivingEntity living && living.hasEffect(ACEEffects.RABIAL.get()) && damaged.getType().is(ACExexmplifiedTagRegistry.CAN_RABIES)){
+            damaged.addEffect(new MobEffectInstance(ACEEffects.RABIAL.get(), 72000, 0));
         }
     }
 

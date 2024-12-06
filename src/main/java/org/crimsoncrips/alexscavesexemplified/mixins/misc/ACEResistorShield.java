@@ -54,7 +54,7 @@ public class ACEResistorShield extends ShieldItem {
 
     @Inject(method = "onUseTick", at = @At("TAIL"))
     private void getMaxLoadTime(Level level, LivingEntity living, ItemStack stack, int timeUsing, CallbackInfo ci) {
-        if (ACExemplifiedConfig.RESISTOR_MAGNETISM) {
+        if (ACExemplifiedConfig.RESISTOR_MAGNETISM_ENABLED) {
             int i = this.getUseDuration(stack) - timeUsing;
             boolean scarlet = isScarlet(stack);
             for (ItemEntity entity : living.level().getEntitiesOfClass(ItemEntity.class, living.getBoundingBox().inflate(5, 1, 5))) {

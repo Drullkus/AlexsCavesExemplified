@@ -6,11 +6,14 @@ public class ACExemplifiedConfig {
     public static boolean ANTI_SACRIFICE_ENABLED;
 
     public static boolean REDOABLE_SPELUNKY_ENABLED;
-    public static boolean RESISTOR_MAGNETISM;
+    public static boolean RADIANT_WRATH_ENABLED;
+    public static boolean RESISTOR_MAGNETISM_ENABLED;
     public static boolean PURPLE_LEATHERED_ENABLED;
     public static boolean STICKY_SODA_ENABLED;
     public static int EXEMPLIFIED_IRRADIATION_AMOUNT;
     public static boolean GLUTTONY_ENABLED;
+    public static boolean PRIMORDIAL_OXYGEN_ENABLED;
+    public static boolean VOLCANIC_SACRIFICE_ENABLED;
     public static boolean GAMMAROACH_FOODING_ENABLED;
     public static boolean REGULAR_REFERENCE_ENABLED;
     public static boolean JELLYBEAN_CHANGES_ENABLED;;
@@ -45,8 +48,10 @@ public class ACExemplifiedConfig {
 
     public static void bake() {
         try {
+            PRIMORDIAL_OXYGEN_ENABLED = ACEConfigHolder.EXEMPLIFIED.PRIMORDIAL_OXYGEN_ENABLED.get();
+
             JELLYBEAN_CHANGES_ENABLED = ACEConfigHolder.EXEMPLIFIED.JELLYBEAN_CHANGES_ENABLED.get();
-            RESISTOR_MAGNETISM = ACEConfigHolder.EXEMPLIFIED.RESISTOR_MAGNETISM.get();
+            RESISTOR_MAGNETISM_ENABLED = ACEConfigHolder.EXEMPLIFIED.RESISTOR_MAGNETISM_ENABLED.get();
 
             CHARGED_CAVE_CREEPER_CHANCE = ACEConfigHolder.EXEMPLIFIED.CHARGED_CAVE_CREEPER_CHANCE.get();
             FLY_TRAP_ENABLED = ACEConfigHolder.EXEMPLIFIED.FLY_TRAP_ENABLED.get();
@@ -55,6 +60,8 @@ public class ACExemplifiedConfig {
             EXEMPLIFIED_IRRADIATION_AMOUNT = ACEConfigHolder.EXEMPLIFIED.EXEMPLIFIED_IRRADIATION_AMOUNT.get();
             PURPLE_LEATHERED_ENABLED = ACEConfigHolder.EXEMPLIFIED.PURPLE_LEATHERED_ENABLED.get();
             STICKY_SODA_ENABLED = ACEConfigHolder.EXEMPLIFIED.STICKY_SODA_ENABLED.get();
+            VOLCANIC_SACRIFICE_ENABLED = ACEConfigHolder.EXEMPLIFIED.VOLCANIC_SACRIFICE_ENABLED.get();
+            RADIANT_WRATH_ENABLED = ACEConfigHolder.EXEMPLIFIED.RADIANT_WRATH_ENABLED.get();
 
             NUCLEAR_PISTONATION_ENABLED = ACEConfigHolder.EXEMPLIFIED.NUCLEAR_PISTONATION_ENABLED.get();
             VANILLA_ADAPTIONS_ENABLED = ACEConfigHolder.EXEMPLIFIED.VANILLA_ADAPTIONS_ENABLED.get();

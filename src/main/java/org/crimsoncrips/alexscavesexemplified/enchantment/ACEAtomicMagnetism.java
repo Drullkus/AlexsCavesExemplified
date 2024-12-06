@@ -27,7 +27,7 @@ public class ACEAtomicMagnetism extends Enchantment {
 
     @Override
     public String getDescriptionId() {
-        if (ACExemplifiedConfig.RESISTOR_MAGNETISM) {
+        if (ACExemplifiedConfig.RESISTOR_MAGNETISM_ENABLED) {
             return "enchantment.alexscavesexemplified.atomic_magnetism";
         } else {
             return "alexscavesexemplified.feature_disabled";
