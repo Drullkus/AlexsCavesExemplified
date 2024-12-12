@@ -23,10 +23,10 @@ public abstract class ACEWatcher {
 
     @WrapOperation(method = "attemptPossession", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/WatcherEntity;canPossessTargetEntity(Lnet/minecraft/world/entity/Entity;)Z"),remap = false)
     private boolean attemptPossesion(WatcherEntity instance, Entity playerData, Operation<Boolean> original) {
-        boolean returning = false;
+        boolean returning = true;
         if (ModList.get().isLoaded("alexsmobsinteraction")){
             if (ACExemplifiedConfig.STABILIZER_COMPATIBILITY_ENABLED && playerData instanceof Player player && player.getItemBySlot(EquipmentSlot.HEAD).getEnchantmentLevel(AMIEnchantmentRegistry.STABILIZER.get()) > 0) {
-                returning = true;
+                returning = false;
             }
         }
 

@@ -5,24 +5,26 @@
 
 package org.crimsoncrips.alexscavesexemplified.goals;
 
+import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity;
 import com.google.common.base.Predicate;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.item.Item;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
-import javax.annotation.Nullable;
-import net.minecraft.world.InteractionHand;
-import net.minecraft.world.entity.Entity;
-import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
-import net.minecraft.world.entity.ai.goal.target.TargetGoal;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.misc.ACETargetsDroppedItems;
 
-public class ACECreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
+public class ACEPickupWasteBarrels<T extends ItemEntity> extends TargetGoal {
 
     //just a copy of AM's CreatureAITargetItems goal//
     protected final Sorter theNearestAttackableTargetSorter;
@@ -30,42 +32,29 @@ public class ACECreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected int executionChance;
     protected boolean mustUpdate;
     protected ItemEntity targetEntity;
-    protected ACETargetsDroppedItems hunter;
     private final int tickThreshold;
     private float radius;
+    private BrainiacEntity brainiac;
     private int walkCooldown;
 
-    public ACECreatureAITargetItems(PathfinderMob creature, boolean checkSight) {
-        this(creature, checkSight, false);
-        this.setFlags(EnumSet.of(Flag.MOVE));
-    }
 
-    public ACECreatureAITargetItems(PathfinderMob creature, boolean checkSight, int tickThreshold) {
-        this(creature, checkSight, false, tickThreshold, 9);
-        this.setFlags(EnumSet.of(Flag.MOVE));
-    }
-
-    public ACECreatureAITargetItems(PathfinderMob creature, boolean checkSight, boolean onlyNearby) {
-        this(creature, 10, checkSight, onlyNearby, (Predicate)null, 0);
-    }
-
-    public ACECreatureAITargetItems(PathfinderMob creature, boolean checkSight, boolean onlyNearby, int tickThreshold, int radius) {
+    public ACEPickupWasteBarrels(BrainiacEntity creature, boolean checkSight, boolean onlyNearby, int tickThreshold, int radius) {
         this(creature, 10, checkSight, onlyNearby, (Predicate)null, tickThreshold);
         this.radius = (float)radius;
     }
 
-    public ACECreatureAITargetItems(PathfinderMob creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable Predicate<? super T> targetSelector, int ticksExisted) {
+    public ACEPickupWasteBarrels(BrainiacEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable Predicate<? super T> targetSelector, int ticksExisted) {
         super(creature, checkSight, onlyNearby);
         this.radius = 9.0F;
         this.walkCooldown = 0;
+        this.brainiac = creature;
         this.executionChance = chance;
         this.tickThreshold = ticksExisted;
-        this.hunter = (ACETargetsDroppedItems)creature;
         this.theNearestAttackableTargetSorter = new Sorter(creature);
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             public boolean apply(@Nullable ItemEntity item) {
                 ItemStack stack = item.getItem();
-                return !stack.isEmpty() && ACECreatureAITargetItems.this.hunter.canTargetItem(stack) && item.tickCount > ACECreatureAITargetItems.this.tickThreshold;
+                return !stack.isEmpty() && stack.is(ACBlockRegistry.WASTE_DRUM.get().asItem()) && item.tickCount > ACEPickupWasteBarrels.this.tickThreshold;
             }
         };
         this.setFlags(EnumSet.of(Flag.MOVE));
@@ -73,7 +62,7 @@ public class ACECreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
 
     public boolean canUse() {
         if (!this.mob.isPassenger() && (!this.mob.isVehicle() || this.mob.getControllingPassenger() == null)) {
-            if (!this.mob.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
+            if (brainiac.hasBarrel()) {
                 return false;
             } else {
                 if (!this.mustUpdate) {
@@ -94,7 +83,6 @@ public class ACECreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
                     Collections.sort(list, this.theNearestAttackableTargetSorter);
                     this.targetEntity = (ItemEntity)list.get(0);
                     this.mustUpdate = false;
-                    this.hunter.onFindTarget(this.targetEntity);
                     return true;
                 }
             }
@@ -147,9 +135,9 @@ public class ACECreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
             this.mob.getMoveControl().setWantedPosition(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 1.0);
         }
 
-        if (this.targetEntity != null && this.targetEntity.isAlive() && this.mob.distanceToSqr(this.targetEntity) < this.hunter.getMaxDistToItem() && this.mob.getItemInHand(InteractionHand.MAIN_HAND).isEmpty()) {
-            this.hunter.onGetItem(this.targetEntity);
-            this.targetEntity.getItem().shrink(1);
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.mob.distanceToSqr(this.targetEntity) < 3 && !brainiac.hasBarrel()) {
+            brainiac.setHasBarrel(true);
+            targetEntity.kill();
             this.stop();
         }
 

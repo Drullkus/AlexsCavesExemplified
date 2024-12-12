@@ -6,14 +6,14 @@ import com.github.alexmodguy.alexscaves.server.block.PottedFlytrapBlock;
 import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
+import com.github.alexmodguy.alexscaves.server.entity.item.MeltedCaramelEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.GumbeeperEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.NucleeperEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.*;
+import com.github.alexmodguy.alexscaves.server.entity.util.FrostmintExplosion;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
+import com.github.alexmodguy.alexscaves.server.misc.ACMath;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityFly;
@@ -25,6 +25,8 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.effect.MobEffect;
@@ -37,6 +39,7 @@ import net.minecraft.world.entity.animal.Cow;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
@@ -44,6 +47,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -132,7 +136,7 @@ public class ACExemplifiedEvents {
                             Vec3 lookAngle = player.getLookAngle();
                             worldIn.addParticle(particle, player.getX(), player.getY() + 1.5, player.getZ(), lookAngle.x * 1.5, lookAngle.y * 2, lookAngle.z * 1.5);
                         }
-                        if (random.nextDouble() < 0.04)
+                        if (random.nextDouble() < 0.01)
                             player.addEffect(new MobEffectInstance(ACEffectRegistry.SUGAR_RUSH.get(), 100, 0));
 
                     }
@@ -164,8 +168,9 @@ public class ACExemplifiedEvents {
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent deathEvent) {
         LivingEntity died = deathEvent.getEntity();
+        Level level = died.level();
 
-        if (died instanceof NucleeperEntity nucleeper){
+        if (died instanceof NucleeperEntity nucleeper && ACExemplifiedConfig.NUCLEAR_CHAIN_ENABLED){
             if (deathEvent.getSource().is(DamageTypes.PLAYER_EXPLOSION) || deathEvent.getSource().is(DamageTypes.EXPLOSION) || deathEvent.getSource().is(ACDamageTypes.NUKE)){
                 NuclearExplosionEntity explosion = ACEntityRegistry.NUCLEAR_EXPLOSION.get().create(nucleeper.level());
                 explosion.copyPosition(nucleeper);
@@ -175,6 +180,23 @@ public class ACExemplifiedEvents {
                 }
                 nucleeper.level().addFreshEntity(explosion);
             }
+        }
+
+        if (died instanceof Player player && ACExemplifiedConfig.MUTATED_DEATH_ENABLED) {
+            MobEffectInstance irradiated = player.getEffect(ACEffectRegistry.IRRADIATED.get());
+            if (irradiated != null && irradiated.getAmplifier() >= 2) {
+                ACEntityRegistry.BRAINIAC.get().spawn((ServerLevel) level, BlockPos.containing(player.getX(), player.getY(), player.getZ()), MobSpawnType.MOB_SUMMONED);
+
+            }
+        }
+
+        if (ACExemplifiedConfig.FISH_MUTATION_ENABLED && died.getFeetBlockState().is(ACBlockRegistry.ACID.get()) && died.getType().is(ACExexmplifiedTagRegistry.FISH)  && !died.level().isClientSide() && died.getRandom().nextDouble() < 1){
+            ACEntityRegistry.RADGILL.get().spawn((ServerLevel) level, BlockPos.containing(died.getX(), died.getY(), died.getZ()), MobSpawnType.MOB_SUMMONED);
+            died.discard();
+        }
+        if (ACExemplifiedConfig.CAT_MUTATION_ENABLED && died.getFeetBlockState().is(ACBlockRegistry.ACID.get()) && died.getType().is(ACExexmplifiedTagRegistry.CAT)  && !died.level().isClientSide() && died.getRandom().nextDouble() < 1){
+            ACEntityRegistry.RAYCAT.get().spawn((ServerLevel) level, BlockPos.containing(died.getX(), died.getY(), died.getZ()), MobSpawnType.MOB_SUMMONED);
+            died.discard();
         }
 
     }
@@ -216,9 +238,50 @@ public class ACExemplifiedEvents {
     }
 
     @SubscribeEvent
-    public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) {
+    public void mobTickEvents(LivingEvent.LivingTickEvent livingTickEvent) throws InterruptedException {
         LivingEntity livingEntity = livingTickEvent.getEntity();
         Level level = livingEntity.level();
+
+
+
+        if (ACExemplifiedConfig.DISORIENTED_ENABLED && !level.isClientSide && livingEntity instanceof WatcherEntity watcherEntity){
+            Entity possessedEntity = watcherEntity.getPossessedEntity();
+            if (possessedEntity != null && possessedEntity.isAlive()) {
+                if (possessedEntity.getId() != watcherEntity.getId() && possessedEntity instanceof Player player) {
+                    player.addEffect(new MobEffectInstance(MobEffects.CONFUSION, 80, 0));
+                    player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 80, 0));
+                }
+            }
+        }
+
+
+        if (ACExemplifiedConfig.PRESSURED_HOOKS_ENABLED){
+            if (livingEntity instanceof Player player) {
+                boolean trueMainhand = livingEntity.getMainHandItem().is(ACItemRegistry.CANDY_CANE_HOOK.get());
+                boolean trueOffhand = livingEntity.getOffhandItem().is(ACItemRegistry.CANDY_CANE_HOOK.get());
+                if (livingEntity.getVehicle() instanceof GumWormSegmentEntity && trueMainhand) {
+                    if (player.isCreative())
+                        return;
+                    if (!(player.getRandom().nextDouble() < 0.05))
+                        return;
+                    player.getMainHandItem().hurtAndBreak(1, player, (p_233654_0_) -> {
+                    });
+                }
+                if (livingEntity.getVehicle() instanceof GumWormSegmentEntity && trueOffhand) {
+                    if (player.isCreative())
+                        return;
+                    if (!(player.getRandom().nextDouble() < 0.05))
+                        return;
+                    player.getOffhandItem().hurtAndBreak(1, player, (p_233654_0_) -> {
+                    });
+                }
+
+                if ((!trueMainhand || !trueOffhand) && livingEntity.getVehicle() instanceof GumWormSegmentEntity && ACExemplifiedConfig.LOGICAL_RIDING_ENABLED) {
+                    livingEntity.removeVehicle();
+                }
+            }
+        }
+
 
         if (ACExemplifiedConfig.STICKY_SODA_ENABLED && livingEntity.getFeetBlockState().is(ACBlockRegistry.PURPLE_SODA.get())){
             livingEntity.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 90, 0));
@@ -337,6 +400,16 @@ public class ACExemplifiedEvents {
 
         if(ACExemplifiedConfig.RABIES_ENABLED && damager instanceof LivingEntity living && living.hasEffect(ACEEffects.RABIAL.get()) && damaged.getType().is(ACExexmplifiedTagRegistry.CAN_RABIES)){
             damaged.addEffect(new MobEffectInstance(ACEEffects.RABIAL.get(), 72000, 0));
+        }
+
+        if(ACExemplifiedConfig.STICKY_CARAMEL_ENABLED && damager instanceof CaramelCubeEntity caramelCubeEntity && caramelCubeEntity.getRandom().nextDouble() < 0.5){
+            MeltedCaramelEntity meltedCaramel = ACEntityRegistry.MELTED_CARAMEL.get().create(caramelCubeEntity.level());
+            if (meltedCaramel == null)
+                return;
+            meltedCaramel.setPos(damaged.getPosition(1));
+            meltedCaramel.setDespawnsIn(40 + ((1 + caramelCubeEntity.getSlimeSize()) - 1) * 40);
+            meltedCaramel.setDeltaMovement(caramelCubeEntity.getDeltaMovement().multiply(-1.0F, 0.0F, -1.0F));
+            caramelCubeEntity.level().addFreshEntity(meltedCaramel);
         }
     }
 

@@ -57,11 +57,25 @@ public class ACEConfigList {
     public final ForgeConfigSpec.DoubleValue CHARGED_CAVE_CREEPER_CHANCE;
     public final ForgeConfigSpec.BooleanValue RESISTOR_MAGNETISM_ENABLED;
     public final ForgeConfigSpec.BooleanValue PURPLE_LEATHERED_ENABLED;
+    public final ForgeConfigSpec.BooleanValue FISH_MUTATION_ENABLED;
+    public final ForgeConfigSpec.BooleanValue STICKY_CARAMEL_ENABLED;
 
     public final ForgeConfigSpec.BooleanValue STICKY_SODA_ENABLED;
     public final ForgeConfigSpec.BooleanValue PRIMORDIAL_OXYGEN_ENABLED;
     public final ForgeConfigSpec.BooleanValue VOLCANIC_SACRIFICE_ENABLED;
     public final ForgeConfigSpec.BooleanValue RADIANT_WRATH_ENABLED;
+    public final ForgeConfigSpec.BooleanValue PRESSURED_HOOKS_ENABLED;
+    public final ForgeConfigSpec.BooleanValue LOGICAL_RIDING_ENABLED;
+    public final ForgeConfigSpec.BooleanValue FEARED_ANCESTORS_ENABLED;
+    public final ForgeConfigSpec.BooleanValue DINOSAUR_EGG_ANGER_ENABLED;
+    public final ForgeConfigSpec.BooleanValue IRRADIATED_CREEPER_ENABLED;
+    public final ForgeConfigSpec.BooleanValue NUCLEAR_CHAIN_ENABLED;
+    public final ForgeConfigSpec.BooleanValue MUTATED_DEATH_ENABLED;
+    public final ForgeConfigSpec.BooleanValue WASTE_PICKUP_ENABLED;
+    public final ForgeConfigSpec.BooleanValue CAT_MUTATION_ENABLED;
+    public final ForgeConfigSpec.BooleanValue DARKNESS_APPLYED_ENABLED;
+    public final ForgeConfigSpec.BooleanValue DISORIENTED_ENABLED;
+
     public final ForgeConfigSpec.IntValue SPELUNKY_ATTEMPTS_AMOUNT;
     
 
@@ -87,6 +101,9 @@ public class ACEConfigList {
         builder.push("Caniac");
         this.CANIAC_SENSITIVITY_ENABLED = buildBoolean(builder, "CANIAC_SENSITIVITY_ENABLED", " ", true, "Whether Caniac dissolve in water and will actively avoid it");
          builder.pop();
+        builder.push("Caramel Cube");
+        this.STICKY_CARAMEL_ENABLED = buildBoolean(builder, "STICKY_CARAMEL_ENABLED", " ", true, "Whether caramel cube's stickiness applies to its attacks");
+        builder.pop();
         builder.push("Gingerbread Man");
         this.AMPUTATION_ENABLED = buildBoolean(builder, "AMPUTATION_ENABLED", " ", true, "Whether Gingerbread Men can be amputated with an axe");
         this.HIVE_MIND_ENABLED = buildBoolean(builder, "HIVE_MIND_ENABLED", " ", true, "Whether Gingerbread Men will attack you if you attack one of them.");
@@ -97,6 +114,11 @@ public class ACEConfigList {
         builder.push("Gummy Bear");
         this.JELLYBEAN_CHANGES_ENABLED = buildBoolean(builder, "JELLYBEAN_CHANGES_ENABLED", " ", true, "Jellybean harvesting is changed where amount of jellybeans is made the longer they hibernate");
         builder.pop();
+        builder.push("Gum Worm");
+        this.PRESSURED_HOOKS_ENABLED = buildBoolean(builder, "PRESSURED_HOOKS_ENABLED", " ", true, "Whether candy hooks will take damage overtime when riding a gum worm");
+        this.LOGICAL_RIDING_ENABLED = buildBoolean(builder, "LOGICAL_RIDING_ENABLED", " ", true, "Whether to kick you off the gum worm when either of your hooks are not present");
+
+        builder.pop();
         
         
 
@@ -104,6 +126,8 @@ public class ACEConfigList {
         builder.push("Forlorn Hollows");
         this.FORLORN_LIGHT_EFFECT_ENABLED = buildBoolean(builder, "FORLORN_LIGHT_EFFECT_ENABLED", " ", true, "Whether most forlorn mammals are effected when a player holds light");
         this.BURST_OUT_ENABLED = buildBoolean(builder, "BURST_OUT_ENABLED", " ", true, "Whether breaking Forlorn Hollows blocks has a chance to burst out Underzealots or Corrodents");
+        this.DARKNESS_APPLYED_ENABLED = buildBoolean(builder, "DARKNESS_APPLYED_ENABLED", " ", true, "Whether darkness arrows have a 1% chance of inflicting darkness");
+
         builder.push("Corrodent");
         this.CORRODENT_CONVERSION_ENABLED = buildBoolean(builder, "CORRODENT_CONVERSION_ENABLED", " ", true, "Whether corrodents can be converted to underzealots through ritual");
         this.RABIES_ENABLED = buildBoolean(builder, "RABIES_ENABLED", " ", true, "Whether corrodents inflict rabies-like symptoms");
@@ -115,23 +139,41 @@ public class ACEConfigList {
         builder.pop();
         builder.push("Watcher");
         this.STABILIZER_COMPATIBILITY_ENABLED = buildBoolean(builder, "STABILIZER_COMPATIBILITY_ENABLED", " ", true, "Whether the Stabilizer enchantment from Alexs Mobs Interaction negates possession from the Watcher");
+        this.DISORIENTED_ENABLED = buildBoolean(builder, "DISORIENTED_ENABLED", " ", true, "Whether you get disoriented when possessed by a watcher");
+
         builder.pop();
         builder.pop();
 
         builder.push("Toxic Caves");
         this.EXEMPLIFIED_IRRADIATION_AMOUNT = buildInt(builder, "EXEMPLIFIED_IRRADIATION_AMOUNT", " ", 3, 0, Integer.MAX_VALUE, "Amount of irradiation level to get the deadly effects");
-
+        this.IRRADIATED_CREEPER_ENABLED = buildBoolean(builder, "IRRADIATED_CREEPER_ENABLED", " ", true, "Whether Irradiated Creepers have their explosions amplified");
         this.IRRADIATION_WASHOFF_ENABLED = buildBoolean(builder, "IRRADIATION_WASHOFF_ENABLED", " ", true, "Whether Irradiation wears off faster when in water");
         this.GEOTHERMAL_EFFECTS_ENABLED = buildBoolean(builder, "GEOTHERMAL_EFFECTS_ENABLED", " ", true, "Whether Geothermal Vents have effects when standing on top depending on the spewed smoke");
 
+        builder.push("Braniac");
+        this.MUTATED_DEATH_ENABLED = buildBoolean(builder, "MUTATED_DEATH_ENABLED", " ", true, "Whether players with irradiated with an amplifier of 2 or more spawns braniacs");
+        this.WASTE_PICKUP_ENABLED = buildBoolean(builder, "WASTE_PICKUP_ENABLED", " ", true, "Whether Braniacs can pickup waste drums if they have non");
+        builder.pop();
         builder.push("Gammaroach");
         this.GAMMAROACH_FOODING_ENABLED = buildBoolean(builder, "GAMMAROACH_FOODING_ENABLED", " ", true, "Whether gammaroaches hunt dropped food");
+        builder.pop();
+        builder.push("Nucleeper");
+        this.NUCLEAR_CHAIN_ENABLED = buildBoolean(builder, "NUCLEAR_CHAIN_ENABLED", " ", true, "Whether nucleepers explode when they die from explosions");
+        builder.pop();
+        builder.push("Radgill");
+        this.FISH_MUTATION_ENABLED = buildBoolean(builder, "FISH_MUTATION_ENABLED", " ", true, "Whether fish have a chance to turn into radgill when dowsed in acid");
+        builder.pop();
+        builder.push("Raycat");
+        this.CAT_MUTATION_ENABLED = buildBoolean(builder, "CAT_MUTATION_ENABLED", " ", true, "Whether cats have a chance to turn into raycat when dowsed in acid");
         builder.pop();
         builder.pop();
 
         builder.push("Primordial Caves");
         this.FLY_TRAP_ENABLED = buildBoolean(builder, "FLY_TRAP_ENABLED", " ", true, "Flytraps close shut when a fly (From Alexs Mobs) comes into contact with it");
         this.PRIMORDIAL_OXYGEN_ENABLED = buildBoolean(builder, "PRIMORDIAL_OXYGEN_ENABLED", " ", true, "Whether you are weaker inside Primordial Caves due to the oxygen");
+        this.FEARED_ANCESTORS_ENABLED = buildBoolean(builder, "FEARED_ANCESTORS_ENABLED", " ", true, "Whether you are attacked by some dinosaurs if seen with a limestone spear");
+        this.DINOSAUR_EGG_ANGER_ENABLED = buildBoolean(builder, "DINOSAUR_EGG_ANGER_ENABLED", " ", true, "Whether untamed dinosaurs will attack any that are seen with their egg");
+
         builder.push("Atlatitan");
         this.VOLCANIC_SACRIFICE_ENABLED = buildBoolean(builder, "VOLCANIC_SACRIFICE_ENABLED", " ", true, "Whether atlatitan eggs or babies can be sacrificed to a volcano to refresh its lux cooldown");
         builder.pop();

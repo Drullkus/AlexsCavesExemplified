@@ -1,61 +1,38 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 
-import com.github.alexmodguy.alexscaves.server.block.PrimalMagmaBlock;
 import com.github.alexmodguy.alexscaves.server.enchantment.ACEnchantmentRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.item.DarkArrowEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.FrostmintSpearEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.SpinningPeppermintEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.SugarStaffHexEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.AtlatitanEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.LuxtructosaurusEntity;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.item.SeaStaffItem;
 import com.github.alexmodguy.alexscaves.server.item.SugarStaffItem;
 import com.github.alexmodguy.alexscaves.server.misc.ACMath;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
-import com.github.alexmodguy.alexscaves.server.potion.DarknessIncarnateEffect;
-import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import net.minecraft.core.BlockPos;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.item.Items;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentHelper;
-import net.minecraft.world.item.enchantment.Enchantments;
-import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraft.world.phys.shapes.CollisionContext;
-import net.minecraft.world.phys.shapes.EntityCollisionContext;
-import net.minecraft.world.phys.shapes.Shapes;
-import net.minecraft.world.phys.shapes.VoxelShape;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
-import org.spongepowered.asm.mixin.injection.Constant;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
-
-import static com.github.alexmodguy.alexscaves.server.block.PrimalMagmaBlock.SINK_SHAPE;
 
 
 @Mixin(SugarStaffItem.class)
@@ -72,9 +49,11 @@ public abstract class ACESugarStaff extends Item {
             player.swing(hand);
             Entity lookingAtEntity = SeaStaffItem.getClosestLookingAtEntityFor(level, player, (double)32.0F);
 
-            if (player.getOffhandItem().is(ACItemRegistry.RADIANT_ESSENCE.get())){
+            if (player.getItemInHand(InteractionHand.OFF_HAND).is(ACItemRegistry.RADIANT_ESSENCE.get()) && ACExemplifiedConfig.RADIANT_WRATH_ENABLED){
                 if(hex){
-                    System.out.println("testtttt");
+                    int humunguous = itemstack.getEnchantmentLevel(ACEnchantmentRegistry.HUMUNGOUS_HEX.get());
+
+
                     float maxDist = 128;
                     HitResult realHitResult = ProjectileUtil.getHitResultOnViewVector(player, Entity::canBeHitByProjectile, maxDist);
                     if(realHitResult.getType() == HitResult.Type.MISS){
@@ -88,7 +67,7 @@ public abstract class ACESugarStaff extends Item {
                         k++;
                     }
 
-                    int maxSpears = 30;
+                    int maxSpears = 20 + (humunguous <= 0 ? 0 : 10 * humunguous);
                     for(int j = 0; j < maxSpears; j++){
                         FrostmintSpearEntity frostmintSpearEntity = ACEntityRegistry.FROSTMINT_SPEAR.get().spawn((ServerLevel) level, BlockPos.containing(0, 0, 0), MobSpawnType.MOB_SUMMONED);
                         frostmintSpearEntity.pickup = FrostmintSpearEntity.Pickup.CREATIVE_ONLY;
@@ -107,12 +86,13 @@ public abstract class ACESugarStaff extends Item {
                         Vec3 vec31 = realHitResult.getLocation().subtract(vec3);
                         frostmintSpearEntity.setKnockback(0);
                         frostmintSpearEntity.shoot(vec31.x, vec31.y, vec31.z, 0.5F + 1.5F * level.random.nextFloat(),  level.random.nextFloat() * 10);
+                        frostmintSpearEntity.getPersistentData().putBoolean("FrostRadiant", true);
                     }
 
                     SugarStaffHexEntity sugarStaffHexEntity = ACEntityRegistry.SUGAR_STAFF_HEX.get().create(player.level());
                     sugarStaffHexEntity.setOwner(player);
                     sugarStaffHexEntity.setPos(realHitResult.getLocation());
-                    sugarStaffHexEntity.setHexScale(3.0F + 0.25F * itemstack.getEnchantmentLevel(ACEnchantmentRegistry.HUMUNGOUS_HEX.get()));
+                    sugarStaffHexEntity.setHexScale(1.0F + 0.25F * (float) humunguous);
                     level.addFreshEntity(sugarStaffHexEntity);
                     level.playSound(null, player.blockPosition(), ACSoundRegistry.SUGAR_STAFF_CAST_HEX.get(), SoundSource.PLAYERS, 1.0F, 0.0F);
                     sugarStaffHexEntity.setLifespan(300 + 60 * itemstack.getEnchantmentLevel(ACEnchantmentRegistry.SPELL_LASTING.get()));
@@ -121,41 +101,41 @@ public abstract class ACESugarStaff extends Item {
                     if (!player.isCreative()) {
                         player.getOffhandItem().shrink(1);
                     }
+                    player.getCooldowns().addCooldown(this, humunguous >= 2 ? 1400 : (humunguous == 1 ? 1200 : 1000));
 
                     level.playSound((Player) null, player.blockPosition(), (SoundEvent) ACSoundRegistry.SUGAR_STAFF_CAST_HEX.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
 
 
                 }else{
-                    if (itemstack.getEnchantmentLevel(ACEnchantmentRegistry.PEPPERMINT_PUNTING.get()) > 0){
 
-                    } else {
-                        int amountOfMint = 50 + itemstack.getEnchantmentLevel(ACEnchantmentRegistry.MULTIPLE_MINT.get());
-                        int outsideLayer = (int) (amountOfMint * 0.5);
-                        int middleLayer = (int)  (amountOfMint * 0.3);
-                        int lastLayer = (int) (amountOfMint * 0.2);
+                    boolean seeking = itemstack.getEnchantmentLevel(ACEnchantmentRegistry.SEEKCANDY.get()) > 0;
+                    boolean straight = itemstack.getEnchantmentLevel(ACEnchantmentRegistry.PEPPERMINT_PUNTING.get()) > 0;
+                    int multipleMint = itemstack.getEnchantmentLevel(ACEnchantmentRegistry.MULTIPLE_MINT.get());
 
-                        System.out.println(outsideLayer + "outside");
-                        System.out.println(middleLayer + "middle");
-                        System.out.println(lastLayer + "last");
-
-
-                        for (int oL = 0; oL < outsideLayer; oL++) {
-                            makePeppermint(outsideLayer,oL,level,player,2,9,200,false);
+                    for (int layers = 1; layers < (multipleMint != 0 ? multipleMint : 2);layers++){
+                        for (int l = 0; l < 5 * (2 + layers); l++) {
+                            makeRadiantPeppermint(5 * (2 + layers), l, level, player, 12 / layers  != 0 ? (float) 12 / layers  : 1, 2.5F + layers - 1, 200, straight,seeking,lookingAtEntity);
                         }
-                        for (int mL = 0; mL < middleLayer; mL++) {
-                            makePeppermint(middleLayer,mL,level,player,6,7.5F,200,false);
-                        }
-                        for (int lL = 0; lL < lastLayer; lL++) {
-                            makePeppermint(lastLayer,lL,level,player,10,5,200,false);
-                        }
-
-                        player.getCooldowns().addCooldown(this, 10);
-
-                        level.playSound((Player) null, player.blockPosition(), (SoundEvent) ACSoundRegistry.SUGAR_STAFF_CAST_PEPPERMINT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
-
-
                     }
 
+//                    for (int oL = 0; oL < outsideLayer; oL++) {
+//                        makeRadiantPeppermint(outsideLayer, oL, level, player, 3, 4.5F, 200, straight,seeking,lookingAtEntity);
+//                    }
+//                    if (multipleMint >= 1) {
+//                        for (int mL = 0; mL < middleLayer; mL++) {
+//                            makeRadiantPeppermint(middleLayer, mL, level, player, 7, 3.5F, 200, straight,seeking,lookingAtEntity);
+//                        }
+//                    }
+//                    if (multipleMint >= 2) {
+//                        for (int lL = 0; lL < lastLayer; lL++) {
+//                            makeRadiantPeppermint(lastLayer, lL, level, player, 11, 2.5F, 200, straight,seeking,lookingAtEntity);
+//                        }
+//                    }
+                    if (!player.isCreative()) {
+                        player.getOffhandItem().shrink(1);
+                    }
+                    player.getCooldowns().addCooldown(this, seeking ? (multipleMint >= 2 ? 800 : (multipleMint == 1 ? 700 : 600)) : (multipleMint >= 2 ? 600 : (multipleMint == 1 ? 500 : 400)));
+                    level.playSound((Player) null, player.blockPosition(), (SoundEvent) ACSoundRegistry.SUGAR_STAFF_CAST_PEPPERMINT.get(), SoundSource.PLAYERS, 1.0F, 1.0F);
                 }
             } else {
 
@@ -182,21 +162,19 @@ public abstract class ACESugarStaff extends Item {
                         if (itemstack.getEnchantmentLevel((Enchantment) ACEnchantmentRegistry.PEPPERMINT_PUNTING.get()) > 0) {
                             spinningPeppermintEntity.setStraight(true);
                             spinningPeppermintEntity.setYRot(180.0F + player.getYHeadRot() + (float) ((i - 1) * 15));
-                            spinningPeppermintEntity.setSpinSpeed(8.0F);
                             despawnTime = 20;
                         } else {
                             spinningPeppermintEntity.setStraight(false);
                             spinningPeppermintEntity.setYRot((float) (180 + (i - 1) * 30));
-                            spinningPeppermintEntity.setSpinSpeed(12.0F);
                         }
 
                         if (lookingAtEntity != null && itemstack.getEnchantmentLevel((Enchantment) ACEnchantmentRegistry.SEEKCANDY.get()) > 0) {
                             spinningPeppermintEntity.setSeekingEntityId(lookingAtEntity.getId());
-                            spinningPeppermintEntity.setSpinSpeed(50.0F);
                             despawnTime = 50;
                         }
 
-                        spinningPeppermintEntity.setSpinRadius(3.5F);
+                        spinningPeppermintEntity.setSpinSpeed(7.0F);
+                        spinningPeppermintEntity.setSpinRadius(3F);
                         spinningPeppermintEntity.setOwner(player);
                         spinningPeppermintEntity.setStartAngle((float) (i * 360) / (float) spawnIn);
                         spinningPeppermintEntity.setLifespan(80);
@@ -214,11 +192,14 @@ public abstract class ACESugarStaff extends Item {
         return InteractionResultHolder.sidedSuccess(itemstack, level.isClientSide());
     }
 
-    public void makePeppermint(int amountOfPeppermint, int loopInt, Level level, LivingEntity living,int spinSpeed,float spinRadius, int setLifespan,boolean setStraight){
+    public void makeRadiantPeppermint(int amountOfPeppermint, float loopInt, Level level, LivingEntity living, float spinSpeed, float spinRadius, int setLifespan, boolean setStraight, boolean seeking, Entity lookingAtEntity){
 
         SpinningPeppermintEntity peppermint = ACEntityRegistry.SPINNING_PEPPERMINT.get().create(living.level());
         peppermint.setPos(living.position().add(0, living.getBbHeight() * 0.45F, 0));
-
+        if (seeking) {
+            peppermint.setSeekingEntityId(lookingAtEntity.getId());
+        }
+        peppermint.getPersistentData().putBoolean("PepperRadiant", true);
         peppermint.setStraight(setStraight);
         peppermint.setYRot(180 + (loopInt - 1) * 30);
         peppermint.setSpinSpeed(spinSpeed);
@@ -226,7 +207,21 @@ public abstract class ACESugarStaff extends Item {
         peppermint.setOwner(living);
         peppermint.setStartAngle(loopInt * 360 / (float) amountOfPeppermint);
         peppermint.setLifespan(setLifespan);
+
         level.addFreshEntity(peppermint);
     }
 
+    @Override
+    public boolean hurtEnemy(ItemStack pStack, LivingEntity pTarget, LivingEntity pAttacker) {
+        if (pAttacker.getOffhandItem().is(ACItemRegistry.RADIANT_ESSENCE.get())){
+            pTarget.addEffect(new MobEffectInstance(MobEffects.HUNGER,1500,9));
+            if (pAttacker instanceof Player player && !player.isCreative()) {
+                pAttacker.getOffhandItem().shrink(1);
+                player.getCooldowns().addCooldown(this, 400);
+            }
+
+        }
+
+        return super.hurtEnemy(pStack, pTarget, pAttacker);
+    }
 }

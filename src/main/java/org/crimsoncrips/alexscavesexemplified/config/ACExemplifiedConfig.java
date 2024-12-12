@@ -4,11 +4,17 @@ import static com.mojang.text2speech.Narrator.LOGGER;
 
 public class ACExemplifiedConfig {
     public static boolean ANTI_SACRIFICE_ENABLED;
-
+    public static boolean PRESSURED_HOOKS_ENABLED;
+    public static boolean STICKY_CARAMEL_ENABLED;
     public static boolean REDOABLE_SPELUNKY_ENABLED;
+    public static boolean IRRADIATED_CREEPER_ENABLED;
     public static boolean RADIANT_WRATH_ENABLED;
     public static boolean RESISTOR_MAGNETISM_ENABLED;
     public static boolean PURPLE_LEATHERED_ENABLED;
+    public static boolean MUTATED_DEATH_ENABLED;
+    public static boolean DARKNESS_APPLYED_ENABLED;
+    public static boolean FISH_MUTATION_ENABLED;
+    public static boolean DISORIENTED_ENABLED;
     public static boolean STICKY_SODA_ENABLED;
     public static int EXEMPLIFIED_IRRADIATION_AMOUNT;
     public static boolean GLUTTONY_ENABLED;
@@ -44,11 +50,32 @@ public class ACExemplifiedConfig {
 
     public static boolean GEOTHERMAL_EFFECTS_ENABLED;
 
+    public static boolean LOGICAL_RIDING_ENABLED;
+
+    public static boolean FEARED_ANCESTORS_ENABLED;
+    public static boolean DINOSAUR_EGG_ANGER_ENABLED;
+    public static boolean NUCLEAR_CHAIN_ENABLED;
+
+    public static boolean WASTE_PICKUP_ENABLED;
+    public static boolean CAT_MUTATION_ENABLED;
 
 
     public static void bake() {
         try {
+            DARKNESS_APPLYED_ENABLED = ACEConfigHolder.EXEMPLIFIED.DARKNESS_APPLYED_ENABLED.get();
+            STICKY_CARAMEL_ENABLED = ACEConfigHolder.EXEMPLIFIED.STICKY_CARAMEL_ENABLED.get();
+            DISORIENTED_ENABLED = ACEConfigHolder.EXEMPLIFIED.DISORIENTED_ENABLED.get();
             PRIMORDIAL_OXYGEN_ENABLED = ACEConfigHolder.EXEMPLIFIED.PRIMORDIAL_OXYGEN_ENABLED.get();
+            PRESSURED_HOOKS_ENABLED = ACEConfigHolder.EXEMPLIFIED.PRESSURED_HOOKS_ENABLED.get();
+            LOGICAL_RIDING_ENABLED = ACEConfigHolder.EXEMPLIFIED.LOGICAL_RIDING_ENABLED.get();
+            FEARED_ANCESTORS_ENABLED = ACEConfigHolder.EXEMPLIFIED.FEARED_ANCESTORS_ENABLED.get();
+            DINOSAUR_EGG_ANGER_ENABLED = ACEConfigHolder.EXEMPLIFIED.DINOSAUR_EGG_ANGER_ENABLED.get();
+            IRRADIATED_CREEPER_ENABLED = ACEConfigHolder.EXEMPLIFIED.IRRADIATED_CREEPER_ENABLED.get();
+            NUCLEAR_CHAIN_ENABLED = ACEConfigHolder.EXEMPLIFIED.NUCLEAR_CHAIN_ENABLED.get();
+            MUTATED_DEATH_ENABLED = ACEConfigHolder.EXEMPLIFIED.MUTATED_DEATH_ENABLED.get();
+            WASTE_PICKUP_ENABLED = ACEConfigHolder.EXEMPLIFIED.WASTE_PICKUP_ENABLED.get();
+            FISH_MUTATION_ENABLED = ACEConfigHolder.EXEMPLIFIED.FISH_MUTATION_ENABLED.get();
+            CAT_MUTATION_ENABLED = ACEConfigHolder.EXEMPLIFIED.CAT_MUTATION_ENABLED.get();
 
             JELLYBEAN_CHANGES_ENABLED = ACEConfigHolder.EXEMPLIFIED.JELLYBEAN_CHANGES_ENABLED.get();
             RESISTOR_MAGNETISM_ENABLED = ACEConfigHolder.EXEMPLIFIED.RESISTOR_MAGNETISM_ENABLED.get();

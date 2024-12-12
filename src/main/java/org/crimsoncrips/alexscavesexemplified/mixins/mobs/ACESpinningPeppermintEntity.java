@@ -9,6 +9,7 @@ import com.github.alexmodguy.alexscaves.server.entity.util.UnderzealotSacrifice;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -112,38 +113,56 @@ public abstract class ACESpinningPeppermintEntity extends Entity {
             this.reapplyPosition();
             this.setRot(this.getYRot(), this.getXRot());
             Entity owner = this.getOwner();
-            if (owner instanceof Mob) {
-                Mob mob = (Mob)owner;
-                LivingEntity target = mob.getTarget();
-                if (target != null && encirclePos != null) {
-                    Vec3 add = target.getEyePosition().subtract(encirclePos);
-                    if (add.length() > 1.0F) {
-                        add = add.normalize();
-                    }
 
-                    this.setSpinAroundPosition(encirclePos.add(add.scale(0.05F)));
-                }
-            } else if (owner instanceof Player) {
-                Player player = (Player)owner;
-                Vec3 playerPos = player.position().add(0.0F, (player.getBbHeight() * 0.45F), 0.0F);
+            if (owner instanceof Player player && this.getPersistentData().getBoolean("PepperRadiant") && ACExemplifiedConfig.RADIANT_WRATH_ENABLED){
                 Entity seeking = this.getSeekingEntityId() == -1 ? null : this.level().getEntity(this.getSeekingEntityId());
-                if (seeking != null) {
-                    Vec3 add = seeking.getEyePosition().subtract(this.position());
-                    if (add.length() > 1.0F) {
-                        add = add.normalize();
-                    }
+                Vec3 playerPos = player.position().add(0.0F, (player.getBbHeight() * 0.45F), 0.0F);
 
-                    this.setSpinRadius(4.0F - 4.0F * Math.min(1.0F, (float)this.tickCount / 30.0F));
-                    this.setSpinAroundPosition(this.position().add(add));
+                if (seeking != null) {
+                    Vec3 targetPos = seeking.position().add(0.0F, (seeking.getBbHeight() * 0.45F), 0.0F);
+                    this.setSpinAroundPosition(targetPos);
+                    if (this.tickCount == 50){
+                        this.setSpinRadius(getSpinRadius() / 3);
+                    }
                 } else {
                     this.setSpinAroundPosition(playerPos);
                 }
+
+            } else {
+                if (owner instanceof Mob) {
+                    Mob mob = (Mob)owner;
+                    LivingEntity target = mob.getTarget();
+                    if (target != null && encirclePos != null) {
+                        Vec3 add = target.getEyePosition().subtract(encirclePos);
+                        if (add.length() > 1.0F) {
+                            add = add.normalize();
+                        }
+
+                        this.setSpinAroundPosition(encirclePos.add(add.scale(0.05F)));
+                    }
+                } else if (owner instanceof Player) {
+                    Player player = (Player)owner;
+                    Vec3 playerPos = player.position().add(0.0F, (player.getBbHeight() * 0.45F), 0.0F);
+                    Entity seeking = this.getSeekingEntityId() == -1 ? null : this.level().getEntity(this.getSeekingEntityId());
+                    if (seeking != null) {
+                        Vec3 add = seeking.getEyePosition().subtract(this.position());
+                        if (add.length() > 1.0F) {
+                            add = add.normalize();
+                        }
+
+                        this.setSpinRadius(4.0F - 4.0F * Math.min(1.0F, (float)this.tickCount / 30.0F));
+                        this.setSpinAroundPosition(this.position().add(add));
+                    } else {
+                        this.setSpinAroundPosition(playerPos);
+                    }
+                }
             }
+
         }
 
-        if (owner != null && owner.getOffhandItem().is(ACItemRegistry.RADIANT_ESSENCE.get())) {
+        if (owner != null && this.getPersistentData().getBoolean("PepperRadiant") && ACExemplifiedConfig.RADIANT_WRATH_ENABLED) {
             if (this.isStraight()) {
-                if (despawnsIn > 50 && owner != null) {
+                if (despawnsIn > 150) {
                     this.setYRot(180 + this.owner.getYHeadRot());
                     if (encirclePos == null) {
                         this.setSpinAroundPosition(this.position());
@@ -158,6 +177,7 @@ public abstract class ACESpinningPeppermintEntity extends Entity {
                     }
                 } else {
                     if (!level().isClientSide) {
+                        this.setSpinSpeed(7);
                         Vec3 vec3 = new Vec3(0, 0, -0.01F * this.getSpinSpeed()).yRot((float) -Math.toRadians(this.getYRot()));
                         this.setDeltaMovement(this.getDeltaMovement().add(vec3));
                         if (!this.isNoGravity()) {
@@ -170,12 +190,11 @@ public abstract class ACESpinningPeppermintEntity extends Entity {
                     }
                 }
             } else {
-                this.setYRot(180 + this.owner.getYHeadRot());
                 if (encirclePos == null) {
                     this.setSpinAroundPosition(this.position());
                 } else if (!level().isClientSide) {
                     this.move(MoverType.SELF, getDeltaMovement());
-                    float f = Math.min(0.5F, tickCount / 30F);
+                    float f = Math.min(1.0F, tickCount / 30F);
                     Vec3 angle = new Vec3(0, 0, f * this.getSpinRadius()).yRot((float) -Math.toRadians(this.getStartAngle() + spinAngle));
                     Vec3 encircle = encirclePos.add(angle);
                     Vec3 newDelta = encircle.subtract(this.position());
@@ -211,10 +230,10 @@ public abstract class ACESpinningPeppermintEntity extends Entity {
             }
         }
 
-        this.hurtEntities();
+        if (!this.getPersistentData().contains("PepperRadiant") || this.tickCount > 50){
+            this.hurtEntities();
+        }
+
     }
-
-
-
 
 }

@@ -54,6 +54,11 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
         super(pEntityType, pLevel);
     }
 
+    @Override
+    public boolean ignoreExplosion() {
+        return ACExemplifiedConfig.RADIANT_WRATH_ENABLED && this.getPersistentData().getBoolean("FrostRadiant");
+    }
+
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
@@ -70,7 +75,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
             }
         }
 
-        if (ACExemplifiedConfig.RADIANT_WRATH_ENABLED && this.tickCount > 200){
+        if (ACExemplifiedConfig.RADIANT_WRATH_ENABLED && this.getPersistentData().getBoolean("FrostRadiant") && this.tickCount > 100){
             this.discard();
         }
     }
