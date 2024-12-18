@@ -18,6 +18,7 @@ import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
+import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 
 public class ACEEffects {
     private static MobEffect register(int pId, String pKey, MobEffect pEffect) {
@@ -27,8 +28,8 @@ public class ACEEffects {
     public static final DeferredRegister<MobEffect> EFFECT_REGISTER = DeferredRegister.create(ForgeRegistries.MOB_EFFECTS, AlexsCavesExemplified.MODID);
     public static final DeferredRegister<Potion> POTION_REGISTER = DeferredRegister.create(ForgeRegistries.POTIONS, AlexsCavesExemplified.MODID);
 
+    public static final RegistryObject<MobEffect> SUGAR_CRASH = EFFECT_REGISTER.register("sugar_crash", ACESugarCrash::new);
     public static final RegistryObject<MobEffect> RABIAL = EFFECT_REGISTER.register("rabial", ACERabial::new);
-    public static final RegistryObject<Potion> RABIAL_POTION = POTION_REGISTER.register("rabial", ()-> new Potion(new MobEffectInstance(RABIAL.get(), 72000)));
 
 
     public static ItemStack createPotion(Potion potion){
@@ -39,7 +40,6 @@ public class ACEEffects {
 
 
     public static void init(){
-        BrewingRecipeRegistry.addRecipe(new ACEBrewingRecipes(Ingredient.of(createPotion(Potions.WATER)), Ingredient.of(ACItemRegistry.CORRODENT_TEETH.get()), createPotion(RABIAL_POTION.get())));
 
     }
 }

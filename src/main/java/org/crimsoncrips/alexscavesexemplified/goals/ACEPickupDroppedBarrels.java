@@ -24,7 +24,7 @@ import java.util.Comparator;
 import java.util.EnumSet;
 import java.util.List;
 
-public class ACEPickupWasteBarrels<T extends ItemEntity> extends TargetGoal {
+public class ACEPickupDroppedBarrels<T extends ItemEntity> extends TargetGoal {
 
     //just a copy of AM's CreatureAITargetItems goal//
     protected final Sorter theNearestAttackableTargetSorter;
@@ -38,12 +38,12 @@ public class ACEPickupWasteBarrels<T extends ItemEntity> extends TargetGoal {
     private int walkCooldown;
 
 
-    public ACEPickupWasteBarrels(BrainiacEntity creature, boolean checkSight, boolean onlyNearby, int tickThreshold, int radius) {
+    public ACEPickupDroppedBarrels(BrainiacEntity creature, boolean checkSight, boolean onlyNearby, int tickThreshold, int radius) {
         this(creature, 10, checkSight, onlyNearby, (Predicate)null, tickThreshold);
         this.radius = (float)radius;
     }
 
-    public ACEPickupWasteBarrels(BrainiacEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable Predicate<? super T> targetSelector, int ticksExisted) {
+    public ACEPickupDroppedBarrels(BrainiacEntity creature, int chance, boolean checkSight, boolean onlyNearby, @Nullable Predicate<? super T> targetSelector, int ticksExisted) {
         super(creature, checkSight, onlyNearby);
         this.radius = 9.0F;
         this.walkCooldown = 0;
@@ -54,7 +54,7 @@ public class ACEPickupWasteBarrels<T extends ItemEntity> extends TargetGoal {
         this.targetEntitySelector = new Predicate<ItemEntity>() {
             public boolean apply(@Nullable ItemEntity item) {
                 ItemStack stack = item.getItem();
-                return !stack.isEmpty() && stack.is(ACBlockRegistry.WASTE_DRUM.get().asItem()) && item.tickCount > ACEPickupWasteBarrels.this.tickThreshold;
+                return !stack.isEmpty() && stack.is(ACBlockRegistry.WASTE_DRUM.get().asItem()) && item.tickCount > ACEPickupDroppedBarrels.this.tickThreshold;
             }
         };
         this.setFlags(EnumSet.of(Flag.MOVE));
@@ -113,7 +113,6 @@ public class ACEPickupWasteBarrels<T extends ItemEntity> extends TargetGoal {
             this.mob.getNavigation().moveTo(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 1.0);
             this.walkCooldown = 30 + this.mob.getRandom().nextInt(40);
         }
-
     }
 
     public void stop() {
@@ -135,10 +134,15 @@ public class ACEPickupWasteBarrels<T extends ItemEntity> extends TargetGoal {
             this.mob.getMoveControl().setWantedPosition(this.targetEntity.getX(), this.targetEntity.getY(), this.targetEntity.getZ(), 1.0);
         }
 
-        if (this.targetEntity != null && this.targetEntity.isAlive() && this.mob.distanceToSqr(this.targetEntity) < 3 && !brainiac.hasBarrel()) {
-            brainiac.setHasBarrel(true);
-            targetEntity.kill();
-            this.stop();
+        if (this.targetEntity != null && this.targetEntity.isAlive() && this.mob.distanceToSqr(this.targetEntity) < 6 && !brainiac.hasBarrel()) {
+            if (brainiac.getAnimation() == BrainiacEntity.NO_ANIMATION) {
+                brainiac.setAnimation(BrainiacEntity.ANIMATION_BITE);
+            }
+            if (brainiac.getAnimation() == BrainiacEntity.ANIMATION_BITE && brainiac.getAnimationTick() >= 10 && brainiac.getAnimationTick() <= 30) {
+                brainiac.setHasBarrel(true);
+                targetEntity.kill();
+                this.stop();
+            }
         }
 
     }

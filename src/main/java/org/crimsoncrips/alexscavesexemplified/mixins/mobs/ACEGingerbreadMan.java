@@ -26,4 +26,10 @@ public abstract class ACEGingerbreadMan extends Monster {
         if (ACExemplifiedConfig.HIVE_MIND_ENABLED) gingerbreadMan.targetSelector.addGoal(1, (new ACEHurtByTargetGoal(gingerbreadMan)).setAlertOthers(new Class[0]));
     }
 
+    @Override
+    public boolean isSensitiveToWater() {
+        return ACExemplifiedConfig.GINGER_DISINTEGRATE_ENABLED;
+    }
+
+
 }

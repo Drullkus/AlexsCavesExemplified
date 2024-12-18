@@ -11,8 +11,11 @@ import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.LuxtructosaurusEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.SauropodBaseEntity;
 import com.github.alexmodguy.alexscaves.server.misc.ACAdvancementTriggerRegistry;
+import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvent;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
 import net.minecraft.util.RandomSource;
@@ -62,6 +65,8 @@ public abstract class ACEVolcanicCoreBlockEntity extends BlockEntity {
 
                 double dist = Mth.sqrt((float) item.distanceToSqr(vec3));
                 if (dist < maxDist) {
+                    item.getPersistentData().putBoolean("DraggedProtection", true);
+                    item.setGlowingTag(true);
                     Vec3 sub = vec3.subtract(item.position()).normalize().scale(0.2F);
                     Vec3 delta = item.getDeltaMovement().scale(0.8F);
                     item.setDeltaMovement(sub.add(delta));

@@ -84,7 +84,7 @@ public abstract class ACERaygun extends Item {
         Block[] block = {Blocks.BASALT,Blocks.NETHERRACK,Blocks.MAGMA_BLOCK, ACBlockRegistry.PRIMAL_MAGMA.get()};
 
         if (!level.getBlockState(pos).is(Blocks.AIR) && level.random.nextDouble() < 0.2 && !level.getBlockState(pos).is(BlockTags.WITHER_IMMUNE))
-            level.setBlockAndUpdate(pos, block[level.random.nextInt(1, 4)].defaultBlockState());
+            level.setBlockAndUpdate(pos, block[level.random.nextInt(0, 4)].defaultBlockState());
     }
 
 }

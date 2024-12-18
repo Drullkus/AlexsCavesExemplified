@@ -84,7 +84,6 @@ public abstract class ACESugarStaff extends Item {
                         }
                         frostmintSpearEntity.setPos(vec3);
                         Vec3 vec31 = realHitResult.getLocation().subtract(vec3);
-                        frostmintSpearEntity.setKnockback(0);
                         frostmintSpearEntity.shoot(vec31.x, vec31.y, vec31.z, 0.5F + 1.5F * level.random.nextFloat(),  level.random.nextFloat() * 10);
                         frostmintSpearEntity.getPersistentData().putBoolean("FrostRadiant", true);
                     }

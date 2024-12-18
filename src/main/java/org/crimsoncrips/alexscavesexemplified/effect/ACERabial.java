@@ -14,6 +14,7 @@ public class ACERabial extends MobEffect {
 
     public ACERabial() {
         super(MobEffectCategory.HARMFUL, 0Xe6b0ac);
+        
         this.addAttributeModifier(Attributes.ATTACK_DAMAGE, UUID.randomUUID().toString(), -0.1000000596046448, AttributeModifier.Operation.MULTIPLY_TOTAL);
         this.addAttributeModifier(Attributes.ARMOR, UUID.randomUUID().toString(), -1, AttributeModifier.Operation.ADDITION);
 

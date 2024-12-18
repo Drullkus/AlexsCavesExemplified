@@ -3,9 +3,13 @@ package org.crimsoncrips.alexscavesexemplified;
 
 import biomesoplenty.worldgen.feature.misc.DripstoneSplatterFeature;
 import com.crimsoncrips.alexsmobsinteraction.effect.AMIEffects;
+import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import com.github.alexmodguy.alexscaves.server.level.feature.ACFeatureRegistry;
 import com.github.alexthe666.alexsmobs.client.event.ClientEvents;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.CauldronBlock;
+import net.minecraft.world.level.block.FireBlock;
 import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
@@ -42,6 +46,7 @@ public class AlexsCavesExemplified {
         ACEEnchants.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACExemplifiedEvents());
         MinecraftForge.EVENT_BUS.register(this);
+
         ACEEffects.EFFECT_REGISTER.register(modEventBus);
         ACEEffects.POTION_REGISTER.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACEClientEvents());
@@ -68,6 +73,47 @@ public class AlexsCavesExemplified {
 
     private void setup(final FMLCommonSetupEvent event) {
         AMIEffects.init();
+        FireBlock fireblock = (FireBlock) Blocks.FIRE;
+        if (ACExemplifiedConfig.ADDITIONAL_FLAMMABILITY_ENABLED){
+            //Primordial Caves
+            fireblock.setFlammable(ACBlockRegistry.AMBER.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_BRANCH.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_PLANKS.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_WOOD.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_LOG.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.STRIPPED_PEWEN_LOG.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.STRIPPED_PEWEN_WOOD.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_FENCE_GATE.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_PLANKS_FENCE.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_PLANKS_STAIRS.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_PLANKS_SLAB.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_TRAPDOOR.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_DOOR.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.PEWEN_PINES.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.ARCHAIC_VINE.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.FIDDLEHEAD.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.CURLY_FERN.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.FLYTRAP.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.CYCAD.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.ANCIENT_LEAVES.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.FERN_THATCH.get(), 5, 20);
+
+            //Forlorn Hollows
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_LOG.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_BRANCH.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_WOOD.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.STRIPPED_THORNWOOD_LOG.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.STRIPPED_THORNWOOD_WOOD.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_PLANKS.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_PLANKS_STAIRS.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_PLANKS_SLAB.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_PLANKS_FENCE.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_DOOR.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.THORNWOOD_TRAPDOOR.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.UNDERWEED.get(), 5, 20);
+            fireblock.setFlammable(ACBlockRegistry.FORSAKEN_IDOL.get(), 5, 20);
+
+        }
     }
 
 

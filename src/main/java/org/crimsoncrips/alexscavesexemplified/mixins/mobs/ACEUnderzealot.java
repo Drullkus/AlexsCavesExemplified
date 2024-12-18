@@ -2,11 +2,15 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetClosePlayers;
+import com.github.alexmodguy.alexscaves.server.entity.ai.UnderzealotBreakLightGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
+import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
+import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
@@ -20,6 +24,7 @@ import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.goals.ACEHurtByTargetGoal;
 import org.crimsoncrips.alexscavesexemplified.goals.ACEMobTargetClosePlayers;
+import org.crimsoncrips.alexscavesexemplified.goals.ACEUnderzealotExtinguishCampfires;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -39,21 +44,22 @@ public abstract class ACEUnderzealot extends Monster {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         UnderzealotEntity underzealot = (UnderzealotEntity)(Object)this;
-        if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED){
+        underzealot.targetSelector.addGoal(2, new ACEMobTargetClosePlayers(underzealot, 40, 12.0F,livingEntity -> {
+            boolean light = (!livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && !(livingEntity instanceof Player player && curiosLight(player))) || !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
+            boolean respect = (!livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(ACItemRegistry.CLOAK_OF_DARKNESS.get()) && !livingEntity.getItemBySlot(EquipmentSlot.HEAD).is(ACItemRegistry.HOOD_OF_DARKNESS.get())) || !ACExemplifiedConfig.UNDERZEALOT_RESPECT_ENABLED ;
+            return light && respect;
+        }) {
+            public boolean canUse() {
+                return !underzealot.isTargetingBlocked() && super.canUse();
+            }
+        });
 
-            underzealot.targetSelector.addGoal(2, new ACEMobTargetClosePlayers(underzealot, 40, 12.0F,livingEntity -> {
-                return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && !(livingEntity instanceof Player player && curiosLight(player));
-            }) {
-                public boolean canUse() {
-                    return !underzealot.isTargetingBlocked() && super.canUse();
-                }
-            });
-
-            underzealot.goalSelector.addGoal(1, new AvoidEntityGoal<>(underzealot, LivingEntity.class, 4.0F, 1.5, 2, (livingEntity) -> {
-                return underzealot.getLastAttacker() != livingEntity && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || (livingEntity instanceof Player player && curiosLight(player))) ;
-            }));
-
+        if (ACExemplifiedConfig.EXTINGUISH_CAMPFIRES_ENABLED){
+            this.goalSelector.addGoal(7, new ACEUnderzealotExtinguishCampfires(underzealot, 32));
         }
+
+
+
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
@@ -79,7 +85,8 @@ public abstract class ACEUnderzealot extends Monster {
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 12))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
-        return !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
+        return !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED && !ACExemplifiedConfig.UNDERZEALOT_RESPECT_ENABLED;
     }
+
 
 }

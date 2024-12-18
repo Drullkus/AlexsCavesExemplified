@@ -7,13 +7,13 @@
 
   "alexscavesexemplified.potion.rabial": "Rabial Infection",
   "effect.alexscavesexemplified.rabial.description": "Nervous System Disease",
-  "item.minecraft.splash_potion.effect.rabial": "Splash Potion of Rabial",
-  "item.minecraft.tipped_arrow.effect.rabial": "Arrow of Rabial",
-  "item.minecraft.lingering_potion.effect.rabial": "Lingering Potion of Rabial",
-  "item.minecraft.potion.effect.rabial": "Potion of Rabial",
 
+  "alexscavesexemplified.potion.sugar_crash": "Sugar Crash",
+  "effect.alexscavesexemplified.sugar_crash.description": "Sugar Crashed",
 
   "death.attack.rabial_water_0": "%s suffered from water with Rabies",
-  "death.attack.rabial_end_0": "%s died to Rabies"
+  "death.attack.rabial_end_0": "%s died to Rabies",
+  "death.attack.sugar_crash_0": "%s died from a sugar overdose",
+  "death.attack.stomach_damage_0": "%s's stomach exploded"
 }
 

@@ -1,0 +1,10 @@
+{
+  "replace": false,
+  "values": [
+    "alexsmobs:fly",
+    "alexsmobs:cockroach",
+    "alexsmobs:bat",
+    "alexsmobs:spider",
+    "alexsmobs:cave_spider"
+  ]
+}

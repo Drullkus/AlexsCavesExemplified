@@ -16,12 +16,20 @@ public class ACEDamageTypes {
 
     public static final ResourceKey<DamageType> RABIAL_WATER = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "rabial_water"));
     public static final ResourceKey<DamageType> RABIAL_END = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "rabial_end"));
+    public static final ResourceKey<DamageType> SUGAR_CRASH = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "sugar_crash"));
+    public static final ResourceKey<DamageType> STOMACH_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "stomach_damage"));
 
     public static DamageSource causeRabialWaterDamage(RegistryAccess registryAccess) {
         return new DamageSourceRandomMessages(registryAccess.registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(RABIAL_WATER), 1);
     }
     public static DamageSource causeEndRabialDamage(RegistryAccess registryAccess) {
         return new DamageSourceRandomMessages(registryAccess.registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(RABIAL_END), 1);
+    }
+    public static DamageSource causeSugarCrash(RegistryAccess registryAccess) {
+        return new DamageSourceRandomMessages(registryAccess.registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(SUGAR_CRASH), 1);
+    }
+    public static DamageSource causeStomachDamage(RegistryAccess registryAccess) {
+        return new DamageSourceRandomMessages(registryAccess.registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(STOMACH_DAMAGE), 1);
     }
 
     private static class DamageSourceRandomMessages extends DamageSource {

@@ -7,22 +7,30 @@
   "mixins": [
     "external_mobs.ACECreeper",
     "external_mobs.ACEItemEntity",
+    "external_mobs.ACELivingEntity",
+    "external_mobs.ACEPlayer",
     "external_mobs.ACEThrownPotion",
+    "misc.ACEAmberFeature",
+    "misc.ACEDinosaurChops",
+    "misc.ACEDinosaurEggBlock",
     "misc.ACEDreadbowItem",
-    "misc.ACEItemEntity",
+    "misc.ACEGuanoProjectile",
     "misc.ACENuclearBomb",
     "misc.ACEPrimalMagma",
     "misc.ACERaygun",
     "misc.ACEResistorShield",
     "misc.ACESpelunkeryTable",
+    "misc.ACESugarRush",
     "misc.ACESugarStaff",
     "misc.ACESugarStaffHex",
+    "misc.ACEThrownIceCream",
     "misc.ACEVolcanicCoreBlockEntity",
     "mobs.ACEAtlatitan",
     "mobs.ACEBrainiac",
     "mobs.ACECaniac",
     "mobs.ACECorrodent",
     "mobs.ACEDarkArrow",
+    "mobs.ACEDinosaurEntity",
     "mobs.ACEFrostmintSpear",
     "mobs.ACEGammaroach",
     "mobs.ACEGingerbreadMan",
@@ -32,6 +40,7 @@
     "mobs.ACEGummybear",
     "mobs.ACELuxtructosaurus",
     "mobs.ACERelicheirus",
+    "mobs.ACESauropod",
     "mobs.ACESpinningPeppermintEntity",
     "mobs.ACESubterranadon",
     "mobs.ACETremorsaurus",
@@ -44,5 +53,6 @@
     "defaultRequire": 1
   },
   "client": [
+    "external_mobs.ACECockroach.ACEModelCockroach"
   ]
 }

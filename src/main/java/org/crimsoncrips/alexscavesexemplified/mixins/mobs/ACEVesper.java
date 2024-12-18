@@ -1,12 +1,16 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
+import com.crimsoncrips.alexsmobsinteraction.AMInteractionTagRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
 import com.github.alexmodguy.alexscaves.server.entity.ai.VesperTargetUnderneathEntities;
 import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GloomothEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.VesperEntity;
+import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import net.minecraft.world.damagesource.DamageSource;
+import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
@@ -23,6 +27,7 @@ import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.goals.ACEHurtByTargetGoal;
 import org.crimsoncrips.alexscavesexemplified.goals.ACEVesperTarget;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -35,6 +40,12 @@ import java.util.Objects;
 @Mixin(VesperEntity.class)
 public abstract class ACEVesper extends Monster {
 
+
+    @Shadow public int groundedFor;
+
+    @Shadow public int timeHanging;
+
+    @Shadow public abstract void setHanging(boolean hanging);
 
     protected ACEVesper(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -62,8 +73,8 @@ public abstract class ACEVesper extends Monster {
             }));
         }
 
-        if (ACExemplifiedConfig.VESPER_CANNIBALIZE_ENABLED){
-            this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, Bat.class, Objects::nonNull));
+        if (ACExemplifiedConfig.VESPER_HUNT_ENABLED){
+            this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, LivingEntity.class, AMEntityRegistry.buildPredicateFromTag(ACExexmplifiedTagRegistry.VESPER_HUNT)));
         }
     }
 
@@ -79,6 +90,15 @@ public abstract class ACEVesper extends Monster {
         if (target.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || target instanceof Player player && curiosLight(player)) {
             this.setTarget(null);
         }
+    }
+
+    @Override
+    public boolean hurt(DamageSource pSource, float pAmount) {
+        if (pSource.is(DamageTypes.ARROW) && ACExemplifiedConfig.VESPER_SHOTDOWN_ENABLED){
+            this.setHanging(false);
+            groundedFor = 1000;
+        }
+        return super.hurt(pSource, pAmount);
     }
 
     public boolean curiosLight(Player player){

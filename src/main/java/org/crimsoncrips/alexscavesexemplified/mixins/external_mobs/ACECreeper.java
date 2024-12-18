@@ -34,7 +34,7 @@ public abstract class ACECreeper extends Entity {
     }
 
     @ModifyVariable(method = "explodeCreeper", at = @At(value = "STORE"), ordinal = 0)
-    private float modifyPotion(float original) {
+    private float explode(float original) {
         Creeper creeper = (Creeper)(Object)this;
         return ACExemplifiedConfig.IRRADIATED_CREEPER_ENABLED ? (float) (original * (creeper.hasEffect(ACEffectRegistry.IRRADIATED.get()) ? 1.3 * Objects.requireNonNull(creeper.getEffect(ACEffectRegistry.IRRADIATED.get())).getAmplifier() + 1 : 1)) : original;
     }

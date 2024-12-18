@@ -18,9 +18,10 @@ public class ACExexmplifiedTagRegistry {
     public static final TagKey<EntityType<?>> CAN_RABIES = registerEntityTag("can_rabies");
     public static final TagKey<EntityType<?>> FISH = registerEntityTag("acid_to_fish");
     public static final TagKey<EntityType<?>> CAT = registerEntityTag("acid_to_cat");
+    public static final TagKey<EntityType<?>> VESPER_HUNT = registerEntityTag("vesper_hunt");
 
     public static final TagKey<Item> LIGHT = registerItemTag("light");
-
+    public static final TagKey<Item> KNAWING = registerItemTag("knawing");
 
     public ACExexmplifiedTagRegistry() {
     }
