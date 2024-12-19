@@ -597,9 +597,7 @@ public class ACExemplifiedEvents {
 //    }
 
     private void checkLeatherArmor(ItemStack item, Level level, LivingEntity living){
-        DyeableLeatherItem dyeableLeatherItem = new DyeableLeatherItem() {};
-        Item[] leatherItems = {Items.LEATHER_BOOTS, Items.LEATHER_HELMET, Items.LEATHER_LEGGINGS, Items.LEATHER_CHESTPLATE, Items.LEATHER_HORSE_ARMOR};
-        if (item.is(leatherItems[level.random.nextInt(0, 5)]) && living.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get()) && !dyeableLeatherItem.hasCustomColor(item)) {
+        if (item.getItem() instanceof DyeableLeatherItem dyeableLeatherItem && living.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get())) {
             dyeableLeatherItem.setColor(item, 0Xb839e6);
         }
     }

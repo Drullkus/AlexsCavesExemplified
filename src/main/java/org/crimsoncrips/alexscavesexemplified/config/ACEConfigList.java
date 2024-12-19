@@ -193,7 +193,7 @@ public class ACEConfigList {
 
         builder.push("Primordial Caves");
         this.FLY_TRAP_ENABLED = buildBoolean(builder, "FLY_TRAP_ENABLED", " ", true, "Flytraps close shut when a fly (From Alexs Mobs) comes into contact with it");
-        this.PRIMORDIAL_OXYGEN_ENABLED = buildBoolean(builder, "PRIMORDIAL_OXYGEN_ENABLED", " ", true, "Whether you are weaker inside Primordial Caves due to the oxygen");
+        this.PRIMORDIAL_OXYGEN_ENABLED = buildBoolean(builder, "PRIMORDIAL_OXYGEN_ENABLED", " ", true, "Whether you have less oxygen inside Primordial Caves");
         this.FEARED_ANCESTORS_ENABLED = buildBoolean(builder, "FEARED_ANCESTORS_ENABLED", " ", true, "Whether you are attacked by some dinosaurs if seen with a limestone spear");
         this.DINOSAUR_EGG_ANGER_ENABLED = buildBoolean(builder, "DINOSAUR_EGG_ANGER_ENABLED", " ", true, "Whether untamed dinosaurs will attack any that are seen with their egg");
         this.SCAVENGING_ENABLED = buildBoolean(builder, "SCAVENGING_ENABLED", " ", true, "Whether carnivores scavenge for placed dinosaur chops");

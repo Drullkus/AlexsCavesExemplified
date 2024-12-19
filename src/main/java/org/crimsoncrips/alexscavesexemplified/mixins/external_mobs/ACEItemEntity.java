@@ -74,10 +74,7 @@ public abstract class ACEItemEntity extends Entity {
 
         if (ACExemplifiedConfig.PURPLE_LEATHERED_ENABLED) {
             ItemStack item = this.getItem();
-            //idk how this is a sin but alr//
-            DyeableLeatherItem dyeableLeatherItem = new DyeableLeatherItem() {};
-            Item[] leatherItems = {Items.LEATHER_BOOTS, Items.LEATHER_HELMET, Items.LEATHER_LEGGINGS, Items.LEATHER_CHESTPLATE, Items.LEATHER_HORSE_ARMOR};
-            if (item.is(leatherItems[random.nextInt(0, 5)]) && this.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get()) && !dyeableLeatherItem.hasCustomColor(item)) {
+            if (item.getItem() instanceof DyeableLeatherItem dyeableLeatherItem && this.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get())) {
                 dyeableLeatherItem.setColor(item, 0Xb839e6);
             }
         }
