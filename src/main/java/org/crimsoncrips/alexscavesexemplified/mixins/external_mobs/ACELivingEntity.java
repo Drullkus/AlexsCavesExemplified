@@ -24,6 +24,7 @@ import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.FlowerPotBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
@@ -60,25 +61,25 @@ public abstract class ACELivingEntity extends Entity {
                 cockroach.setNoAi(false);
                 cockroach.setInvulnerable(false);
                 cockroach.setSilent(false);
-                cockroach.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1));
+                cockroach.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1,false,false));
             }
             if (livingEntity instanceof EntityFly fly && fly.isNoAi()) {
                 fly.setNoAi(false);
                 fly.setInvulnerable(false);
                 fly.setSilent(false);
-                fly.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1));
+                fly.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1,false,false));
             }
             if (livingEntity instanceof Frog frog && frog.isNoAi()) {
                 frog.setNoAi(false);
                 frog.setInvulnerable(false);
                 frog.setSilent(false);
-                frog.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1));
+                frog.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1,false,false));
             }
             if (livingEntity instanceof Tadpole tadpole && tadpole.isNoAi()) {
                 tadpole.setNoAi(false);
                 tadpole.setInvulnerable(false);
                 tadpole.setSilent(false);
-                tadpole.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1));
+                tadpole.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1,false,false));
             }
         }
     }

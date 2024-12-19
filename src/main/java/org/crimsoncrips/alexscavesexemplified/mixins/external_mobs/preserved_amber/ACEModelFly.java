@@ -22,7 +22,7 @@ public abstract class ACEModelFly {
     //Props to Drullkus for assistance
 
 
-    @Inject(method = "setupAnim(Lcom/github/alexthe666/alexsmobs/entity/EntityFly;FFFFF)V", at = @At(value = "INVOKE", target = "Lcom/github/alexthe666/alexsmobs/client/model/ModelFly;resetToDefaultPose()V"),cancellable = true,remap = false)
+    @Inject(method = "setupAnim(Lcom/github/alexthe666/alexsmobs/entity/EntityFly;FFFFF)V", at = @At(value = "INVOKE", target = "Lcom/github/alexthe666/alexsmobs/client/model/ModelFly;walk(Lcom/github/alexthe666/citadel/client/model/AdvancedModelBox;FFZFFFF)V",ordinal = 0),cancellable = true,remap = false)
     private void tick(EntityFly fly, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
         Block block = fly.level().getBlockState(fly.blockPosition()).getBlock();
         if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && fly.isNoAi() && ModList.get().isLoaded("alexsmobs") && block == ACBlockRegistry.AMBER.get()) ci.cancel();

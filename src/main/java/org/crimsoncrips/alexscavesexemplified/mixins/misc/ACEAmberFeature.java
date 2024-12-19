@@ -82,7 +82,7 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
                         finalizeAmberSpawn(new Vec3(fill.getCenter().x, fill.getY() + 0.4, fill.getCenter().z),frog,servLevel,random);
                     }
                     break;
-                case 3:
+                default:
                     Tadpole tadpole = EntityType.TADPOLE.create(servLevel);
                     if (tadpole != null) {
                         tadpole.setNoAi(true);
@@ -90,8 +90,6 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
                     }
                     break;
 
-                default:
-                    throw new IllegalStateException("Unexpected value: ");
 
             }
         }
@@ -112,8 +110,7 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
                 case 0 -> FrogVariant.COLD;
                 case 1 -> FrogVariant.WARM;
                 case 2 -> FrogVariant.TEMPERATE;
-                case 3 -> ACFrogRegistry.PRIMORDIAL.get();
-                default -> throw new IllegalStateException("Unexpected value: ");
+                default -> ACFrogRegistry.PRIMORDIAL.get();
             };
             frog.setVariant(frogVariant);
         }

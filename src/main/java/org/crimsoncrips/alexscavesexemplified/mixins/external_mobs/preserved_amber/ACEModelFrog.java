@@ -24,7 +24,7 @@ public abstract class ACEModelFrog<T extends Frog> extends HierarchicalModel<T> 
     //Props to Drullkus for assistance
 
 
-    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/animal/frog/Frog;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/FrogModel;root()Lnet/minecraft/client/model/geom/ModelPart;"),cancellable = true,remap = false)
+    @Inject(method = "setupAnim(Lnet/minecraft/world/entity/animal/frog/Frog;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/FrogModel;animate(Lnet/minecraft/world/entity/AnimationState;Lnet/minecraft/client/animation/AnimationDefinition;F)V",ordinal = 0),cancellable = true,remap = false)
     private void tick(T frog, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
         Block block = frog.level().getBlockState(frog.blockPosition()).getBlock();
         if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && frog.isNoAi() && block == ACBlockRegistry.AMBER.get()) ci.cancel();

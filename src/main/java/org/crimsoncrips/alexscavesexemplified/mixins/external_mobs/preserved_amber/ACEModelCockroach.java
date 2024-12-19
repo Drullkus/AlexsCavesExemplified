@@ -20,7 +20,7 @@ public abstract class ACEModelCockroach {
     //Props to Drullkus for assistance
 
 
-    @Inject(method = "setupAnim(Lcom/github/alexthe666/alexsmobs/entity/EntityCockroach;FFFFF)V", at = @At(value = "INVOKE", target = "Lcom/github/alexthe666/alexsmobs/client/model/ModelCockroach;resetToDefaultPose()V"),cancellable = true,remap = false)
+    @Inject(method = "setupAnim(Lcom/github/alexthe666/alexsmobs/entity/EntityCockroach;FFFFF)V", at = @At(value = "INVOKE", target = "Lcom/github/alexthe666/alexsmobs/client/model/ModelCockroach;progressRotationPrev(Lcom/github/alexthe666/citadel/client/model/AdvancedModelBox;FFFFF)V",ordinal = 0),cancellable = true,remap = false)
     private void tick(EntityCockroach cockroach, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
         Block block = cockroach.level().getBlockState(cockroach.blockPosition()).getBlock();
         if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && cockroach.isNoAi() && ModList.get().isLoaded("alexsmobs") && block == ACBlockRegistry.AMBER.get()) ci.cancel();
