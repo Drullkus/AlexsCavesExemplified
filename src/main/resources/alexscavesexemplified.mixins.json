@@ -57,6 +57,7 @@
     "external_mobs.preserved_amber.ACEModelCockroach",
     "external_mobs.preserved_amber.ACEModelFly",
     "external_mobs.preserved_amber.ACEModelFrog",
-    "external_mobs.preserved_amber.ACEModelTadpole"
+    "external_mobs.preserved_amber.ACEModelTadpole",
+    "mobs.brainiac.ACEBraniacRendering"
   ]
 }

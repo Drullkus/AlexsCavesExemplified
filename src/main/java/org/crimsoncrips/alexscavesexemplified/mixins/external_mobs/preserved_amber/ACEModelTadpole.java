@@ -29,13 +29,10 @@ public abstract class ACEModelTadpole<T extends Tadpole> extends AgeableListMode
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/animal/frog/Tadpole;FFFFF)V", at = @At(value = "HEAD"),cancellable = true,remap = false)
     private void tick(T frog, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
         Block block = frog.level().getBlockState(frog.blockPosition()).getBlock();
-        if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && frog.isNoAi() && block == ACBlockRegistry.AMBER.get()) {
-            this.root().getAllParts().forEach(ModelPart::resetPose);
-            ci.cancel();
+        if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED) {
+            this.root.getAllParts().forEach(ModelPart::resetPose);
+            if (frog.isNoAi() && block == ACBlockRegistry.AMBER.get()) ci.cancel();
         }
-    }
-    public ModelPart root() {
-        return this.root;
     }
 
 

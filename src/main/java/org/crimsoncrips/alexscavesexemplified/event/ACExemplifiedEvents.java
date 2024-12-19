@@ -296,7 +296,7 @@ public class ACExemplifiedEvents {
             }
         }
 
-        if (ACExemplifiedConfig.GUM_TRAMPLE_ENABLED && livingEntity instanceof GumWormEntity gumWorm){
+        if (ACExemplifiedConfig.GUM_TRAMPLE_ENABLED && livingEntity instanceof GumWormEntity gumWorm && gumWorm.isVehicle() && gumWorm.getFirstPassenger() instanceof Player){
             for (LivingEntity entity : gumWorm.level().getEntitiesOfClass(LivingEntity.class, gumWorm.getBoundingBox().inflate(1.2))) {
                 if (entity != gumWorm && entity.getBbHeight() <= 3.5F) {
                     entity.hurt(gumWorm.damageSources().mobAttack(gumWorm), 1.0F);

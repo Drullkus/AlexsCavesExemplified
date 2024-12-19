@@ -38,8 +38,9 @@ public abstract class ACEBrainiac extends Monster {
         }
     }
 
-    @Inject(method = "postAttackEffect", at = @At("TAIL"),remap = false)
+    @Inject(method = "postAttackEffect", at = @At("HEAD"),cancellable = true,remap = false)
     private void postAttack(LivingEntity entity, CallbackInfo ci) {
+        ci.cancel();
         if (entity != null && entity.isAlive()) {
             entity.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 400,ACExemplifiedConfig.WASTE_POWERUP_ENABLED && this.getPersistentData().getBoolean("WastePowered") ? 1 : 0));
         }
