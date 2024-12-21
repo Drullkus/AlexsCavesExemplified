@@ -1,14 +1,20 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import com.github.alexmodguy.alexscaves.server.block.ACSoundTypes;
 import com.github.alexmodguy.alexscaves.server.block.blockentity.VolcanicCoreBlockEntity;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.TephraEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.AtlatitanEntity;
+import com.github.alexmodguy.alexscaves.server.entity.util.ShakesScreen;
+import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import net.minecraft.core.BlockPos;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.Mth;
+import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
@@ -18,7 +24,9 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.ACEReflectionUtil;
+import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
@@ -27,7 +35,8 @@ import java.util.function.Predicate;
 
 
 @Mixin(VolcanicCoreBlockEntity.class)
-public abstract class ACEVolcanicCoreBlockEntity extends BlockEntity {
+public abstract class ACEVolcanicCoreBlockEntity extends BlockEntity{
+
 
 
     public ACEVolcanicCoreBlockEntity(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
@@ -40,7 +49,10 @@ public abstract class ACEVolcanicCoreBlockEntity extends BlockEntity {
 
     @Inject(method = "tick", at = @At("HEAD"),remap = false)
     private static void registerGoals(Level level, BlockPos blockPos, BlockState state, VolcanicCoreBlockEntity entity, CallbackInfo ci) {
-        if ((int) ACEReflectionUtil.getField(entity, "bossSpawnCooldown") > 0) {
+
+
+        if ((int) ACEReflectionUtil.getField(entity, "bossSpawnCooldown") > 0 && ACExemplifiedConfig.VOLCANIC_SACRIFICE_ENABLED) {
+
             Vec3 vec3 = Vec3.atCenterOf(blockPos);
             AABB itemAABB = new AABB(vec3.subtract(20, 100, 20), vec3.add(20, 100, 20));
             double maxDist = 100;
@@ -54,7 +66,7 @@ public abstract class ACEVolcanicCoreBlockEntity extends BlockEntity {
                     Vec3 delta = item.getDeltaMovement().scale(0.8F);
                     item.setDeltaMovement(sub.add(delta));
                 }
-                if (dist < 0.66F) {
+                if (dist < 1F) {
                     item.getItem().shrink(1);
                     if (level.getRandom().nextDouble() < 1) {
                         spawnTephra(level, entity);

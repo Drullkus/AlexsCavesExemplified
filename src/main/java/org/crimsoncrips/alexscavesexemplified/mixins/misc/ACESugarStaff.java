@@ -116,20 +116,6 @@ public abstract class ACESugarStaff extends Item {
                             makeRadiantPeppermint(5 * (2 + layers), l, level, player, 12 / layers  != 0 ? (float) 12 / layers  : 1, 2.5F + layers - 1, 200, straight,seeking,lookingAtEntity);
                         }
                     }
-
-//                    for (int oL = 0; oL < outsideLayer; oL++) {
-//                        makeRadiantPeppermint(outsideLayer, oL, level, player, 3, 4.5F, 200, straight,seeking,lookingAtEntity);
-//                    }
-//                    if (multipleMint >= 1) {
-//                        for (int mL = 0; mL < middleLayer; mL++) {
-//                            makeRadiantPeppermint(middleLayer, mL, level, player, 7, 3.5F, 200, straight,seeking,lookingAtEntity);
-//                        }
-//                    }
-//                    if (multipleMint >= 2) {
-//                        for (int lL = 0; lL < lastLayer; lL++) {
-//                            makeRadiantPeppermint(lastLayer, lL, level, player, 11, 2.5F, 200, straight,seeking,lookingAtEntity);
-//                        }
-//                    }
                     if (!player.isCreative()) {
                         player.getOffhandItem().shrink(1);
                     }

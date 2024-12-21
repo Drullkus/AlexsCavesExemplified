@@ -45,10 +45,11 @@
     "mobs.ACESpinningPeppermintEntity",
     "mobs.ACESubterranadon",
     "mobs.ACETremorsaurus",
-    "mobs.ACEUnderzealot",
     "mobs.ACEVallumraptor",
     "mobs.ACEVesper",
-    "mobs.ACEWatcher"
+    "mobs.ACEWatcher",
+    "mobs.underzealot.ACEUnderzealot",
+    "mobs.underzealot.ACEUnderzealotRenderMixin"
   ],
   "injectors": {
     "defaultRequire": 1
@@ -58,6 +59,6 @@
     "external_mobs.preserved_amber.ACEModelFly",
     "external_mobs.preserved_amber.ACEModelFrog",
     "external_mobs.preserved_amber.ACEModelTadpole",
-    "mobs.brainiac.ACEBraniacRendering"
+    "mobs.brainiac.ACEBraniacRenderMixin"
   ]
 }

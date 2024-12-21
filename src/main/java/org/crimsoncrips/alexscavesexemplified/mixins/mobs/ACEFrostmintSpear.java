@@ -5,17 +5,24 @@ import biomesoplenty.block.BloodFluid;
 import biomesoplenty.init.ModTags;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.FrostmintSpearEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.FrostmintExplosion;
+import com.github.alexmodguy.alexscaves.server.item.HazmatArmorItem;
 import com.github.alexmodguy.alexscaves.server.misc.ACAdvancementTriggerRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
+import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.simibubi.create.AllFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.entity.projectile.AbstractArrow;
+import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
@@ -94,6 +101,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
             solidifyBlock(Blocks.WATER,Blocks.ICE,level,blockPos);
             solidifyBlock(Blocks.LAVA,Blocks.BASALT,level,blockPos);
             solidifyBlock(ACBlockRegistry.PURPLE_SODA.get(), ACBlockRegistry.SUGAR_GLASS.get(), level,blockPos);
+            solidifyBlock(ACBlockRegistry.ACID.get(), ACBlockRegistry.RADROCK.get(), level,blockPos);
             if (ModList.get().isLoaded("create")) {
                 if (AllFluids.CHOCOLATE.getBlock().isPresent()){
                     solidifyBlock(AllFluids.CHOCOLATE.getBlock().get(), ACBlockRegistry.BLOCK_OF_CHOCOLATE.get(), level,blockPos);
@@ -114,6 +122,28 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
 
     @Unique
     public void solidifyBlock(Block block, Block output, Level level, BlockPos blockPos){
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                for (int z = -1; z < 2; z++) {
+                    BlockPos icePos = new BlockPos(blockPos.getX() + x, blockPos.getY() + y , blockPos.getZ() + z);
+                    BlockState blockState = level.getBlockState(icePos);
+                    if (blockState.is(block)) {
+                        if(blockState.getFluidState().isSource()) {
+                            level.setBlock(icePos, output.defaultBlockState(), 3);
+                            level.scheduleTick(icePos, blockState.getBlock(), 2);
+                            this.discard();
+                            explode();
+                        } else if (random.nextDouble() < 0.3) {
+                            level.setBlock(icePos, output.defaultBlockState(), 3);
+                            level.scheduleTick(icePos, blockState.getBlock(), 2);
+                            this.discard();
+                            explode();
+                        }
+                    }
+
+                }
+            }
+        }
         for (int x = 0; x < 3; x++) {
             for (int y = 0; y < 3; y++) {
                 for (int z = 0; z < 3; z++) {
@@ -121,12 +151,12 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
                     BlockState blockState = level.getBlockState(icePos);
                     if (blockState.is(block)) {
                         if(blockState.getFluidState().isSource()) {
-                            level.setBlock(icePos, output.defaultBlockState(), 2);
+                            level.setBlock(icePos, output.defaultBlockState(), 3);
                             level.scheduleTick(icePos, blockState.getBlock(), 2);
                             this.discard();
                             explode();
                         } else if (random.nextDouble() < 0.3) {
-                            level.setBlock(icePos, output.defaultBlockState(), 2);
+                            level.setBlock(icePos, output.defaultBlockState(), 3);
                             level.scheduleTick(icePos, blockState.getBlock(), 2);
                             this.discard();
                             explode();

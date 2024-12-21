@@ -1,18 +1,11 @@
-package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
+package org.crimsoncrips.alexscavesexemplified.mixins.mobs.underzealot;
 
-import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
-import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetClosePlayers;
-import com.github.alexmodguy.alexscaves.server.entity.ai.UnderzealotBreakLightGoal;
-import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
-import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.monster.Monster;
@@ -22,7 +15,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACEHurtByTargetGoal;
 import org.crimsoncrips.alexscavesexemplified.goals.ACEMobTargetClosePlayers;
 import org.crimsoncrips.alexscavesexemplified.goals.ACEUnderzealotExtinguishCampfires;
 import org.spongepowered.asm.mixin.Mixin;

@@ -12,14 +12,18 @@ import com.github.alexmodguy.alexscaves.server.entity.item.MeltedCaramelEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.*;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
+import com.github.alexmodguy.alexscaves.server.item.HazmatArmorItem;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
+import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityFly;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
+import net.minecraft.client.model.ZombieModel;
+import net.minecraft.client.renderer.entity.AbstractZombieRenderer;
 import net.minecraft.core.*;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
@@ -30,6 +34,7 @@ import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.damagesource.DamageTypes;
@@ -40,8 +45,11 @@ import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
+import net.minecraft.world.item.crafting.Ingredient;
+import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.BonemealableBlock;
 import net.minecraft.world.level.block.state.BlockState;
@@ -49,6 +57,8 @@ import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -66,6 +76,8 @@ import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import top.theillusivec4.curios.api.CuriosApi;
+import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.*;
 
@@ -125,14 +137,13 @@ public class ACExemplifiedEvents {
         BlockPos pos = event.getPos();
         Level worldIn = event.getLevel();
         RandomSource random = event.getEntity().getRandom();
-        LivingEntity livingEntity = event.getEntity();
-
+        Player player = event.getEntity();
 
         if (ACExemplifiedConfig.GLUTTONY_ENABLED) {
             if (blockState.is(ACExexmplifiedTagRegistry.CONSUMABLE_BLOCKS)) {
                 ParticleOptions particle = new BlockParticleOption(ParticleTypes.BLOCK, blockState);
 
-                if (livingEntity instanceof Player player && player.isCrouching()) {
+                if (player.isCrouching()) {
                     MobEffectInstance hunger = player.getEffect(MobEffects.HUNGER);
                     if (hunger != null) {
                         if (!hunger.isInfiniteDuration()) {
@@ -163,6 +174,7 @@ public class ACExemplifiedEvents {
                     }
                 }
             }
+
 
 
         }
@@ -272,6 +284,29 @@ public class ACExemplifiedEvents {
             //taken from Dreadbow's particle making
             Vec3 particlePos = livingEntity.position().add((level.random.nextFloat() - 0.5F) * 2.5F, 0F, (level.random.nextFloat() - 0.5F) * 2.5F);
             level.addParticle(ACParticleRegistry.PROTON.get(), particlePos.x, particlePos.y, particlePos.z, livingEntity.getX(), livingEntity.getY(0.5F), livingEntity.getZ());
+        }
+
+        if (livingEntity instanceof Player player && level.random.nextDouble() < 0.1) {
+            for (int x = -1; x < 2; x++) {
+                for (int y = 0; y < 3; y++) {
+                    for (int z = -1; z < 2; z++) {
+                        BlockPos pickedBlock = new BlockPos(player.getBlockX() + x, player.getBlockY() + y , player.getBlockZ() + z);
+                        BlockState blockState = level.getBlockState(pickedBlock);
+                        if (ACExemplifiedConfig.PEERING_TRIGGER_ENABLED && blockState.is(ACBlockRegistry.PEERING_COPROLITH.get()) && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || curiosLight(player))) {
+                            if (player.getRandom().nextDouble() < 0.9) {
+                                level.setBlock(pickedBlock, ACBlockRegistry.POROUS_COPROLITH.get().defaultBlockState(), 3);
+                            } else if (!level.isClientSide) {
+                                level.destroyBlock(pickedBlock, true, player);
+                                ACEntityRegistry.CORRODENT.get().spawn((ServerLevel) level, pickedBlock, MobSpawnType.MOB_SUMMONED);
+                            }
+                        }
+                        if (ACExemplifiedConfig.RADIOACTIVE_AWARENESS_ENABLED && blockState.is(ACExexmplifiedTagRegistry.RADIOACTIVE) && HazmatArmorItem.getWornAmount(player) < 4) {
+                            player.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 200, 0));
+                        }
+
+                    }
+                }
+            }
         }
 
         if (ACExemplifiedConfig.HEAVY_GRAVITY_ENABLED){
@@ -600,6 +635,13 @@ public class ACExemplifiedEvents {
         if (item.getItem() instanceof DyeableLeatherItem dyeableLeatherItem && living.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get())) {
             dyeableLeatherItem.setColor(item, 0Xb839e6);
         }
+    }
+
+    public boolean curiosLight(Player player){
+        if (ModList.get().isLoaded("curiouslanterns")) {
+            ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
+            return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
+        } else return false;
     }
 
 

@@ -76,6 +76,19 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue CARBONATED_STOMACH_ENABLED;
     public final ForgeConfigSpec.BooleanValue HEAVY_GRAVITY_ENABLED;
     public final ForgeConfigSpec.BooleanValue PRESERVED_AMBER_ENABLED;
+    public final ForgeConfigSpec.BooleanValue SEETHED_TAMING_ENABLED;
+    public final ForgeConfigSpec.BooleanValue HAZMAT_AMPLIFIED_ENABLED;
+    public final ForgeConfigSpec.BooleanValue TREMOR_V_TREMOR_ENABLED;
+    public final ForgeConfigSpec.BooleanValue PEERING_TRIGGER_ENABLED;
+    public final ForgeConfigSpec.BooleanValue RADIOACTIVE_AWARENESS_ENABLED;
+
+
+
+
+
+
+
+
 
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
@@ -91,7 +104,7 @@ public class ACEConfigList {
         this.GLUTTONY_ENABLED = buildBoolean(builder, "GLUTTONY_ENABLED", " ", true, "Whether blocks inside candy cavity, can be eaten by right clicking");
         this.AMPLIFIED_FROSTMINT_ENABLED = buildBoolean(builder, "AMPLIFIED_FROSTMINT_ENABLED", " ", true, "Item and spear entity explodes as well in Purple Soda");
         this.SOLIDIFIED_ENABLED = buildBoolean(builder, "SOLIDIFIED_ENABLED", " ", true, "Frostmint Spears causes liquid blocks to freeze at the cost of the spear");
-        this.PURPLE_LEATHERED_ENABLED = buildBoolean(builder, "PURPLE_LEATHERED_ENABLED", " ", true, "Whether purple soda, purples non-dyed leather armor");
+        this.PURPLE_LEATHERED_ENABLED = buildBoolean(builder, "PURPLE_LEATHERED_ENABLED", " ", true, "Whether purple soda, purples dyable armor");
         this.STICKY_SODA_ENABLED = buildBoolean(builder, "STICKY_SODA_ENABLED", " ", true, "Whether purple soda causes stickyness when in it");
         this.RADIANT_WRATH_ENABLED = buildBoolean(builder, "RADIANT_WRATH_ENABLED", " ", true, "Having Radiant Essence amplifies the attacks of Sugar Staff");
         this.DROPPED_SATING_ENABLED = buildBoolean(builder, "DROPPED_SATING_ENABLED", " ", true, "Dropping foods in a dropped sack of sating will consume the dropped foods");
@@ -139,6 +152,7 @@ public class ACEConfigList {
         this.DARKNESS_APPLYED_ENABLED = buildBoolean(builder, "DARKNESS_APPLYED_ENABLED", " ", true, "Whether darkness arrows have a 1% chance of inflicting darkness");
         this.RABIES_ENABLED = buildBoolean(builder, "RABIES_ENABLED", " ", true, "Whether corrodents inflict rabies-like symptoms");
         this.GUANO_SLOW_ENABLED = buildBoolean(builder, "GUANO_SLOW_ENABLED", " ", true, "Whether guano slows you down");
+        this.PEERING_TRIGGER_ENABLED = buildBoolean(builder, "PEERING_TRIGGER_ENABLED", " ", true, "Whether peering coprolith interact with players holding light in different ways");
 
         builder.push("Corrodent");
         this.CORRODENT_CONVERSION_ENABLED = buildBoolean(builder, "CORRODENT_CONVERSION_ENABLED", " ", true, "Whether corrodents can be converted to underzealots through ritual");
@@ -165,11 +179,13 @@ public class ACEConfigList {
         builder.pop();
 
         builder.push("Toxic Caves");
-        this.EXEMPLIFIED_IRRADIATION_AMOUNT = buildInt(builder, "EXEMPLIFIED_IRRADIATION_AMOUNT", " ", 5, 0, Integer.MAX_VALUE, "Amount of irradiation level to get the deadly effects");
+        this.EXEMPLIFIED_IRRADIATION_AMOUNT = buildInt(builder, "EXEMPLIFIED_IRRADIATION_AMOUNT", " ", 5, 1, Integer.MAX_VALUE, "Amount of irradiation level to get the deadly effects");
         this.IRRADIATED_CREEPER_ENABLED = buildBoolean(builder, "IRRADIATED_CREEPER_ENABLED", " ", true, "Whether Irradiated Creepers have their explosions amplified");
         this.IRRADIATION_WASHOFF_ENABLED = buildBoolean(builder, "IRRADIATION_WASHOFF_ENABLED", " ", true, "Whether Irradiation wears off faster when in water");
         this.GEOTHERMAL_EFFECTS_ENABLED = buildBoolean(builder, "GEOTHERMAL_EFFECTS_ENABLED", " ", true, "Whether Geothermal Vents have effects when standing on top depending on the spewed smoke");
         this.KIROV_REPORTING_ENABLED = buildBoolean(builder, "KIROV_REPORTING_ENABLED", " ", true, "Allows lighting of explosives, including nuclear bombs with a flint and steel off-hand during flight");
+        this.HAZMAT_AMPLIFIED_ENABLED = buildBoolean(builder, "HAZMAT_AMPLIFIED_ENABLED", " ", true, "Hazmat reduces amount of irradiation recieved from rayguns");
+        this.RADIOACTIVE_AWARENESS_ENABLED = buildBoolean(builder, "RADIOACTIVE_AWARENESS_ENABLED", " ", true, "Radioactive blocks emit irradiation to nearby players");
 
         builder.push("Braniac");
         this.MUTATED_DEATH_ENABLED = buildBoolean(builder, "MUTATED_DEATH_ENABLED", " ", true, "Whether players with irradiated with an amplifier of 2 or more spawns braniacs");
@@ -204,6 +220,11 @@ public class ACEConfigList {
 
         builder.push("Atlatitan");
         this.VOLCANIC_SACRIFICE_ENABLED = buildBoolean(builder, "VOLCANIC_SACRIFICE_ENABLED", " ", true, "Whether atlatitan eggs or babies can be sacrificed to a volcano to refresh its lux cooldown");
+        builder.pop();
+        builder.push("Tremorsaurus");
+        this.SEETHED_TAMING_ENABLED = buildBoolean(builder, "SEETHED_TAMING_ENABLED", " ", true, "Whether tremorsaurus can be tamed alternatively with meat(MUST HAVE SCAVENGING FEATURE ENABLED)");
+        this.TREMOR_V_TREMOR_ENABLED = buildBoolean(builder, "TREMOR_V_TREMOR_ENABLED", " ", true, "Whether tremorsaurus fights other tremorsaurus when attacked");
+
         builder.pop();
         builder.pop();
 

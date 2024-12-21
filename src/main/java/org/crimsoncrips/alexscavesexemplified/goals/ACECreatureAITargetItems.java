@@ -14,13 +14,12 @@ import javax.annotation.Nullable;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.PathfinderMob;
-import net.minecraft.world.entity.ai.goal.Goal.Flag;
 import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.misc.ACETargetsDroppedItems;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACETargetsDroppedItems;
 
 public class ACECreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
 
@@ -32,16 +31,11 @@ public class ACECreatureAITargetItems<T extends ItemEntity> extends TargetGoal {
     protected ItemEntity targetEntity;
     protected ACETargetsDroppedItems hunter;
     private final int tickThreshold;
-    private float radius;
+    float radius;
     private int walkCooldown;
 
     public ACECreatureAITargetItems(PathfinderMob creature, boolean checkSight) {
         this(creature, checkSight, false);
-        this.setFlags(EnumSet.of(Flag.MOVE));
-    }
-
-    public ACECreatureAITargetItems(PathfinderMob creature, boolean checkSight, int tickThreshold) {
-        this(creature, checkSight, false, tickThreshold, 9);
         this.setFlags(EnumSet.of(Flag.MOVE));
     }
 

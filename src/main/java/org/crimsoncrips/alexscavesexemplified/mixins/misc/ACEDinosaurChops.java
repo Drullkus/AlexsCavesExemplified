@@ -35,9 +35,6 @@ public abstract class ACEDinosaurChops extends Block {
         super(pProperties);
     }
 
-    @Override
-    public void setPlacedBy(Level pLevel, BlockPos pPos, BlockState pState, @Nullable LivingEntity pPlacer, ItemStack pStack) {
-        super.setPlacedBy(pLevel, pPos, pState, pPlacer, pStack);
-    }
+
 
 }

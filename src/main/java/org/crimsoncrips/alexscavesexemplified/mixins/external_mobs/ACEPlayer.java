@@ -62,7 +62,7 @@ public abstract class ACEPlayer extends LivingEntity {
             String firstFood = foodItems[random.nextInt(0, 2)];
             if (lastAte[0].toString().equals(firstFood) && lastAte[1].toString().equals(foodItems[random.nextInt(0, 2)]) && !lastAte[1].toString().equals(firstFood)) {
                 AlexsCaves.sendMSGToAll(new WorldEventMessage(9 , (int)this.getX(), (int)this.getY(), (int) this.getZ()));
-                level.playSound(null, (int)this.getX(), (int)this.getY(), (int) this.getZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0F, -3.0F);
+                level.playSound(null, this.getBlockX(), this.getBlockY(), this.getBlockZ(), SoundEvents.GENERIC_EXPLODE, SoundSource.BLOCKS, 1.0F, -3.0F);
                 this.hurt(ACEDamageTypes.causeStomachDamage(level.registryAccess()), 3.5F);
 
                 lastAte[0] = null;

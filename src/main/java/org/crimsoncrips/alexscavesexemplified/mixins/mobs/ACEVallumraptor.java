@@ -4,6 +4,8 @@ import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.block.DinosaurChopBlock;
 import com.github.alexmodguy.alexscaves.server.block.ThinBoneBlock;
 import com.github.alexmodguy.alexscaves.server.entity.living.DinosaurEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.TremorsaurusEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.VallumraptorEntity;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -20,14 +22,15 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACECreatureAITargetItems;
-import org.crimsoncrips.alexscavesexemplified.misc.ACETargetsDroppedItems;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import java.util.Iterator;
 
 import static com.github.alexmodguy.alexscaves.server.block.DinosaurChopBlock.BITES;
 
@@ -54,21 +57,24 @@ public abstract class ACEVallumraptor extends DinosaurEntity {
         }
 
         if (ACExemplifiedConfig.SCAVENGING_ENABLED){
-            vallumraptor.goalSelector.addGoal(2, new MoveToBlockGoal(vallumraptor, 1.4, 20) {
+            vallumraptor.goalSelector.addGoal(8, new MoveToBlockGoal(vallumraptor, 1.4, 20) {
                 @Override
                 public void tick() {
                     super.tick();
+
+                    for (TremorsaurusEntity tremorsaurus : vallumraptor.level().getEntitiesOfClass(TremorsaurusEntity.class, new AABB(blockPos.offset(-5, -5, -5), blockPos.offset(5, 5, 5)))) {
+                       stop();
+                    }
                     vallumraptor.lookAt(EntityAnchorArgument.Anchor.EYES, Vec3.atCenterOf(blockPos));
-                    System.out.println(vallumraptor.getAnimation());
                     if (this.isReachedTarget()) {
                         vallumraptor.getNavigation().stop();
 
-                        if (vallumraptor.getAnimation() == VallumraptorEntity.NO_ANIMATION){
+                        if (vallumraptor.getAnimation() == VallumraptorEntity.NO_ANIMATION) {
                             vallumraptor.setAnimation(VallumraptorEntity.ANIMATION_MELEE_BITE);
                         }
 
-                        if (vallumraptor.getAnimation() == VallumraptorEntity.ANIMATION_MELEE_BITE && vallumraptor.getAnimationTick() >= 10 && vallumraptor.getAnimationTick() <= 15){
-                            if (isValidTarget(vallumraptor.level(), blockPos)){
+                        if (vallumraptor.getAnimation() == VallumraptorEntity.ANIMATION_MELEE_BITE && vallumraptor.getAnimationTick() >= 10 && vallumraptor.getAnimationTick() <= 15) {
+                            if (isValidTarget(vallumraptor.level(), blockPos)) {
                                 BlockState blockState = vallumraptor.level().getBlockState(blockPos);
                                 vallumraptor.heal(1);
                                 int i = blockState.getValue(BITES);
@@ -80,7 +86,7 @@ public abstract class ACEVallumraptor extends DinosaurEntity {
                                 }
                                 vallumraptor.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
                             }
-                            this.stop();
+                            stop();
                         }
                     }
                 }
@@ -97,8 +103,10 @@ public abstract class ACEVallumraptor extends DinosaurEntity {
                 public double acceptedDistance() {
                     return 3F;
                 }
-                protected int nextStartTick(PathfinderMob mob) {
-                    return reducedTickDelay(400 + vallumraptor.getRandom().nextInt(50));
+
+                @Override
+                protected int nextStartTick(PathfinderMob pCreature) {
+                    return reducedTickDelay(100 + vallumraptor.getRandom().nextInt(100));
                 }
             });
 

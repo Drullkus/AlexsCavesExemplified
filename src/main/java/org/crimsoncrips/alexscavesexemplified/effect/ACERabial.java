@@ -5,6 +5,7 @@ import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
+import net.minecraft.world.entity.animal.WaterAnimal;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 
@@ -34,6 +35,10 @@ public class ACERabial extends MobEffect {
         if (lastDuration <= 1) {
             int rabialLevel = amplifier + 1;
             entity.hurt(ACEDamageTypes.causeEndRabialDamage(entity.level().registryAccess()), rabialLevel * 10);
+        }
+
+        if (ACExemplifiedConfig.RABIES_ENABLED && entity.isInWaterRainOrBubble() && !(entity instanceof WaterAnimal)) {
+            entity.hurt(ACEDamageTypes.causeRabialWaterDamage(entity.level().registryAccess()), 1.2F);
         }
     }
 
