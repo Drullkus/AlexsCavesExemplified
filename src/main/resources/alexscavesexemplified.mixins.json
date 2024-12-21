@@ -59,6 +59,7 @@
     "external_mobs.preserved_amber.ACEModelFly",
     "external_mobs.preserved_amber.ACEModelFrog",
     "external_mobs.preserved_amber.ACEModelTadpole",
-    "mobs.brainiac.ACEBraniacRenderMixin"
+    "mobs.brainiac.ACEBraniacRenderMixin",
+    "mobs.gumbeeper.ACEGumbeeperRenderMixin"
   ]
 }
