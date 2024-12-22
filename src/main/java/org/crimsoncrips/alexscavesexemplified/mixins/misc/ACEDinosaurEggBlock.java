@@ -19,6 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraftforge.registries.RegistryObject;
+import org.crimsoncrips.alexscavesexemplified.ACEReflectionUtil;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -29,19 +30,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(DinosaurEggBlock.class)
-public abstract class ACEDinosaurEggBlock extends Block {
+public class ACEDinosaurEggBlock {
 
 
     @Shadow @Final private RegistryObject<EntityType> births;
 
-    public ACEDinosaurEggBlock(Properties pProperties) {
-        super(pProperties);
-    }
-
-    @Inject(method = "playerDestroy", at = @At("TAIL"), remap = false)
+    @Inject(method = "playerDestroy", at = @At("TAIL"))
     private void playerBreak(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack, CallbackInfo ci) {
         if (!worldIn.isClientSide && ACExemplifiedConfig.DINOSAUR_EGG_ANGER_ENABLED) {
-            AABB bb = (new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).inflate(25.0F, 25.0F, 25.0F);
+            AABB bb = (new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).inflate(10.0F, 10.0F, 10.0F);
             if (player.isCreative())
                 return;
 

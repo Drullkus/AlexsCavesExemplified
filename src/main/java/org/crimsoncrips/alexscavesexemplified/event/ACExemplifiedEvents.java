@@ -70,6 +70,7 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
+import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
@@ -187,6 +188,7 @@ public class ACExemplifiedEvents {
         ItemStack itemStack = event.getItemStack();
         RandomSource random = player.getRandom();
         if (event.getTarget() instanceof GingerbreadManEntity gingerbreadMan) {
+
             if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.AMPUTATION_ENABLED) {
                 if (gingerbreadMan.hasBothLegs()) {
                     gingerbreadMan.hurt(player.damageSources().mobAttack(player), 0.5F);
@@ -224,7 +226,6 @@ public class ACExemplifiedEvents {
             MobEffectInstance irradiated = player.getEffect(ACEffectRegistry.IRRADIATED.get());
             if (irradiated != null && irradiated.getAmplifier() >= 2) {
                 ACEntityRegistry.BRAINIAC.get().spawn((ServerLevel) level, BlockPos.containing(player.getX(), player.getY(), player.getZ()), MobSpawnType.MOB_SUMMONED);
-
             }
         }
 
@@ -438,14 +439,14 @@ public class ACExemplifiedEvents {
             }
         }
 
-        if (ACExemplifiedConfig.FLY_TRAP_ENABLED && livingEntity instanceof EntityFly fly && ModList.get().isLoaded("alexsmobs")){
-            BlockState blockState = fly.getFeetBlockState();
-            BlockPos blockPos = new BlockPos(fly.getBlockX(),fly.getBlockY(),fly.getBlockZ());
-            if (blockState.is(ACBlockRegistry.FLYTRAP.get())){
+        if (ACExemplifiedConfig.FLY_TRAP_ENABLED  && ModList.get().isLoaded("alexsmobs")){
+            BlockState blockState = livingEntity.getFeetBlockState();
+            BlockPos blockPos = new BlockPos(livingEntity.getBlockX(),livingEntity.getBlockY(),livingEntity.getBlockZ());
+            if (blockState.is(ACBlockRegistry.FLYTRAP.get())&& AMCompat.fly(livingEntity)){
                  if (blockState.getValue(PottedFlytrapBlock.OPEN)){
                      livingEntity.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
-                     fly.captureDrops();
-                     fly.kill();
+                     livingEntity.captureDrops();
+                     livingEntity.kill();
                      livingEntity.level().setBlock(blockPos, blockState.setValue(PottedFlytrapBlock.OPEN, false), 2);
                  }
             }

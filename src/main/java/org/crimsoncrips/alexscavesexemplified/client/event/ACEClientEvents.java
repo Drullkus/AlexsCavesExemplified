@@ -2,9 +2,6 @@ package org.crimsoncrips.alexscavesexemplified.client.event;
 
 import com.github.alexmodguy.alexscaves.server.entity.living.CaniacEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.WatcherEntity;
-import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
-import com.mojang.math.Axis;
-import net.minecraft.world.entity.LivingEntity;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;

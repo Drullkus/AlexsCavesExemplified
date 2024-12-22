@@ -28,7 +28,7 @@ public abstract class ACESubterranadon extends DinosaurEntity {
         super(pEntityType, pLevel);
     }
 
-    @Inject(method = "registerGoals", at = @At("TAIL"),remap = false)
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         SubterranodonEntity subterranodon = (SubterranodonEntity)(Object)this;
         if (ACExemplifiedConfig.DINOSAUR_EGG_ANGER_ENABLED){

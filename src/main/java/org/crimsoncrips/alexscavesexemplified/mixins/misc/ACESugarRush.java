@@ -23,7 +23,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(SugarRushEffect.class)
-public abstract class ACESugarRush extends MobEffect {
+public class ACESugarRush extends MobEffect {
+
     @Unique
     private int lastDuration = -1;
 
@@ -32,14 +33,13 @@ public abstract class ACESugarRush extends MobEffect {
         super(pCategory, pColor);
     }
 
-    @Inject(method = "applyEffectTick", at = @At("HEAD"), remap = false)
+    @Inject(method = "applyEffectTick", at = @At("TAIL"))
     private void getMaxLoadTime(LivingEntity entity, int amplifier, CallbackInfo ci) {
         if (lastDuration <= 1 && ACExemplifiedConfig.SUGAR_CRASH_ENABLED) {
             int sugarcrashLevel = amplifier + 1;
             entity.addEffect(new MobEffectInstance(ACEEffects.SUGAR_CRASH.get(), 400, amplifier));
             entity.hurt(ACEDamageTypes.causeSugarCrash(entity.level().registryAccess()), sugarcrashLevel * 2);
             entity.playSound(SoundEvents.GENERIC_EXPLODE, 0.5F, 0F);
-
         }
     }
 

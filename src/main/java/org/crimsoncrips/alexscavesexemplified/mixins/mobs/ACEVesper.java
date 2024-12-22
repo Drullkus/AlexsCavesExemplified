@@ -1,14 +1,10 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
-import com.crimsoncrips.alexsmobsinteraction.AMInteractionTagRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
-import com.github.alexmodguy.alexscaves.server.entity.ai.VesperTargetUnderneathEntities;
-import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.GloomothEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.VesperEntity;
-import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
+import com.google.common.base.Predicates;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
+import net.minecraft.tags.TagKey;
 import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.damagesource.DamageTypes;
 import net.minecraft.world.entity.EntityType;
@@ -16,7 +12,6 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.goal.AvoidEntityGoal;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.ambient.Bat;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.Ingredient;
@@ -24,7 +19,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACEHurtByTargetGoal;
 import org.crimsoncrips.alexscavesexemplified.goals.ACEVesperTarget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -34,7 +28,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
-import java.util.Objects;
+import java.util.function.Predicate;
 
 
 @Mixin(VesperEntity.class)
@@ -74,7 +68,7 @@ public abstract class ACEVesper extends Monster {
         }
 
         if (ACExemplifiedConfig.VESPER_HUNT_ENABLED){
-            this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, LivingEntity.class, AMEntityRegistry.buildPredicateFromTag(ACExexmplifiedTagRegistry.VESPER_HUNT)));
+            this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, LivingEntity.class, buildPredicateFromTag(ACExexmplifiedTagRegistry.VESPER_HUNT)));
         }
     }
 
@@ -111,6 +105,11 @@ public abstract class ACEVesper extends Monster {
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 7))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
         return !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
+    }
+
+    //Taken from AM
+    private static Predicate<LivingEntity> buildPredicateFromTag(TagKey<EntityType<?>> entityTag) {
+        return entityTag == null ? Predicates.alwaysFalse() : (e) -> e.isAlive() && e.getType().is(entityTag);
     }
 
 }

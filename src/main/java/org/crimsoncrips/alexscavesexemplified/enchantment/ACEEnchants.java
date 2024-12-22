@@ -2,12 +2,8 @@ package org.crimsoncrips.alexscavesexemplified.enchantment;
 
 
 import com.github.alexmodguy.alexscaves.server.enchantment.ACEnchantmentRegistry;
-import com.github.alexmodguy.alexscaves.server.item.ResistorShieldItem;
-import com.github.alexthe666.alexsmobs.item.ItemShieldOfTheDeep;
 import net.minecraft.world.entity.EquipmentSlot;
-import net.minecraft.world.item.ShieldItem;
 import net.minecraft.world.item.enchantment.Enchantment;
-import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;

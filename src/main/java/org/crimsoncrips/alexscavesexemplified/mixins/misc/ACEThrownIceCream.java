@@ -18,14 +18,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(ThrownIceCreamScoopEntity.class)
-public abstract class ACEThrownIceCream extends ThrowableItemProjectile {
+public class ACEThrownIceCream {
 
-
-    public ACEThrownIceCream(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-
-    @Inject(method = "onHitEntity", at = @At("HEAD"), remap = false)
+    @Inject(method = "onHitEntity", at = @At("HEAD"))
     private void getMaxLoadTime(EntityHitResult hitResult, CallbackInfo ci) {
         if (hitResult.getEntity() instanceof LivingEntity living && ACExemplifiedConfig.ICED_CREAM_ENABLED){
             living.setTicksFrozen(living.getTicksRequiredToFreeze() + 10);

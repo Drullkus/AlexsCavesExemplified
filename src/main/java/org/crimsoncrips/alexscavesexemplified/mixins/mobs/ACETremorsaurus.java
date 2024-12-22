@@ -55,7 +55,7 @@ public abstract class ACETremorsaurus extends DinosaurEntity implements ACETarge
         super(pEntityType, pLevel);
     }
 
-    @Inject(method = "registerGoals", at = @At("HEAD"),remap = false)
+    @Inject(method = "registerGoals", at = @At("HEAD"))
     private void registerGoals(CallbackInfo ci) {
         TremorsaurusEntity tremorsaurus = (TremorsaurusEntity)(Object)this;
         if (ACExemplifiedConfig.DINOSAUR_EGG_ANGER_ENABLED){
@@ -222,7 +222,7 @@ public abstract class ACETremorsaurus extends DinosaurEntity implements ACETarge
         }
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorsaurusEntity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"),remap = false)
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorsaurusEntity;playSound(Lnet/minecraft/sounds/SoundEvent;FF)V"))
     private void stomp(CallbackInfo ci) {
         TremorsaurusEntity tremorsaurus = (TremorsaurusEntity)(Object)this;
         for (LivingEntity entity : tremorsaurus.level().getEntitiesOfClass(LivingEntity.class, tremorsaurus.getBoundingBox().expandTowards(1, -2, 1))) {
@@ -232,7 +232,7 @@ public abstract class ACETremorsaurus extends DinosaurEntity implements ACETarge
         }
     }
 
-    @Inject(method = "tick", at = @At(value = "HEAD",remap = false))
+    @Inject(method = "tick", at = @At(value = "HEAD"))
     private void tick(CallbackInfo ci) {
         TremorsaurusEntity tremorsaurus = (TremorsaurusEntity)(Object)this;
         if (ACExemplifiedConfig.SEETHED_TAMING_ENABLED){

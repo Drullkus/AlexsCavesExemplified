@@ -1,12 +1,9 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
-import com.crimsoncrips.alexsmobsinteraction.config.AMInteractionConfig;
 import com.github.alexmodguy.alexscaves.server.entity.living.GummyBearEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.GummyColors;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import net.minecraft.resources.ResourceKey;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -25,7 +22,6 @@ import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(GummyBearEntity.class)
@@ -134,7 +130,7 @@ public abstract class ACEGummybear extends Animal {
         return super.mobInteract(player, hand);
     }
 
-    @ModifyConstant(method = "tick",constant = @Constant(intValue = 85),remap = false)
+    @ModifyConstant(method = "tick",constant = @Constant(intValue = 85))
     private int modifyAmount(int amount) {
         if (ACExemplifiedConfig.JELLYBEAN_CHANGES_ENABLED){
             return 100000000;

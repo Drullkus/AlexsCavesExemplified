@@ -41,7 +41,7 @@ public abstract class ACEBrainiac extends Monster implements ACEBrainiacPowered 
     }
     private static final EntityDataAccessor<Boolean> POWERED = SynchedEntityData.defineId(BrainiacEntity.class, EntityDataSerializers.BOOLEAN);;
 
-    @Inject(method = "registerGoals", at = @At("TAIL"),remap = false)
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         BrainiacEntity brainiac = (BrainiacEntity)(Object)this;
         if (ACExemplifiedConfig.WASTE_PICKUP_ENABLED){
@@ -70,7 +70,7 @@ public abstract class ACEBrainiac extends Monster implements ACEBrainiacPowered 
         }
     }
 
-    @Inject(method = "tick", at = @At("TAIL"),remap = false)
+    @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
         BrainiacEntity brainiac = (BrainiacEntity)(Object)this;
         Level level = brainiac.level();

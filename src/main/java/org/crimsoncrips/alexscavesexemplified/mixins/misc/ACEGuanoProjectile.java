@@ -40,14 +40,9 @@ import static com.github.alexmodguy.alexscaves.server.item.DreadbowItem.*;
 
 
 @Mixin(GuanoEntity.class)
-public abstract class ACEGuanoProjectile extends ThrowableItemProjectile {
+public class ACEGuanoProjectile {
 
-
-    public ACEGuanoProjectile(EntityType<? extends ThrowableItemProjectile> pEntityType, Level pLevel) {
-        super(pEntityType, pLevel);
-    }
-
-    @Inject(method = "onHitEntity", at = @At("HEAD"), remap = false)
+    @Inject(method = "onHitEntity", at = @At("HEAD"))
     private void getMaxLoadTime(EntityHitResult hitResult, CallbackInfo ci) {
         if (hitResult.getEntity() instanceof LivingEntity living && ACExemplifiedConfig.GUANO_SLOW_ENABLED){
             living.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 100, 0));

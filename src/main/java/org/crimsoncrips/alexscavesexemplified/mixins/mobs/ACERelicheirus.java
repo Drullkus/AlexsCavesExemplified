@@ -25,7 +25,7 @@ public abstract class ACERelicheirus extends DinosaurEntity {
         super(pEntityType, pLevel);
     }
 
-    @Inject(method = "registerGoals", at = @At("TAIL"),remap = false)
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         RelicheirusEntity relicheirus = (RelicheirusEntity)(Object)this;
         if (ACExemplifiedConfig.DINOSAUR_EGG_ANGER_ENABLED){

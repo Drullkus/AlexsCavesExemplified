@@ -1,42 +1,29 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 
-import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACFrogRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.item.SugarStaffHexEntity;
-import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.level.feature.AmbersolFeature;
-import com.github.alexthe666.alexsmobs.entity.AMEntityRegistry;
-import com.github.alexthe666.alexsmobs.entity.EntityCockroach;
-import com.github.alexthe666.alexsmobs.entity.EntityFly;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.serialization.Codec;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.util.RandomSource;
-import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.animal.FrogVariant;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.entity.animal.frog.Tadpole;
-import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.Item;
-import net.minecraft.world.level.Level;
 import net.minecraft.world.level.WorldGenLevel;
-import net.minecraft.world.level.block.Rotation;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
+import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 
 @Mixin(AmbersolFeature.class)
@@ -57,25 +44,11 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
                 case 0:
                     if (!ModList.get().isLoaded("alexsmobs"))
                         return;
-                    EntityCockroach cockroach = AMEntityRegistry.COCKROACH.get().create(servLevel);
-                    if (cockroach != null) {
-                        cockroach.setNoAi(true);
-                        cockroach.setBaby(random.nextDouble() < 0.5);
-                        finalizeAmberSpawn(new Vec3(fill.getCenter().x, fill.getY() + 0.4, fill.getCenter().z),cockroach,servLevel,random);
-                    }
+                    LivingEntity entity = AMCompat.createAmberAM(servLevel);
+                    finalizeAmberSpawn(new Vec3(fill.getCenter().x, fill.getY() + 0.4, fill.getCenter().z),entity,servLevel,random);
+
                     break;
                 case 1:
-                    if (!ModList.get().isLoaded("alexsmobs"))
-                        return;
-                    EntityFly fly = AMEntityRegistry.FLY.get().create(servLevel);
-                    if (fly != null) {
-                        fly.setNoAi(true);
-                        fly.setBaby(random.nextDouble() < 0.5);
-                        finalizeAmberSpawn(new Vec3(fill.getCenter().x, fill.getY() + 0.4, fill.getCenter().z),fly,servLevel,random);
-                    }
-                    break;
-
-                case 2:
                     Frog frog = EntityType.FROG.create(servLevel);
                     if (frog != null) {
                         frog.setNoAi(true);
@@ -89,7 +62,6 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
                         finalizeAmberSpawn(new Vec3(fill.getCenter().x, fill.getY() + 0.4, fill.getCenter().z),tadpole,servLevel,random);
                     }
                     break;
-
 
             }
         }

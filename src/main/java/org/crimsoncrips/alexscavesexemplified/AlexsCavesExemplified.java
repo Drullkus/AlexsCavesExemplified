@@ -1,28 +1,23 @@
 package org.crimsoncrips.alexscavesexemplified;
 
 
-import biomesoplenty.worldgen.feature.misc.DripstoneSplatterFeature;
-import com.crimsoncrips.alexsmobsinteraction.effect.AMIEffects;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import com.github.alexmodguy.alexscaves.server.level.feature.ACFeatureRegistry;
-import com.github.alexthe666.alexsmobs.client.event.ClientEvents;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.CauldronBlock;
 import net.minecraft.world.level.block.FireBlock;
-import net.minecraft.world.level.levelgen.feature.DripstoneUtils;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
+import net.minecraftforge.fml.DistExecutor;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.config.ModConfigEvent;
+import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import net.minecraftforge.network.NetworkRegistry;
-import net.minecraftforge.network.simple.SimpleChannel;
 import org.crimsoncrips.alexscavesexemplified.client.event.ACEClientEvents;
+import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
@@ -36,6 +31,7 @@ import java.util.Locale;
 public class AlexsCavesExemplified {
 
     public static final String MODID = "alexscavesexemplified";
+    public static final ACECommonProxy PROXY = DistExecutor.runForDist(() -> ACEClientProxy::new, () -> ACECommonProxy::new);
 
 
 
@@ -46,11 +42,12 @@ public class AlexsCavesExemplified {
         ACEEnchants.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACExemplifiedEvents());
         MinecraftForge.EVENT_BUS.register(this);
-
+        ACEParticleRegistry.DEF_REG.register(modEventBus);
+        PROXY.init();
         ACEEffects.EFFECT_REGISTER.register(modEventBus);
         ACEEffects.POTION_REGISTER.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACEClientEvents());
-
+        modEventBus.addListener(this::setupClient);
 
         modEventBus.addListener(this::setup);
 
@@ -72,7 +69,6 @@ public class AlexsCavesExemplified {
     }
 
     private void setup(final FMLCommonSetupEvent event) {
-        AMIEffects.init();
         FireBlock fireblock = (FireBlock) Blocks.FIRE;
         if (ACExemplifiedConfig.ADDITIONAL_FLAMMABILITY_ENABLED){
             //Primordial Caves
@@ -114,6 +110,10 @@ public class AlexsCavesExemplified {
             fireblock.setFlammable(ACBlockRegistry.FORSAKEN_IDOL.get(), 5, 20);
 
         }
+    }
+
+    private void setupClient(FMLClientSetupEvent event) {
+        event.enqueueWork(PROXY::clientInit);
     }
 
 

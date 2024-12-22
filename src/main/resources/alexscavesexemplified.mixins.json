@@ -18,7 +18,7 @@
     "misc.ACEGuanoProjectile",
     "misc.ACENuclearBomb",
     "misc.ACEPrimalMagma",
-    "misc.ACERaygun",
+    "misc.ACERaygunMixin",
     "misc.ACEResistorShield",
     "misc.ACESpelunkeryTable",
     "misc.ACESugarRush",
@@ -48,18 +48,21 @@
     "mobs.ACEVallumraptor",
     "mobs.ACEVesper",
     "mobs.ACEWatcher",
-    "mobs.underzealot.ACEUnderzealot",
-    "mobs.underzealot.ACEUnderzealotRenderMixin"
+    "mobs.tremorzilla.ACETremorzillaMixin",
+    "mobs.underzealot.ACEUnderzealot"
   ],
   "injectors": {
     "defaultRequire": 1
   },
   "client": [
+    "external_mobs.ACESpelunkeryScreenMixin",
     "external_mobs.preserved_amber.ACEModelCockroach",
     "external_mobs.preserved_amber.ACEModelFly",
     "external_mobs.preserved_amber.ACEModelFrog",
     "external_mobs.preserved_amber.ACEModelTadpole",
     "mobs.brainiac.ACEBraniacRenderMixin",
-    "mobs.gumbeeper.ACEGumbeeperRenderMixin"
+    "mobs.gumbeeper.ACEGumbeeperRenderMixin",
+    "mobs.tremorzilla.AMITremorzillaRenderGlowMixin",
+    "mobs.tremorzilla.AMITremorzillaRenderMixin"
   ]
 }

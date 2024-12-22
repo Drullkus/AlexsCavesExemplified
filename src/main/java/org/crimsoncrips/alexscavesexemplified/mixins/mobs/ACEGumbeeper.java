@@ -13,6 +13,8 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import static org.crimsoncrips.alexscavesexemplified.compat.AMCompat.AMmob;
+
 
 @Mixin(GumbeeperEntity.class)
 public abstract class ACEGumbeeper extends Monster {
@@ -26,8 +28,9 @@ public abstract class ACEGumbeeper extends Monster {
     private void registerGoals(CallbackInfo ci) {
         GumbeeperEntity gumbeeper = (GumbeeperEntity)(Object)this;
         if (ACExemplifiedConfig.REGULAR_REFERENCE_ENABLED &&  ModList.get().isLoaded("alexsmobs")) {
-            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, EntityBlueJay.class, 100, true, false,null));
-            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, EntityRaccoon.class, 100, true, false,null));
+            Class mob = AMmob(level());
+            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, mob, 100, true, false,null));
+            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, mob, 100, true, false,null));
 
         }
     }

@@ -81,15 +81,10 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue TREMOR_V_TREMOR_ENABLED;
     public final ForgeConfigSpec.BooleanValue PEERING_TRIGGER_ENABLED;
     public final ForgeConfigSpec.BooleanValue RADIOACTIVE_AWARENESS_ENABLED;
-
-
-
-
-
-
-
-
-
+    public final ForgeConfigSpec.BooleanValue BRAINDEAD_MODE_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue NON_INSTA_LOSE_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue RERAYGUNNED_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue GAMMARATED_TREMORZILLA_ENABLED ;
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
          this.REDOABLE_SPELUNKY_ENABLED = buildBoolean(builder, "REDOABLE_SPELUNKY_ENABLED", " ", true, "Whether it gives you back the tablet when exiting the spelunky table");
@@ -97,6 +92,7 @@ public class ACEConfigList {
          this.VANILLA_ADAPTIONS_ENABLED = buildBoolean(builder, "VANILLA_ADAPTIONS_ENABLED", " ", true, "Whether vanilla enchantments adapts to weapons (ex.Dreadbow, etc..)");
          this.CHARGED_CAVE_CREEPER_CHANCE = buildDouble(builder, "CHARGED_CAVE_CREEPER_CHANCE", " ", 0.2,0.0,1.0, "Chances of creepers from caves to be charged (0 for disable)");
          this.ADDITIONAL_FLAMMABILITY_ENABLED = buildBoolean(builder, "ADDITIONAL_FLAMMABILITY_ENABLED", " ", true, "Adds flammability to blocks that should be flammable");
+        this.NON_INSTA_LOSE_ENABLED = buildBoolean(builder, "NON_INSTA_LOSE_ENABLED", " ", true, "Reduces level instead of insta-losing in spelunkery minigame");
 
 
         builder.pop();
@@ -186,6 +182,8 @@ public class ACEConfigList {
         this.KIROV_REPORTING_ENABLED = buildBoolean(builder, "KIROV_REPORTING_ENABLED", " ", true, "Allows lighting of explosives, including nuclear bombs with a flint and steel off-hand during flight");
         this.HAZMAT_AMPLIFIED_ENABLED = buildBoolean(builder, "HAZMAT_AMPLIFIED_ENABLED", " ", true, "Hazmat reduces amount of irradiation recieved from rayguns");
         this.RADIOACTIVE_AWARENESS_ENABLED = buildBoolean(builder, "RADIOACTIVE_AWARENESS_ENABLED", " ", true, "Radioactive blocks emit irradiation to nearby players");
+        this.RERAYGUNNED_ENABLED = buildBoolean(builder, "RERAYGUNNED_ENABLED", " ", true, "Amplifies raygun effects.such as block destruction and item annhilation");
+        this.GAMMARATED_TREMORZILLA_ENABLED = buildBoolean(builder, "GAMMARATED_TREMORZILLA_ENABLED", " ", true, "Adds a gammafied tremorzilla, assimilated into a more powerful form");
 
         builder.push("Braniac");
         this.MUTATED_DEATH_ENABLED = buildBoolean(builder, "MUTATED_DEATH_ENABLED", " ", true, "Whether players with irradiated with an amplifier of 2 or more spawns braniacs");
@@ -238,6 +236,7 @@ public class ACEConfigList {
         builder.push("Goofy Mode");
         this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Whether Relentless Darkness dreadbow has no cooldown on its firing");
         this.NUCLEAR_PISTONATION_ENABLED = buildBoolean(builder, "NUCLEAR_PISTONATION_ENABLED", " ", false, "Whether Nuclear Bombs can be pushed by piston (therefore duplicatable)");
+        this.BRAINDEAD_MODE_ENABLED = buildBoolean(builder, "BRAINDEAD_MODE_ENABLED", " ", false, "Whether the spelunkery table text is revealed already for easy answering");
 
 
     }

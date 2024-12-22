@@ -35,7 +35,7 @@ public abstract class ACEAtlatitan extends SauropodBaseEntity {
         }
     }
 
-    @Inject(method = "registerGoals", at = @At("TAIL"),remap = false)
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         AtlatitanEntity atlatitan = (AtlatitanEntity)(Object)this;
         if (ACExemplifiedConfig.DINOSAUR_EGG_ANGER_ENABLED){
