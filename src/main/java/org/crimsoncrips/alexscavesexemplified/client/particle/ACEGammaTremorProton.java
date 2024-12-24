@@ -58,8 +58,8 @@ public class ACEGammaTremorProton extends ProtonParticle {
     @Override
     public Vec3 getOrbitPosition(float angle) {
         Vec3 center = new Vec3(orbitX, orbitY, orbitZ);
-        Vec3 add = orbitOffset.scale(orbitDistance).yRot((float)Math.toRadians(initialYRot)).xRot((float)Math.toRadians(initialXRot));
-        float rot = angle * (reverseOrbit ? -orbitSpeed : orbitSpeed) * (float) (Math.PI / 360F);
+        Vec3 add = orbitOffset.scale(1.8F).yRot((float)Math.toRadians(initialYRot)).xRot((float)Math.toRadians(initialXRot));
+        float rot = angle * (reverseOrbit ? -orbitSpeed : orbitSpeed) * (float) (Math.PI / 180F);
         switch (orbitAxis) {
             case 0:
                 add = add.xRot(rot);
@@ -78,7 +78,7 @@ public class ACEGammaTremorProton extends ProtonParticle {
         if (tremorzillaId != -1 && level.getEntity(tremorzillaId) instanceof TremorzillaEntity entity) {
             Vec3 mouthPos = TremorzillaRenderer.getMouthPositionFor(tremorzillaId);
             if (mouthPos != null) {
-                Vec3 translate = mouthPos.yRot((float) (Math.PI - entity.yBodyRot * ((float) Math.PI / 360F)));
+                Vec3 translate = mouthPos.yRot((float) (Math.PI - entity.yBodyRot * ((float) Math.PI / 180F)));
                 Vec3 newOrbit = new Vec3(entity.getX() + translate.x, entity.getY() + translate.y, entity.getZ() + translate.z);
                 this.orbitX = newOrbit.x;
                 this.orbitY = newOrbit.y;
@@ -101,5 +101,4 @@ public class ACEGammaTremorProton extends ProtonParticle {
             return particle;
         }
     }
-
 }

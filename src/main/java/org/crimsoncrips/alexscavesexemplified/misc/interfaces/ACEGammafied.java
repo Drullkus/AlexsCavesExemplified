@@ -5,4 +5,8 @@ public interface ACEGammafied {
 
     void setGamma(boolean gamma);
 
+    boolean isAnimationBeaming();
+
+    void setAnimationBeaming(boolean animationBeaming);
+
 }
