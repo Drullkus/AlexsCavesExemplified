@@ -62,6 +62,7 @@
     "external_mobs.preserved_amber.ACEModelTadpole",
     "mobs.brainiac.ACEBraniacRenderMixin",
     "mobs.gumbeeper.ACEGumbeeperRenderMixin",
+    "mobs.tremorzilla.ACETremorzillaModel",
     "mobs.tremorzilla.AMITremorzillaRenderGlowMixin",
     "mobs.tremorzilla.AMITremorzillaRenderMixin"
   ]
