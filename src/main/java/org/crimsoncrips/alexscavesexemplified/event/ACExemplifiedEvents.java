@@ -201,6 +201,10 @@ public class ACExemplifiedEvents {
                 }
 
             }
+            if (ACExemplifiedConfig.GLUTTONY_ENABLED) {
+                event.getTarget().discard();
+                player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+            }
         }
 
     }

@@ -84,7 +84,7 @@ public class ACExemplifiedConfig {
     public static boolean FEARED_ANCESTORS_ENABLED;
     public static boolean DINOSAUR_EGG_ANGER_ENABLED;
     public static boolean NUCLEAR_CHAIN_ENABLED;
-
+    public static boolean CANDICORN_HEAL_ENABLED;
     public static boolean WASTE_PICKUP_ENABLED;
     public static boolean CAT_MUTATION_ENABLED;
     public static boolean SOLIDIFIED_WATCHER_ENABLED;
@@ -162,7 +162,7 @@ public class ACExemplifiedConfig {
             RATATATATATA_ENABLED = ACEConfigHolder.EXEMPLIFIED.RATATATATATA_ENABLED.get();
             RABIES_ENABLED = ACEConfigHolder.EXEMPLIFIED.RABIES_ENABLED.get();
             PRESERVED_AMBER_ENABLED = ACEConfigHolder.EXEMPLIFIED.PRESERVED_AMBER_ENABLED.get();
-
+            CANDICORN_HEAL_ENABLED = ACEConfigHolder.EXEMPLIFIED.CANDICORN_HEAL_ENABLED.get();
             GEOTHERMAL_EFFECTS_ENABLED = ACEConfigHolder.EXEMPLIFIED.GEOTHERMAL_EFFECTS_ENABLED.get();
 
 

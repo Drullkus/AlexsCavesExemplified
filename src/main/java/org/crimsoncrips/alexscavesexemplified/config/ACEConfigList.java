@@ -85,6 +85,10 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue NON_INSTA_LOSE_ENABLED ;
     public final ForgeConfigSpec.BooleanValue RERAYGUNNED_ENABLED ;
     public final ForgeConfigSpec.BooleanValue GAMMARATED_TREMORZILLA_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue CANDICORN_HEAL_ENABLED ;
+
+
+
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
          this.REDOABLE_SPELUNKY_ENABLED = buildBoolean(builder, "REDOABLE_SPELUNKY_ENABLED", " ", true, "Whether it gives you back the tablet when exiting the spelunky table");
@@ -112,7 +116,9 @@ public class ACEConfigList {
         this.CANIAC_SENSITIVITY_ENABLED = buildBoolean(builder, "CANIAC_SENSITIVITY_ENABLED", " ", true, "Whether Caniac dissolve in water and will actively avoid it");
         this.BEDWARS_ENABLED = buildBoolean(builder, "BEDWARS_ENABLED", " ", true, "Whether Caniacs randomly destroy beds");
         this.CANIAC_MANIAC_ENABLED = buildBoolean(builder, "CANIAC_MANIAC_ENABLED", " ", true, "Whether Caniacs randomly attacks others");
-
+        builder.pop();
+        builder.push("Candicorn");
+        this.CANDICORN_HEAL_ENABLED = buildBoolean(builder, "CANDICORN_HEAL_ENABLED", " ", true, "Whether candicorn heals with caramel apple");
         builder.pop();
         builder.push("Caramel Cube");
         this.STICKY_CARAMEL_ENABLED = buildBoolean(builder, "STICKY_CARAMEL_ENABLED", " ", true, "Whether caramel cube's stickiness applies to its attacks");

@@ -2,6 +2,7 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs.tremorzilla;
 
 import com.github.alexmodguy.alexscaves.client.model.TremorzillaModel;
 import com.github.alexmodguy.alexscaves.server.entity.living.TremorzillaEntity;
+import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEGammafied;
@@ -17,8 +18,8 @@ public abstract class ACETremorzillaModel extends AdvancedEntityModel<Tremorzill
 
     TremorzillaEntity tremorzilla;
 
-    @Inject(method = "setupAnim(Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;FFFFF)V", at = @At(value = "HEAD"),remap = false)
-    private void captureEntity(TremorzillaEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci) {
+    @Inject(method = "setupAnimForAnimation", at = @At(value = "HEAD"),remap = false)
+    private void captureEntity(TremorzillaEntity entity, Animation animation, float limbSwing, float limbSwingAmount, float ageInTicks, CallbackInfo ci) {
         tremorzilla = entity;
     }
 
