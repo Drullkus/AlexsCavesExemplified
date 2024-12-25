@@ -201,9 +201,23 @@ public class ACExemplifiedEvents {
                 }
 
             }
-            if (ACExemplifiedConfig.GLUTTONY_ENABLED) {
-                event.getTarget().discard();
-                player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+            if (ACExemplifiedConfig.GLUTTONY_ENABLED && player.isCrouching()) {
+                MobEffectInstance hunger = player.getEffect(MobEffects.HUNGER);
+                if (hunger != null) {
+                    event.getTarget().discard();
+                    player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+                }
+                player.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
+            }
+        }
+
+        if (event.getTarget() instanceof CandicornEntity candicornEntity) {
+            if (itemStack.is(ACItemRegistry.CARAMEL_APPLE.get()) && ACExemplifiedConfig.AMPUTATION_ENABLED) {
+                if (!player.isCreative()) {
+                    itemStack.shrink(1);
+                }
+                candicornEntity.heal(4);
+                player.swing(event.getHand());
             }
         }
 
