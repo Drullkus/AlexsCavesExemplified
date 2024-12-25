@@ -2,7 +2,7 @@
   "required": true,
   "minVersion": "0.8",
   "package": "org.crimsoncrips.alexscavesexemplified.mixins",
-  "compatibilityLevel": "JAVA_17",
+  "compatibilityLevel": "JAVA_8",
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
     "external_mobs.ACEAgeableMob",
@@ -51,9 +51,6 @@
     "mobs.tremorzilla.ACETremorzillaMixin",
     "mobs.underzealot.ACEUnderzealot"
   ],
-  "injectors": {
-    "defaultRequire": 1
-  },
   "client": [
     "external_mobs.ACESpelunkeryScreenMixin",
     "external_mobs.preserved_amber.ACEModelCockroach",
@@ -62,8 +59,11 @@
     "external_mobs.preserved_amber.ACEModelTadpole",
     "mobs.brainiac.ACEBraniacRenderMixin",
     "mobs.gumbeeper.ACEGumbeeperRenderMixin",
-    "mobs.tremorzilla.ACETremorzillaModel",
+    "mobs.tremorzilla.ACETremorzillaModelMixin",
     "mobs.tremorzilla.AMITremorzillaRenderGlowMixin",
     "mobs.tremorzilla.AMITremorzillaRenderMixin"
-  ]
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  }
 }

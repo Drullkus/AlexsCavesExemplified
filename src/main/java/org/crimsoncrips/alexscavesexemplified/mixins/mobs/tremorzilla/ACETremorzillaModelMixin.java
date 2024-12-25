@@ -14,7 +14,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(TremorzillaModel.class)
-public abstract class ACETremorzillaModel extends AdvancedEntityModel<TremorzillaEntity> {
+public abstract class ACETremorzillaModelMixin extends AdvancedEntityModel<TremorzillaEntity> {
 
     TremorzillaEntity tremorzilla;
 
