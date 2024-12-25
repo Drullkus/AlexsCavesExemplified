@@ -196,47 +196,47 @@ public abstract class ACETremorzillaMixin extends DinosaurEntity implements ACEG
 //        } else return original.call(instance);
 //    }
 
-//    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 0),remap = false)
-//    public boolean alterIsFiring0(boolean original) {
-//        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
-//            return original || isAnimationBeaming();
-//        } else return original;
-//    }
-//
-//    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 1),remap = false)
-//    public boolean alterIsFiring1(boolean original) {
-//        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
-//            return original && !isAnimationBeaming();
-//        } else return original;
-//    }
-//
-//    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 2),remap = false)
-//    public boolean alterIsFiring2(boolean original) {
-//        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
-//            return original || isAnimationBeaming();
-//        } else return original;
-//    }
-//
-//    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 3),remap = false)
-//    public boolean alterIsFiring3(boolean original) {
-//        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
-//            return original || isAnimationBeaming();
-//        } else return original;
-//    }
-//
-//    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 4),remap = false)
-//    public boolean alterIsFiring4(boolean original) {
-//        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
-//            return original || isAnimationBeaming();
-//        } else return original;
-//    }
-//
-//    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 5),remap = false)
-//    public boolean alterIsFiring5(boolean original) {
-//        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
-//            return original && !isAnimationBeaming();
-//        } else return original;
-//    }
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 0),remap = false)
+    public boolean alterIsFiring0(boolean original) {
+        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
+            return original || isAnimationBeaming();
+        } else return original;
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 1),remap = false)
+    public boolean alterIsFiring1(boolean original) {
+        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
+            return original && !isAnimationBeaming();
+        } else return original;
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 2),remap = false)
+    public boolean alterIsFiring2(boolean original) {
+        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
+            return original || isAnimationBeaming();
+        } else return original;
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 3),remap = false)
+    public boolean alterIsFiring3(boolean original) {
+        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
+            return original || isAnimationBeaming();
+        } else return original;
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 4),remap = false)
+    public boolean alterIsFiring4(boolean original) {
+        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
+            return original || isAnimationBeaming();
+        } else return original;
+    }
+
+    @ModifyExpressionValue(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;isFiring()Z",ordinal = 5),remap = false)
+    public boolean alterIsFiring5(boolean original) {
+        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED){
+            return original && !isAnimationBeaming();
+        } else return original;
+    }
 
     @Inject(method = "travel", at = @At(value = "HEAD"),remap = false, cancellable = true)
     public void travelSuppress(Vec3 vec3d, CallbackInfo ci) {
