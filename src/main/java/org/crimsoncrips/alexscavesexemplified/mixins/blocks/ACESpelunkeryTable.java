@@ -1,4 +1,4 @@
-package org.crimsoncrips.alexscavesexemplified.mixins.misc;
+package org.crimsoncrips.alexscavesexemplified.mixins.blocks;
 
 import com.github.alexmodguy.alexscaves.AlexsCaves;
 import com.github.alexmodguy.alexscaves.client.gui.SpelunkeryTableScreen;

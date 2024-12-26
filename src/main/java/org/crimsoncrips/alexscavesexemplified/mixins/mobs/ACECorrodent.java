@@ -2,8 +2,10 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
+import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetItemGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
+import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
 import com.github.alexmodguy.alexscaves.server.entity.util.UnderzealotSacrifice;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
@@ -23,8 +25,6 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACECreatureAITargetItems;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACETargetsDroppedItems;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,7 +38,7 @@ import java.util.Objects;
 
 
 @Mixin(CorrodentEntity.class)
-public abstract class ACECorrodent extends Monster implements UnderzealotSacrifice, ACETargetsDroppedItems {
+public abstract class ACECorrodent extends Monster implements UnderzealotSacrifice, TargetsDroppedItems {
 
     @Shadow public abstract void remove(RemovalReason removalReason);
 
@@ -60,7 +60,7 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
             }));
         }
         if (ACExemplifiedConfig.KNAWING_ENABLED){
-            corrodent.targetSelector.addGoal(1, new ACECreatureAITargetItems<>(this, false));
+            corrodent.targetSelector.addGoal(1, new MobTargetItemGoal<>(this, false));
         }
 
 
@@ -140,8 +140,9 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
                     this.addEffect(new MobEffectInstance(test.get(i).getFirst()));
                 }
             }
+            itemEntity.getItem().shrink(1);
         } else {
-            itemEntity.discard();
+            itemEntity.getItem().shrink(1);
             this.heal(1);
         }
     }

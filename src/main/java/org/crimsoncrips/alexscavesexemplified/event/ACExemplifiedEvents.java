@@ -1,25 +1,26 @@
 package org.crimsoncrips.alexscavesexemplified.event;
 
 import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
-import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import com.github.alexmodguy.alexscaves.server.block.GeothermalVentBlock;
-import com.github.alexmodguy.alexscaves.server.block.PottedFlytrapBlock;
-import com.github.alexmodguy.alexscaves.server.block.ThornwoodBranchBlock;
+import com.github.alexmodguy.alexscaves.server.block.*;
 import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
 import com.github.alexmodguy.alexscaves.server.entity.item.MeltedCaramelEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.*;
+import com.github.alexmodguy.alexscaves.server.entity.util.DeepOneReaction;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.item.HazmatArmorItem;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
+import com.github.alexmodguy.alexscaves.server.misc.ACAdvancementTriggerRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.EntityFly;
+import com.simibubi.create.AllItems;
+import net.mehvahdjukaar.moonlight.api.block.WaterBlock;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
 import net.minecraft.client.model.ZombieModel;
@@ -30,10 +31,13 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.nbt.Tag;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceKey;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
 import net.minecraft.tags.FluidTags;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -49,17 +53,18 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ClipContext;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.BonemealableBlock;
+import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
+import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.WaterFluid;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.common.Tags;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -71,6 +76,7 @@ import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
+import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
@@ -84,6 +90,7 @@ import java.util.*;
 
 import static com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity.ANIMATION_DRINK_BARREL;
 import static net.minecraft.world.entity.EntityType.*;
+import static net.minecraft.world.level.block.SculkShriekerBlock.CAN_SUMMON;
 
 
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
@@ -264,6 +271,7 @@ public class ACExemplifiedEvents {
     public void blockBreak(BlockEvent.BreakEvent breakEvent){
         BlockState blockState = breakEvent.getState();
         Level level = (Level) breakEvent.getLevel();
+        Player player = breakEvent.getPlayer();
         if (ACExemplifiedConfig.BURST_OUT_ENABLED) {
             if (blockState.is(ACExexmplifiedTagRegistry.BURST_BLOCKS) && breakEvent.getLevel().getRandom().nextDouble() < 0.02) {
                 if (level.getBiome(breakEvent.getPos()).is(ACBiomeRegistry.FORLORN_HOLLOWS)){
@@ -282,6 +290,16 @@ public class ACExemplifiedEvents {
             }
         }
 
+        if (ACExemplifiedConfig.ECOLOGICAL_REPUTATION_ENABLED) {
+            if (blockState.is(ACExexmplifiedTagRegistry.ABYSSAL_ECOSYSTEM) && level.getBiome(breakEvent.getPos()).is(ACBiomeRegistry.ABYSSAL_CHASM)) {
+                for (LivingEntity entity : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(30))) {
+                    if (entity instanceof DeepOneBaseEntity deepOneBaseEntity) {
+                        deepOneBaseEntity.addReputation(player.getUUID(),-1);
+                    }
+                }
+            }
+        }
+
     }
 
     @SubscribeEvent
@@ -289,8 +307,26 @@ public class ACExemplifiedEvents {
         LivingEntity livingEntity = livingTickEvent.getEntity();
         Level level = livingEntity.level();
         if (ACExemplifiedConfig.PRIMORDIAL_OXYGEN_ENABLED && livingEntity instanceof Player player && level.getBiome(player.getOnPos()).is(ACBiomeRegistry.PRIMORDIAL_CAVES)){
-            livingTickEvent.setConsumeAirAmount(5);
+            livingTickEvent.setConsumeAirAmount(livingTickEvent.getConsumeAirAmount() + 2);
         }
+
+        if (ACExemplifiedConfig.ABYSSAL_CRUSH_ENABLED && livingEntity instanceof Player player && level.getBiome(player.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM)){
+            int aboveWater = 0;
+            BlockPos pos = new BlockPos(player.getBlockX(), (int) (player.getBlockY() + 2),player.getBlockZ());
+            while (level.getBlockState(pos).is(Blocks.WATER)){
+                pos = pos.above();
+                aboveWater++;
+            }
+
+            int diving = getDivingAmount(livingEntity);
+            if (level.random.nextDouble() < (0.1 - (0.020 * diving))){
+                if (aboveWater > 50 && diving < 10){
+                    livingTickEvent.setConsumeAirAmount(livingTickEvent.getConsumeAirAmount() + (int) (0.025 * (aboveWater - 40)));
+                }
+            }
+
+        }
+
 
     }
 
@@ -305,13 +341,38 @@ public class ACExemplifiedEvents {
             level.addParticle(ACParticleRegistry.PROTON.get(), particlePos.x, particlePos.y, particlePos.z, livingEntity.getX(), livingEntity.getY(0.5F), livingEntity.getZ());
         }
 
-        if (livingEntity instanceof Player player && level.random.nextDouble() < 0.1) {
+        if (livingEntity instanceof SeaPigEntity seaPigEntity && level.random.nextDouble() < 0.01 && ACExemplifiedConfig.POISONOUS_SKIN_ENABLED) {
+            for (LivingEntity entity : seaPigEntity.level().getEntitiesOfClass(LivingEntity.class, seaPigEntity.getBoundingBox().inflate(1.2))) {
+                if (entity != seaPigEntity && entity.getBbHeight() <= 3.5F && !(entity instanceof SeaPigEntity)) {
+                    entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
+                }
+            }
+        }
+
+        if (livingEntity instanceof Player player && level.getBiome(player.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) && ACExemplifiedConfig.ABYSSAL_CRUSH_ENABLED){
+            int aboveWater = 0;
+            BlockPos pos = new BlockPos(player.getBlockX(), (int) (player.getBlockY() + 2),player.getBlockZ());
+            while (level.getBlockState(pos).is(Blocks.WATER)){
+                pos = pos.above();
+                aboveWater++;
+            }
+            int diving = getDivingAmount(livingEntity);
+
+            if (level.random.nextDouble() < (0.1 - (0.020 * diving))){
+                if (aboveWater > 50 && diving < 10){
+                    player.hurt(ACEDamageTypes.causeDepthDamage(level.registryAccess()), (float) (0.025 * (aboveWater - 40)));
+                }
+            }
+        }
+
+
+        if (livingEntity instanceof Player player) {
             for (int x = -1; x < 2; x++) {
                 for (int y = 0; y < 3; y++) {
                     for (int z = -1; z < 2; z++) {
                         BlockPos pickedBlock = new BlockPos(player.getBlockX() + x, player.getBlockY() + y , player.getBlockZ() + z);
                         BlockState blockState = level.getBlockState(pickedBlock);
-                        if (ACExemplifiedConfig.PEERING_TRIGGER_ENABLED && blockState.is(ACBlockRegistry.PEERING_COPROLITH.get()) && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || curiosLight(player))) {
+                        if (ACExemplifiedConfig.PEERING_TRIGGER_ENABLED && blockState.is(ACBlockRegistry.PEERING_COPROLITH.get()) && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || curiosLight(player)) && level.random.nextDouble() < 0.1) {
                             if (player.getRandom().nextDouble() < 0.9) {
                                 level.setBlock(pickedBlock, ACBlockRegistry.POROUS_COPROLITH.get().defaultBlockState(), 3);
                             } else if (!level.isClientSide) {
@@ -319,13 +380,19 @@ public class ACExemplifiedEvents {
                                 ACEntityRegistry.CORRODENT.get().spawn((ServerLevel) level, pickedBlock, MobSpawnType.MOB_SUMMONED);
                             }
                         }
-                        if (ACExemplifiedConfig.RADIOACTIVE_AWARENESS_ENABLED && blockState.is(ACExexmplifiedTagRegistry.RADIOACTIVE) && HazmatArmorItem.getWornAmount(player) < 4) {
+                        if (ACExemplifiedConfig.RADIOACTIVE_AWARENESS_ENABLED && blockState.is(ACExexmplifiedTagRegistry.RADIOACTIVE) && HazmatArmorItem.getWornAmount(player) < 4 && level.random.nextDouble() < 0.5) {
                             player.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 200, 0));
                         }
-
+                        if (blockState.getBlock() instanceof ActivatedByAltar && livingEntity.isHolding(ACItemRegistry.PEARL.get()) && level.random.nextDouble() < 0.5) {
+                            level.setBlockAndUpdate(pickedBlock, blockState.setValue(ActivatedByAltar.ACTIVE, true));
+                            if (level.random.nextDouble() < 0.05){
+                                level.playLocalSound(pickedBlock, ACSoundRegistry.ABYSSMARINE_GLOW_ON.get(), SoundSource.BLOCKS, 1.5F, level.random.nextFloat() * 0.4F + 0.8F, false);
+                            }
+                        }
                     }
                 }
             }
+
         }
 
         if (ACExemplifiedConfig.HEAVY_GRAVITY_ENABLED){
@@ -661,6 +728,24 @@ public class ACExemplifiedEvents {
             ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
             return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
         } else return false;
+    }
+
+    public static int getDivingAmount(LivingEntity entity) {
+        int i = 0;
+        if (entity.getItemBySlot(EquipmentSlot.HEAD).is((Item)ACItemRegistry.DIVING_HELMET.get())) {
+            ++i;
+        }
+        if (entity.getItemBySlot(EquipmentSlot.CHEST).is((Item)ACItemRegistry.DIVING_CHESTPLATE.get())) {
+            ++i;
+        }
+        if (entity.getItemBySlot(EquipmentSlot.LEGS).is((Item)ACItemRegistry.DIVING_LEGGINGS.get())) {
+            ++i;
+        }
+        if (entity.getItemBySlot(EquipmentSlot.FEET).is((Item)ACItemRegistry.DIVING_BOOTS.get())) {
+            ++i;
+        }
+        i = i + CreateCompat.createDivingSuit(entity);
+        return i;
     }
 
 

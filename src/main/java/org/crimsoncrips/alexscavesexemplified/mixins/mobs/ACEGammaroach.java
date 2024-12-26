@@ -1,6 +1,8 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
+import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetItemGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.GammaroachEntity;
+import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
 import com.mojang.datafixers.util.Pair;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
@@ -9,8 +11,6 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACECreatureAITargetItems;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACETargetsDroppedItems;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -22,7 +22,7 @@ import java.util.Objects;
 
 
 @Mixin(GammaroachEntity.class)
-public abstract class ACEGammaroach extends PathfinderMob implements ACETargetsDroppedItems {
+public abstract class ACEGammaroach extends PathfinderMob implements TargetsDroppedItems {
 
 
     @Shadow public abstract boolean isFed();
@@ -35,7 +35,7 @@ public abstract class ACEGammaroach extends PathfinderMob implements ACETargetsD
     private void registerGoals(CallbackInfo ci) {
         GammaroachEntity gammaroach = (GammaroachEntity)(Object)this;
         if (ACExemplifiedConfig.GAMMAROACH_FOODING_ENABLED) {
-            gammaroach.targetSelector.addGoal(1, new ACECreatureAITargetItems<>(this, false));
+            gammaroach.targetSelector.addGoal(1, new MobTargetItemGoal<>(this, false));
         }
     }
 

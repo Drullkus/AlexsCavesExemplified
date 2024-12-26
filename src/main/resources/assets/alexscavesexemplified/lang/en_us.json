@@ -14,6 +14,8 @@
   "death.attack.rabial_water_0": "%s suffered from water with Rabies",
   "death.attack.rabial_end_0": "%s died to Rabies",
   "death.attack.sugar_crash_0": "%s died from a sugar overdose",
-  "death.attack.stomach_damage_0": "%s's stomach exploded"
+  "death.attack.stomach_damage_0": "%s's stomach exploded",
+  "death.attack.depth_crush_0": "%s died from the crushing depths",
+  "death.attack.depth_crush_1": "%s got Ocean Gated"
 }
 

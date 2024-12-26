@@ -3,9 +3,10 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetClosePlayers;
+import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetItemGoal;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetUntamedGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.*;
-import com.github.alexmodguy.alexscaves.server.misc.ACAdvancementTriggerRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
@@ -22,7 +23,6 @@ import net.minecraft.world.entity.ai.goal.*;
 import net.minecraft.world.entity.ai.goal.target.HurtByTargetGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.ItemLike;
@@ -32,9 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACECreatureAITargetItems;
 import org.crimsoncrips.alexscavesexemplified.goals.ACETremorTempt;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACETargetsDroppedItems;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -42,11 +40,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import java.util.function.Predicate;
 
-import static com.github.alexmodguy.alexscaves.server.entity.living.TremorsaurusEntity.ANIMATION_ROAR;
-
 
 @Mixin(TremorsaurusEntity.class)
-public abstract class ACETremorsaurus extends DinosaurEntity implements ACETargetsDroppedItems {
+public abstract class ACETremorsaurus extends DinosaurEntity implements TargetsDroppedItems {
 
     private boolean sniffed = false;
 
@@ -170,7 +166,7 @@ public abstract class ACETremorsaurus extends DinosaurEntity implements ACETarge
                 }
             });
 
-            tremorsaurus.targetSelector.addGoal(2, new ACECreatureAITargetItems<>(tremorsaurus,true,true,200 + tremorsaurus.getRandom().nextInt(150),30){
+            tremorsaurus.targetSelector.addGoal(2, new MobTargetItemGoal(tremorsaurus,true,true,200 + tremorsaurus.getRandom().nextInt(150),30){
                 @Override
                 public void tick() {
                     if (this.targetEntity != null && this.targetEntity.isAlive()) {

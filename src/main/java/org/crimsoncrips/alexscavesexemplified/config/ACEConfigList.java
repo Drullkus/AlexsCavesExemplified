@@ -86,7 +86,11 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue RERAYGUNNED_ENABLED ;
     public final ForgeConfigSpec.BooleanValue GAMMARATED_TREMORZILLA_ENABLED ;
     public final ForgeConfigSpec.BooleanValue CANDICORN_HEAL_ENABLED ;
-
+    public final ForgeConfigSpec.BooleanValue POISONOUS_SKIN_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue ABYSSAL_CRUSH_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue ECOLOGICAL_REPUTATION_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue GOSSAMER_FEEDING_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue CAVIAL_BONEMEAL_ENABLED ;
 
 
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
@@ -97,6 +101,7 @@ public class ACEConfigList {
          this.CHARGED_CAVE_CREEPER_CHANCE = buildDouble(builder, "CHARGED_CAVE_CREEPER_CHANCE", " ", 0.2,0.0,1.0, "Chances of creepers from caves to be charged (0 for disable)");
          this.ADDITIONAL_FLAMMABILITY_ENABLED = buildBoolean(builder, "ADDITIONAL_FLAMMABILITY_ENABLED", " ", true, "Adds flammability to blocks that should be flammable");
         this.NON_INSTA_LOSE_ENABLED = buildBoolean(builder, "NON_INSTA_LOSE_ENABLED", " ", true, "Reduces level instead of insta-losing in spelunkery minigame");
+        this.CAVIAL_BONEMEAL_ENABLED = buildBoolean(builder, "CAVIAL_BONEMEAL_ENABLED", " ", true, "Whether it adds new interactions of bone meal with Alex's Cave's flora");
 
 
         builder.pop();
@@ -189,7 +194,6 @@ public class ACEConfigList {
         this.HAZMAT_AMPLIFIED_ENABLED = buildBoolean(builder, "HAZMAT_AMPLIFIED_ENABLED", " ", true, "Hazmat reduces amount of irradiation recieved from rayguns");
         this.RADIOACTIVE_AWARENESS_ENABLED = buildBoolean(builder, "RADIOACTIVE_AWARENESS_ENABLED", " ", true, "Radioactive blocks emit irradiation to nearby players");
         this.RERAYGUNNED_ENABLED = buildBoolean(builder, "RERAYGUNNED_ENABLED", " ", true, "Amplifies raygun effects.such as block destruction and item annhilation");
-        this.GAMMARATED_TREMORZILLA_ENABLED = buildBoolean(builder, "GAMMARATED_TREMORZILLA_ENABLED", " ", true, "Adds a gammafied tremorzilla, assimilated into a more powerful form");
 
         builder.push("Braniac");
         this.MUTATED_DEATH_ENABLED = buildBoolean(builder, "MUTATED_DEATH_ENABLED", " ", true, "Whether players with irradiated with an amplifier of 2 or more spawns braniacs");
@@ -208,6 +212,9 @@ public class ACEConfigList {
         builder.pop();
         builder.push("Raycat");
         this.CAT_MUTATION_ENABLED = buildBoolean(builder, "CAT_MUTATION_ENABLED", " ", true, "Whether cats have a chance to turn into raycat when dowsed in acid");
+        builder.pop();
+        builder.push("Tremorzilla");
+        this.GAMMARATED_TREMORZILLA_ENABLED = buildBoolean(builder, "GAMMARATED_TREMORZILLA_ENABLED", " ", true, "Adds a gammafied tremorzilla, assimilated into a more powerful form");
         builder.pop();
         builder.pop();
 
@@ -236,8 +243,18 @@ public class ACEConfigList {
         builder.push("Magnetic Caves");
         this.RESISTOR_MAGNETISM_ENABLED = buildBoolean(builder, "RESISTOR_MAGNETISM_ENABLED", " ", true, "Resistor Shield attracts/repels magnetic items, or more..");
         this.HEAVY_GRAVITY_ENABLED = buildBoolean(builder, "HEAVY_GRAVITY_ENABLED", " ", true, "Entities holding heavy-weight item will increase falling speed");
+        builder.pop();
 
+        builder.push("Abyssal Chasm");
+        this.ABYSSAL_CRUSH_ENABLED = buildBoolean(builder, "ABYSSAL_CRUSH_ENABLED", " ", true, "Whether abyssal chasms cause crushing damage to you and your breath meter when deep enough");
+        this.ECOLOGICAL_REPUTATION_ENABLED = buildBoolean(builder, "ECOLOGICAL_REPUTATION_ENABLED", " ", true, "Whether messing with the ecosystem reduces deep one reputation");
 
+        builder.push("Sea Pig");
+        this.POISONOUS_SKIN_ENABLED = buildBoolean(builder, "POISONOUS_SKIN_ENABLED", " ", true, "Whether seapigs can inflict poison in nearby mobs");
+        builder.pop();
+        builder.push("Gossamer Worm");
+        this.GOSSAMER_FEEDING_ENABLED = buildBoolean(builder, "GOSSAMER_FEEDING_ENABLED", " ", true, "Whether gossamer worms feed on nearby dropped marine snow");
+        builder.pop();
         builder.pop();
         builder.push("Goofy Mode");
         this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Whether Relentless Darkness dreadbow has no cooldown on its firing");
