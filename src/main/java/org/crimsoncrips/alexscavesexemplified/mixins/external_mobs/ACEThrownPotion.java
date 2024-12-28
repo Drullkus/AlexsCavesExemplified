@@ -8,7 +8,7 @@ import net.minecraft.world.entity.projectile.ThrowableItemProjectile;
 import net.minecraft.world.entity.projectile.ThrownPotion;
 import net.minecraft.world.level.Level;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
+import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;

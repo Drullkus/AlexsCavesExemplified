@@ -32,7 +32,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACETremorTempt;
+import org.crimsoncrips.alexscavesexemplified.server.goals.ACETremorTempt;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;

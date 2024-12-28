@@ -73,7 +73,7 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue ICED_CREAM_ENABLED;
     public final ForgeConfigSpec.BooleanValue SOLIDIFIED_WATCHER_ENABLED;
     public final ForgeConfigSpec.BooleanValue GINGER_DISINTEGRATE_ENABLED;
-    public final ForgeConfigSpec.BooleanValue CARBONATED_STOMACH_ENABLED;
+    public final ForgeConfigSpec.BooleanValue OVERTUNED_CONSUMPTION_ENABLED;
     public final ForgeConfigSpec.BooleanValue HEAVY_GRAVITY_ENABLED;
     public final ForgeConfigSpec.BooleanValue PRESERVED_AMBER_ENABLED;
     public final ForgeConfigSpec.BooleanValue SEETHED_TAMING_ENABLED;
@@ -91,6 +91,14 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue ECOLOGICAL_REPUTATION_ENABLED ;
     public final ForgeConfigSpec.BooleanValue GOSSAMER_FEEDING_ENABLED ;
     public final ForgeConfigSpec.BooleanValue CAVIAL_BONEMEAL_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue SUBNAUTICAL_FLOATERS_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue COOKIE_CRUMBLE_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue CRYONIC_CAVITY_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue BREAKING_CANDY_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue LICOWITCH_VENGEANCE_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue CANIACAL_EXPLOSION_ENABLED ;
+
+
 
 
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
@@ -115,12 +123,17 @@ public class ACEConfigList {
         this.DROPPED_SATING_ENABLED = buildBoolean(builder, "DROPPED_SATING_ENABLED", " ", true, "Dropping foods in a dropped sack of sating will consume the dropped foods");
         this.SUGAR_CRASH_ENABLED = buildBoolean(builder, "SUGAR_CRASH_ENABLED", " ", true, "Sugar Rushes at the end will cause sugar crashed dealing damage and temporary slowness");
         this.ICED_CREAM_ENABLED = buildBoolean(builder, "ICED_CREAM_ENABLED", " ", true, "Thrown ice cream slightly freezes those that are hit");
-        this.CARBONATED_STOMACH_ENABLED = buildBoolean(builder, "CARBONATED_STOMACH_ENABLED", " ", true, "You will explode if you drink purple soda, and then eat frostmint (or vise versa)");
+        this.OVERTUNED_CONSUMPTION_ENABLED = buildBoolean(builder, "OVERTUNED_CONSUMPTION_ENABLED", " ", true, "Adds interactions when eating things from Candy Cavity");
+        this.CRYONIC_CAVITY_ENABLED = buildBoolean(builder, "CRYONIC_CAVITY_ENABLED", " ", true, "Makes the candy cavity freeze outsiders slowly");
+        this.BREAKING_CANDY_ENABLED = buildBoolean(builder, "BREAKING_CANDY_ENABLED", " ", true, "Allows the creation of gelatin with bone blocks");
+
 
         builder.push("Caniac");
         this.CANIAC_SENSITIVITY_ENABLED = buildBoolean(builder, "CANIAC_SENSITIVITY_ENABLED", " ", true, "Whether Caniac dissolve in water and will actively avoid it");
         this.BEDWARS_ENABLED = buildBoolean(builder, "BEDWARS_ENABLED", " ", true, "Whether Caniacs randomly destroy beds");
         this.CANIAC_MANIAC_ENABLED = buildBoolean(builder, "CANIAC_MANIAC_ENABLED", " ", true, "Whether Caniacs randomly attacks others");
+        this.CANIACAL_EXPLOSION_ENABLED = buildBoolean(builder, "CANIACAL_EXPLOSION_ENABLED", " ", true, "Whether Caniacs randomly lights placed explosives");
+
         builder.pop();
         builder.push("Candicorn");
         this.CANDICORN_HEAL_ENABLED = buildBoolean(builder, "CANDICORN_HEAL_ENABLED", " ", true, "Whether candicorn heals with caramel apple");
@@ -147,6 +160,10 @@ public class ACEConfigList {
         this.PRESSURED_HOOKS_ENABLED = buildBoolean(builder, "PRESSURED_HOOKS_ENABLED", " ", true, "Whether candy hooks will take damage overtime when riding a gum worm");
         this.LOGICAL_RIDING_ENABLED = buildBoolean(builder, "LOGICAL_RIDING_ENABLED", " ", true, "Whether to kick you off the gum worm when either of your hooks are not present");
         this.GUM_TRAMPLE_ENABLED = buildBoolean(builder, "GUM_TRAMPLE_ENABLED", " ", true, "Whether gum worm head damages nearby enemies");
+
+        builder.pop();
+        builder.push("Licowitch");
+        this.LICOWITCH_VENGEANCE_ENABLED = buildBoolean(builder, "LICOWITCH_VENGEANCE_ENABLED", " ", true, "Whether licowitches attack villagers and iron golems");
 
         builder.pop();
         
@@ -248,7 +265,9 @@ public class ACEConfigList {
         builder.push("Abyssal Chasm");
         this.ABYSSAL_CRUSH_ENABLED = buildBoolean(builder, "ABYSSAL_CRUSH_ENABLED", " ", true, "Whether abyssal chasms cause crushing damage to you and your breath meter when deep enough");
         this.ECOLOGICAL_REPUTATION_ENABLED = buildBoolean(builder, "ECOLOGICAL_REPUTATION_ENABLED", " ", true, "Whether messing with the ecosystem reduces deep one reputation");
-
+        builder.push("Floater");
+        this.SUBNAUTICAL_FLOATERS_ENABLED = buildBoolean(builder, "SUBNAUTICAL_FLOATERS_ENABLED", " ", true, "Whether floaters look like floaters from subnautica");
+        builder.pop();
         builder.push("Sea Pig");
         this.POISONOUS_SKIN_ENABLED = buildBoolean(builder, "POISONOUS_SKIN_ENABLED", " ", true, "Whether seapigs can inflict poison in nearby mobs");
         builder.pop();
@@ -260,6 +279,7 @@ public class ACEConfigList {
         this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Whether Relentless Darkness dreadbow has no cooldown on its firing");
         this.NUCLEAR_PISTONATION_ENABLED = buildBoolean(builder, "NUCLEAR_PISTONATION_ENABLED", " ", false, "Whether Nuclear Bombs can be pushed by piston (therefore duplicatable)");
         this.BRAINDEAD_MODE_ENABLED = buildBoolean(builder, "BRAINDEAD_MODE_ENABLED", " ", false, "Whether the spelunkery table text is revealed already for easy answering");
+        this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", true, "Allows parrots explode with cookie block");
 
 
     }

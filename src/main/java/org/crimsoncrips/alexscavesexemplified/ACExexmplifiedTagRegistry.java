@@ -17,7 +17,6 @@ public class ACExexmplifiedTagRegistry {
     public static final TagKey<Block> CONSUMABLE_BLOCKS = registerBlockTag("consumable_blocks");
     public static final TagKey<Block> RADIOACTIVE = registerBlockTag("radioactive");
     public static final TagKey<Block> ABYSSAL_ECOSYSTEM = registerBlockTag("abyssal_ecosystem");
-
     public static final TagKey<EntityType<?>> CAN_RABIES = registerEntityTag("can_rabies");
     public static final TagKey<EntityType<?>> FISH = registerEntityTag("acid_to_fish");
     public static final TagKey<EntityType<?>> CAT = registerEntityTag("acid_to_cat");
@@ -25,6 +24,8 @@ public class ACExexmplifiedTagRegistry {
 
     public static final TagKey<Item> LIGHT = registerItemTag("light");
     public static final TagKey<Item> KNAWING = registerItemTag("knawing");
+    public static final TagKey<Item> GELATINABLE = registerItemTag("gelatinable");
+
 
     public ACExexmplifiedTagRegistry() {
     }

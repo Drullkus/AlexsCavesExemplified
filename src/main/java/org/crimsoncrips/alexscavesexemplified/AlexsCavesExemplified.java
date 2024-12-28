@@ -2,6 +2,7 @@ package org.crimsoncrips.alexscavesexemplified;
 
 
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -20,10 +21,11 @@ import org.crimsoncrips.alexscavesexemplified.client.event.ACEClientEvents;
 import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
-import org.crimsoncrips.alexscavesexemplified.enchantment.ACEEnchants;
-import org.crimsoncrips.alexscavesexemplified.event.ACExemplifiedEvents;
+import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
+import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;
+import org.crimsoncrips.alexscavesexemplified.server.ACExemplifiedEvents;
 import org.crimsoncrips.alexscavesexemplified.loot.ACELootModifiers;
+import org.crimsoncrips.alexscavesexemplified.server.entity.ACEEntityRegistry;
 
 import java.util.Locale;
 
@@ -43,6 +45,7 @@ public class AlexsCavesExemplified {
         MinecraftForge.EVENT_BUS.register(new ACExemplifiedEvents());
         MinecraftForge.EVENT_BUS.register(this);
         ACEParticleRegistry.DEF_REG.register(modEventBus);
+        ACEEntityRegistry.DEF_REG.register(modEventBus);
         PROXY.init();
         ACEEffects.EFFECT_REGISTER.register(modEventBus);
         ACEEffects.POTION_REGISTER.register(modEventBus);

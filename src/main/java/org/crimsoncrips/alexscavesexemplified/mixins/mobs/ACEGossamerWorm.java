@@ -31,10 +31,6 @@ public abstract class ACEGossamerWorm extends WaterAnimal implements TargetsDrop
             gossamerWorm.targetSelector.addGoal(1, new MobTargetItemGoal<>(this, false){
                 @Override
                 public void tick() {
-                    if (this.targetEntity != null && this.targetEntity.isAlive() && this.mob.distanceToSqr(this.targetEntity) < this.hunter.getMaxDistToItem()) {
-                        this.stop();
-                        targetEntity.kill();
-                    }
                     super.tick();
 
                 }
@@ -48,7 +44,6 @@ public abstract class ACEGossamerWorm extends WaterAnimal implements TargetsDrop
     }
 
     public void onGetItem(ItemEntity itemEntity) {
-        itemEntity.discard();
         this.heal(1);
         itemEntity.getItem().shrink(1);
     }

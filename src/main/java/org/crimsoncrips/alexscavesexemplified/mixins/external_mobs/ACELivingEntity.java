@@ -1,8 +1,9 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.external_mobs;
 
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import com.github.alexthe666.alexsmobs.entity.EntityCockroach;
-import com.github.alexthe666.alexsmobs.entity.EntityFly;
+import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRarity;
+import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
+import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -20,7 +21,9 @@ import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
+import static com.ibm.icu.text.PluralRules.Operand.v;
 import static org.crimsoncrips.alexscavesexemplified.compat.AMCompat.amberReset;
 
 
@@ -33,7 +36,7 @@ public abstract class ACELivingEntity extends Entity {
     }
 
     @WrapOperation(method = "causeFallDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;calculateFallDamage(FF)I"))
-    private int bypassExpensiveCalculationIfNecessary(LivingEntity instance, float f, float v, Operation<Integer> original) {
+    private int causeFallDamage(LivingEntity instance, float f, float v, Operation<Integer> original) {
         if (ACExemplifiedConfig.HEAVY_GRAVITY_ENABLED) {
             return original.call(instance, f, v * 1.5F);
         } else {
@@ -64,4 +67,21 @@ public abstract class ACELivingEntity extends Entity {
             }
         }
     }
+
+    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getTicksFrozen()I"), cancellable = true)
+    private void freezingAlterations(CallbackInfo ci) {
+        if (ACExemplifiedConfig.CRYONIC_CAVITY_ENABLED){
+            ci.cancel();
+            int i = this.getTicksFrozen();
+            if (this.isInPowderSnow && this.canFreeze()) {
+                this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), i + 1));
+            } else if (!this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.CANDY_CAVITY)) {
+                this.setTicksFrozen(Math.max(0, i - 2));
+            }
+        }
+        if (this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.CANDY_CAVITY) && this.level().random.nextDouble() < 0.01 && !this.isOnFire() && !this.getType().is(ACTagRegistry.CANDY_MOBS)){
+            this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), getTicksFrozen() + 1));
+        }
+    }
+
 }

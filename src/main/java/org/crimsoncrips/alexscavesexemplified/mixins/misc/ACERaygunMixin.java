@@ -82,19 +82,6 @@ public abstract class ACERaygunMixin extends Item {
         }
     }
 
-    @Inject(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addParticle(Lnet/minecraft/core/particles/ParticleOptions;DDDDDD)V",ordinal = 0),locals = LocalCapture.CAPTURE_FAILHARD)
-    private void burnItems(Level level, LivingEntity living, ItemStack stack, int timeUsing, CallbackInfo ci, int i, int realStart, float time, float maxDist, boolean xRay, HitResult realHitResult, HitResult blockOnlyHitResult, Vec3 xRayVec, Vec3 vec3, Vec3 vec31, float deltaX, float deltaY, float deltaZ, boolean gamma, ParticleOptions particleOptions) {
-        if (!level.isClientSide && (i - realStart) % 3 == 0 && ACExemplifiedConfig.RERAYGUNNED_ENABLED) {
-            AABB hitBox = new AABB(vec31.add((double)-1.0F, (double)-1.0F, (double)-1.0F), vec31.add((double)1.0F, (double)1.0F, (double)1.0F));
-
-            for(ItemEntity itemEntity : level.getEntitiesOfClass(ItemEntity.class, hitBox.inflate(1))) {
-                if (!itemEntity.isInvulnerable() && !itemEntity.fireImmune() && gamma) {
-                    itemEntity.discard();
-                }
-            }
-        }
-    }
-
     @Unique
     public void setAdjascentBlock(BlockPos pos, Level level){
         Block[] block = {Blocks.BASALT,Blocks.NETHERRACK,Blocks.MAGMA_BLOCK, ACBlockRegistry.PRIMAL_MAGMA.get()};

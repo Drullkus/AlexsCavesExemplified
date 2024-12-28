@@ -7,7 +7,7 @@ import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.effect.ACEEffects;
+import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 
 @OnlyIn(Dist.CLIENT)
 public class ACEClientEvents {
@@ -51,6 +51,15 @@ public class ACEClientEvents {
         if (postEvent.getEntity() instanceof CaniacEntity) {
             postEvent.getPoseStack().popPose();
         }
+    }
+
+    @SubscribeEvent
+    @OnlyIn(Dist.CLIENT)
+    public void layerAdd(EntityRenderersEvent.AddLayers addLayers) {
+//        LivingEntityRenderer renderer = addLayers.getRenderer(EntityType.ALLAY);
+//        if (renderer != null){
+//            renderer.addLayer()
+//        }
     }
 
 }

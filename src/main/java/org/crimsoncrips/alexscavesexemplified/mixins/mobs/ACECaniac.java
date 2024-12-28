@@ -5,15 +5,13 @@ import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.attributes.Attribute;
-import net.minecraft.world.entity.ai.attributes.AttributeModifier;
-import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.ai.goal.WaterAvoidingRandomStrollGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACECaniacBedwars;
+import org.crimsoncrips.alexscavesexemplified.server.goals.ACECaniacBedwars;
+import org.crimsoncrips.alexscavesexemplified.server.goals.ACECaniacExplode;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -43,6 +41,9 @@ public abstract class ACECaniac extends Monster {
         }
         if (ACExemplifiedConfig.BEDWARS_ENABLED){
             caniac.goalSelector.addGoal(2, new ACECaniacBedwars(caniac, 24));
+        }
+        if (ACExemplifiedConfig.CANIACAL_EXPLOSION_ENABLED){
+            caniac.goalSelector.addGoal(2, new ACECaniacExplode(caniac, 24));
         }
         if (ACExemplifiedConfig.CANIAC_MANIAC_ENABLED){
             caniac.goalSelector.addGoal(2, new NearestAttackableTargetGoal<>(caniac, LivingEntity.class,100,false,false, Objects::nonNull){

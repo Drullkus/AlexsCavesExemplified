@@ -19,7 +19,7 @@ import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.goals.ACEVesperTarget;
+import org.crimsoncrips.alexscavesexemplified.server.goals.ACEVesperTarget;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
