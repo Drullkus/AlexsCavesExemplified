@@ -1,9 +1,9 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.external_mobs;
 
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRarity;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
+import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -17,19 +17,20 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-import static com.ibm.icu.text.PluralRules.Operand.v;
 import static org.crimsoncrips.alexscavesexemplified.compat.AMCompat.amberReset;
-
 
 @Mixin(LivingEntity.class)
 public abstract class ACELivingEntity extends Entity {
 
+
+    @Shadow public abstract boolean isDeadOrDying();
 
     public ACELivingEntity(EntityType<?> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -68,19 +69,25 @@ public abstract class ACELivingEntity extends Entity {
         }
     }
 
-    @Inject(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getTicksFrozen()I"), cancellable = true)
+    @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isDeadOrDying()Z"))
+    private boolean disableOriginal(boolean original) {
+        return ACExemplifiedConfig.CRYONIC_CAVITY_ENABLED;
+    }
+
+    @Inject(method = "aiStep", at = @At(value = "TAIL"))
     private void freezingAlterations(CallbackInfo ci) {
         if (ACExemplifiedConfig.CRYONIC_CAVITY_ENABLED){
-            ci.cancel();
-            int i = this.getTicksFrozen();
-            if (this.isInPowderSnow && this.canFreeze()) {
-                this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), i + 1));
-            } else if (!this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.CANDY_CAVITY)) {
-                this.setTicksFrozen(Math.max(0, i - 2));
+            if (!this.level().isClientSide && !this.isDeadOrDying()) {
+                int i = this.getTicksFrozen();
+                if (this.isInPowderSnow && this.canFreeze()) {
+                    this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), i + 1));
+                } else if (!this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.CANDY_CAVITY)) {
+                    this.setTicksFrozen(Math.max(0, i - 2));
+                }
+                if (this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.CANDY_CAVITY) && this.level().random.nextDouble() < 0.01 && !this.isOnFire() && !this.getType().is(ACTagRegistry.CANDY_MOBS)){
+                    this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), getTicksFrozen() + 1));
+                }
             }
-        }
-        if (this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.CANDY_CAVITY) && this.level().random.nextDouble() < 0.01 && !this.isOnFire() && !this.getType().is(ACTagRegistry.CANDY_MOBS)){
-            this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), getTicksFrozen() + 1));
         }
     }
 

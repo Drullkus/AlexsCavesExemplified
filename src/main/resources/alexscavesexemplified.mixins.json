@@ -11,6 +11,7 @@
     "blocks.ACEPingPongSpongeMixin",
     "blocks.ACEPrimalMagma",
     "blocks.ACESpelunkeryTable",
+    "blocks.ACETntMixin",
     "blocks.ACEVolcanicCoreBlockEntity",
     "external_mobs.ACEAgeableMob",
     "external_mobs.ACECreeper",

@@ -61,7 +61,7 @@ public abstract class ACEItemEntity extends Entity {
         }
 
         if (ACExemplifiedConfig.BREAKING_CANDY_ENABLED) {
-            if (level.getBlockState(this.blockPosition()).is(Blocks.WATER_CAULDRON) && item.is(ACExexmplifiedTagRegistry.GELATINABLE) && (level.getBlockState(this.blockPosition().below()).is(Blocks.FIRE) || level.getBlockState(this.blockPosition().below()).is(Blocks.SOUL_FIRE))) {
+            if (level.getBlockState(this.blockPosition()).is(Blocks.WATER_CAULDRON) && item.is(ACExexmplifiedTagRegistry.GELATINABLE) && level.getBlockState(this.blockPosition().below()).is(ACExexmplifiedTagRegistry.GELATIN_FIRE)) {
                 for (ItemEntity itemEntity : this.level().getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(0.1))) {
                     ItemStack nearBone = itemEntity.getItem();
                     if (!nearBone.isEmpty() && timeToCook >= 200) {
