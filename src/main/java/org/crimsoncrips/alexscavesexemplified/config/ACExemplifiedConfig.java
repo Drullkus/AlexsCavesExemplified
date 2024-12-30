@@ -78,6 +78,7 @@ public class ACExemplifiedConfig {
     public static boolean RABIES_ENABLED;
     public static boolean ABYSSAL_CRUSH_ENABLED;
     public static boolean GOSSAMER_FEEDING_ENABLED;
+    public static boolean REMINEDING_ENABLED;
 
     public static boolean GEOTHERMAL_EFFECTS_ENABLED;
     public static boolean CANIACAL_EXPLOSION_ENABLED;
@@ -180,6 +181,7 @@ public class ACExemplifiedConfig {
             PEERING_TRIGGER_ENABLED = ACEConfigHolder.EXEMPLIFIED.PEERING_TRIGGER_ENABLED.get();
             LICOWITCH_VENGEANCE_ENABLED = ACEConfigHolder.EXEMPLIFIED.LICOWITCH_VENGEANCE_ENABLED.get();
             CANIACAL_EXPLOSION_ENABLED = ACEConfigHolder.EXEMPLIFIED.CANIACAL_EXPLOSION_ENABLED.get();
+            REMINEDING_ENABLED = ACEConfigHolder.EXEMPLIFIED.REMINEDING_ENABLED.get();
 
             SPELUNKY_ATTEMPTS_AMOUNT = ACEConfigHolder.EXEMPLIFIED.SPELUNKY_ATTEMPTS_AMOUNT.get();
             REDOABLE_SPELUNKY_ENABLED = ACEConfigHolder.EXEMPLIFIED.REDOABLE_SPELUNKY_ENABLED.get();

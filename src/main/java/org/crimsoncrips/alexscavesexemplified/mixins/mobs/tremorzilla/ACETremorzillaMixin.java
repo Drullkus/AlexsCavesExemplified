@@ -2,6 +2,7 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs.tremorzilla;
 
 import com.crimsoncrips.alexsmobsinteraction.config.AMInteractionConfig;
 import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
+import com.github.alexmodguy.alexscaves.server.block.blockentity.EnigmaticEngineBlockEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.TephraEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.DinosaurEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.TremorzillaEntity;

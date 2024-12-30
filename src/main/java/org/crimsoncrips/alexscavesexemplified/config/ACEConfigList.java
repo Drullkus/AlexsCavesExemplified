@@ -97,6 +97,7 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue BREAKING_CANDY_ENABLED ;
     public final ForgeConfigSpec.BooleanValue LICOWITCH_VENGEANCE_ENABLED ;
     public final ForgeConfigSpec.BooleanValue CANIACAL_EXPLOSION_ENABLED ;
+    public final ForgeConfigSpec.BooleanValue REMINEDING_ENABLED ;
 
 
 
@@ -267,6 +268,9 @@ public class ACEConfigList {
         this.ECOLOGICAL_REPUTATION_ENABLED = buildBoolean(builder, "ECOLOGICAL_REPUTATION_ENABLED", " ", true, "Whether messing with the ecosystem reduces deep one reputation");
         builder.push("Floater");
         this.SUBNAUTICAL_FLOATERS_ENABLED = buildBoolean(builder, "SUBNAUTICAL_FLOATERS_ENABLED", " ", true, "Whether floaters look like floaters from subnautica");
+        builder.pop();
+        builder.push("Mine Guardian");
+        this.REMINEDING_ENABLED = buildBoolean(builder, "REMINEDING_ENABLED", " ", true, "Whether mine guardians can be made");
         builder.pop();
         builder.push("Sea Pig");
         this.POISONOUS_SKIN_ENABLED = buildBoolean(builder, "POISONOUS_SKIN_ENABLED", " ", true, "Whether seapigs can inflict poison in nearby mobs");

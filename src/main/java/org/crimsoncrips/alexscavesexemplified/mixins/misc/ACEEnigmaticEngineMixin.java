@@ -1,0 +1,131 @@
+package org.crimsoncrips.alexscavesexemplified.mixins.misc;
+
+import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import com.github.alexmodguy.alexscaves.server.block.blockentity.EnigmaticEngineBlockEntity;
+import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.ACFrogRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.MineGuardianEntity;
+import com.github.alexmodguy.alexscaves.server.level.feature.AmbersolFeature;
+import com.github.alexmodguy.alexscaves.server.misc.ACMath;
+import com.llamalad7.mixinextras.sugar.Local;
+import com.mojang.serialization.Codec;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.animal.FrogVariant;
+import net.minecraft.world.entity.animal.frog.Frog;
+import net.minecraft.world.entity.animal.frog.Tadpole;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.WorldGenLevel;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.entity.BlockEntity;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.levelgen.feature.Feature;
+import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
+import net.minecraft.world.phys.AABB;
+import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.fml.ModList;
+import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
+import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
+import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
+import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+@Mixin(EnigmaticEngineBlockEntity.class)
+public abstract class ACEEnigmaticEngineMixin extends BlockEntity {
+
+
+
+    public ACEEnigmaticEngineMixin(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
+        super(pType, pPos, pBlockState);
+    }
+
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/EnigmaticEngineBlockEntity;attemptAssembly()Z"),remap = false)
+    private static void tick(Level level, BlockPos blockPos, BlockState state, EnigmaticEngineBlockEntity entity, CallbackInfo ci) {
+
+        if (ACExemplifiedConfig.REMINEDING_ENABLED){
+
+            attemptMineAssembly(entity);
+        }
+    }
+
+
+
+
+
+
+
+
+    @Unique
+    private static void attemptMineAssembly(EnigmaticEngineBlockEntity entity) {
+        Direction assembleIn = null;
+        Level level = entity.getLevel();
+
+        BlockPos blockPos = entity.getBlockPos();
+        for (Direction direction : ACMath.HORIZONTAL_DIRECTIONS) {
+            if (assemblingCheck(direction,blockPos,entity)) {
+                assembleIn = direction;
+                break;
+            }
+        }
+        if (assembleIn != null) {
+            for (BlockPos pos : BlockPos.betweenClosed(blockPos.getX() - 1, blockPos.getY() - 1, blockPos.getZ() - 1, blockPos.getX() + 1, blockPos.getY() + 1, blockPos.getZ() + 1)) {
+                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+            }
+            Player owner = null;
+            for (Player player : level.getEntitiesOfClass(Player.class, new AABB(blockPos.offset(-32, -16, -32), blockPos.offset(32, 16, 32)))) {
+                owner = player;
+            }
+            if(!level.isClientSide){
+                MineGuardianEntity mineGuardian = ACEntityRegistry.MINE_GUARDIAN.get().create(level);
+                Vec3 vec31 = Vec3.atCenterOf(blockPos).add(0, -1, 0);
+                mineGuardian.setYRot(assembleIn.toYRot());
+                mineGuardian.setPos(vec31.x, vec31.y, vec31.z);
+                if (owner != null) {
+                    ((MineGuardianXtra) mineGuardian).setOwner(owner.getUUID().toString());
+                }
+                level.addFreshEntity(mineGuardian);
+            }
+        }
+    }
+
+    @Unique
+    private static boolean assemblingCheck(Direction direction, BlockPos blockPos,EnigmaticEngineBlockEntity entity) {
+        Level level = entity.getLevel();
+        List<BlockPos> scrap = new ArrayList<>();
+        for (int x = -1; x < 2; x++) {
+            for (int y = -1; y < 2; y++) {
+                for (int z = -1; z < 2; z++) {
+                    BlockPos blockCheck = new BlockPos(blockPos.getX() + x,blockPos.getY() + y,blockPos.getZ() + z);
+                    if (y == 0){
+                        if (level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL_PLATE.get())) {
+                            scrap.add(blockCheck);
+                        }
+                    } else {
+                        if (level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL_PLATE.get()) && ((x == 0 && z == 0) || (x + z == 1 || x + z == -1))) {
+                            scrap.add(blockCheck);
+                        }
+                    }
+                }
+            }
+        }
+        System.out.println(scrap.size() == 17 && level.getBlockState(blockPos.relative(direction)).is(ACBlockRegistry.DEPTH_GLASS.get()));
+        return scrap.size() == 17 && level.getBlockState(blockPos.relative(direction)).is(ACBlockRegistry.DEPTH_GLASS.get());
+    }
+}
