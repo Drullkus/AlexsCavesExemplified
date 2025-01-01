@@ -1,14 +1,14 @@
 package org.crimsoncrips.alexscavesexemplified.misc.interfaces;
 
-import java.util.UUID;
-
 public interface MineGuardianXtra {
-    boolean isNoon();
+    boolean alexscavesexemplified$isNoon();
 
-    boolean isNuclear();
+    boolean alexscavesexemplified$isNuclear();
 
-    void setNuclear(boolean nuclear);
+    String alexscavesexemplified$getOwner();
 
-    void setOwner(String playerUUID);
+    void alexscavesexemplified$setNuclear(boolean nuclear);
+
+    void alexscavesexemplified$setOwner(String playerUUID);
 
 }

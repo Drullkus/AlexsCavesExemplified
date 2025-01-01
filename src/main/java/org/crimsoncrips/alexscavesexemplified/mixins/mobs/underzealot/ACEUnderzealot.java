@@ -14,6 +14,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
+import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEMobTargetClosePlayers;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEUnderzealotExtinguishCampfires;
@@ -37,7 +38,7 @@ public abstract class ACEUnderzealot extends Monster {
     private void registerGoals(CallbackInfo ci) {
         UnderzealotEntity underzealot = (UnderzealotEntity)(Object)this;
         underzealot.targetSelector.addGoal(2, new ACEMobTargetClosePlayers(underzealot, 40, 12.0F,livingEntity -> {
-            boolean light = (!livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && !(livingEntity instanceof Player player && curiosLight(player))) || !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
+            boolean light = (!CuriosCompat.hasLight(livingEntity)) || !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
             boolean respect = (!livingEntity.getItemBySlot(EquipmentSlot.CHEST).is(ACItemRegistry.CLOAK_OF_DARKNESS.get()) && !livingEntity.getItemBySlot(EquipmentSlot.HEAD).is(ACItemRegistry.HOOD_OF_DARKNESS.get())) || !ACExemplifiedConfig.UNDERZEALOT_RESPECT_ENABLED ;
             return light && respect;
         }) {
@@ -63,17 +64,12 @@ public abstract class ACEUnderzealot extends Monster {
             return;
         if (this.getLastHurtByMob() == target)
             return;
-        if (target.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || target instanceof Player player && curiosLight(player)) {
+        if (CuriosCompat.hasLight(target)) {
             this.setTarget(null);
         }
     }
 
-    public boolean curiosLight(Player player){
-        if (ModList.get().isLoaded("curiouslanterns")) {
-            ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
-            return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
-        } else return false;
-    }
+
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 12))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {

@@ -54,6 +54,7 @@ import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
+import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
@@ -359,7 +360,7 @@ public class ACExemplifiedEvents {
                     for (int z = -1; z < 2; z++) {
                         BlockPos pickedBlock = new BlockPos(player.getBlockX() + x, player.getBlockY() + y , player.getBlockZ() + z);
                         BlockState blockState = level.getBlockState(pickedBlock);
-                        if (ACExemplifiedConfig.PEERING_TRIGGER_ENABLED && blockState.is(ACBlockRegistry.PEERING_COPROLITH.get()) && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || curiosLight(player)) && level.random.nextDouble() < 0.1) {
+                        if (ACExemplifiedConfig.PEERING_TRIGGER_ENABLED && blockState.is(ACBlockRegistry.PEERING_COPROLITH.get()) && (CuriosCompat.hasLight(livingEntity)) && level.random.nextDouble() < 0.1) {
                             if (player.getRandom().nextDouble() < 0.9) {
                                 level.setBlock(pickedBlock, ACBlockRegistry.POROUS_COPROLITH.get().defaultBlockState(), 3);
                             } else if (!level.isClientSide) {
@@ -718,12 +719,6 @@ public class ACExemplifiedEvents {
         }
     }
 
-    public boolean curiosLight(Player player){
-        if (ModList.get().isLoaded("curiouslanterns")) {
-            ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
-            return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
-        } else return false;
-    }
 
     public static int getDivingAmount(LivingEntity entity) {
         int i = 0;

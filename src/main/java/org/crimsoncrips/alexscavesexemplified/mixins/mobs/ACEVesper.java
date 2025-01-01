@@ -18,6 +18,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
+import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEVesperTarget;
 import org.spongepowered.asm.mixin.Mixin;
@@ -50,11 +51,11 @@ public abstract class ACEVesper extends Monster {
         VesperEntity vesper = (VesperEntity)(Object)this;
         if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED){
             this.targetSelector.addGoal(3, new ACEVesperTarget<>(vesper, 32.0F, Player.class,livingEntity -> {
-                return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && !(livingEntity instanceof Player player && curiosLight(player));
+                return !CuriosCompat.hasLight(livingEntity);
             }));
 
             vesper.goalSelector.addGoal(1, new AvoidEntityGoal<>(vesper, LivingEntity.class, 4.0F, 1.5, 2, (livingEntity) -> {
-                return vesper.getLastAttacker() != livingEntity && (livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || (livingEntity instanceof Player player && curiosLight(player))) ;
+                return vesper.getLastAttacker() != livingEntity && CuriosCompat.hasLight(livingEntity) ;
             }));
 
         }
@@ -81,7 +82,7 @@ public abstract class ACEVesper extends Monster {
             return;
         if (this.getLastHurtByMob() == target)
             return;
-        if (target.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || target instanceof Player player && curiosLight(player)) {
+        if (CuriosCompat.hasLight(target)) {
             this.setTarget(null);
         }
     }
@@ -95,12 +96,6 @@ public abstract class ACEVesper extends Monster {
         return super.hurt(pSource, pAmount);
     }
 
-    public boolean curiosLight(Player player){
-        if (ModList.get().isLoaded("curiouslanterns")) {
-            ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
-            return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
-        } else return false;
-    }
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 7))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {

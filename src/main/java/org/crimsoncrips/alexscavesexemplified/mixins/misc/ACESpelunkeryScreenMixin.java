@@ -18,7 +18,9 @@ import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
@@ -129,6 +131,28 @@ public abstract class ACESpelunkeryScreenMixin extends AbstractContainerScreen<S
         } else {
             return original;
         }
+    }
+
+
+
+    @Shadow protected abstract boolean hasClickedAnyWord();
+
+
+    @ModifyConstant(method = "generateWords",constant = @Constant(intValue = 5),remap = false)
+    private int modifyAmount(int amount) {
+        return ACExemplifiedConfig.SPELUNKY_ATTEMPTS_AMOUNT;
+    }
+
+    @Override
+    public void onClose() {
+        if (ACExemplifiedConfig.REDOABLE_SPELUNKY_ENABLED) {
+            super.onClose();
+        } else {
+            if (hasPaper() && hasTablet() && hasClickedAnyWord() && level < 3) {
+                AlexsCaves.NETWORK_WRAPPER.sendToServer(new SpelunkeryTableChangeMessage(false));
+            }
+        }
+
     }
 
 

@@ -98,9 +98,8 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue LICOWITCH_VENGEANCE_ENABLED ;
     public final ForgeConfigSpec.BooleanValue CANIACAL_EXPLOSION_ENABLED ;
     public final ForgeConfigSpec.BooleanValue REMINEDING_ENABLED ;
-
-
-
+    public final  ForgeConfigSpec.BooleanValue DECIPHERABLE_EXPERIENCE_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue ABYSSAL_LIGHT_CHECK_ENABLED;
 
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
@@ -111,6 +110,7 @@ public class ACEConfigList {
          this.ADDITIONAL_FLAMMABILITY_ENABLED = buildBoolean(builder, "ADDITIONAL_FLAMMABILITY_ENABLED", " ", true, "Adds flammability to blocks that should be flammable");
         this.NON_INSTA_LOSE_ENABLED = buildBoolean(builder, "NON_INSTA_LOSE_ENABLED", " ", true, "Reduces level instead of insta-losing in spelunkery minigame");
         this.CAVIAL_BONEMEAL_ENABLED = buildBoolean(builder, "CAVIAL_BONEMEAL_ENABLED", " ", true, "Whether it adds new interactions of bone meal with Alex's Cave's flora");
+        this.DECIPHERABLE_EXPERIENCE_ENABLED = buildBoolean(builder, "DECIPHERABLE_EXPERIENCE_ENABLED", " ", true, "Whether deciphering tablets give decent xp");
 
 
         builder.pop();
@@ -266,6 +266,8 @@ public class ACEConfigList {
         builder.push("Abyssal Chasm");
         this.ABYSSAL_CRUSH_ENABLED = buildBoolean(builder, "ABYSSAL_CRUSH_ENABLED", " ", true, "Whether abyssal chasms cause crushing damage to you and your breath meter when deep enough");
         this.ECOLOGICAL_REPUTATION_ENABLED = buildBoolean(builder, "ECOLOGICAL_REPUTATION_ENABLED", " ", true, "Whether messing with the ecosystem reduces deep one reputation");
+        this.ABYSSAL_LIGHT_CHECK_ENABLED = buildBoolean(builder, "ABYSSAL_LIGHT_CHECK_ENABLED", " ", true, "Whether abyssal mobs interact with entities holding light");
+
         builder.push("Floater");
         this.SUBNAUTICAL_FLOATERS_ENABLED = buildBoolean(builder, "SUBNAUTICAL_FLOATERS_ENABLED", " ", true, "Whether floaters look like floaters from subnautica");
         builder.pop();

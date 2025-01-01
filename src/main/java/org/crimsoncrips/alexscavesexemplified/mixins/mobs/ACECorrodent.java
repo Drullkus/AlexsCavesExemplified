@@ -24,6 +24,7 @@ import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraftforge.fml.ModList;
 import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
+import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -56,7 +57,7 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
         CorrodentEntity corrodent = (CorrodentEntity)(Object)this;
         if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED){
             corrodent.targetSelector.addGoal(2, new MobTarget3DGoal(corrodent, Player.class, false,10, livingEntity -> {
-                return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && (livingEntity instanceof Player player && !curiosLight(player));
+                return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && (livingEntity instanceof Player player && !CuriosCompat.hasLight(player));
             }));
         }
         if (ACExemplifiedConfig.KNAWING_ENABLED){
@@ -103,18 +104,12 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
 
         LivingEntity target = this.getTarget();
         if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED && target != this.getLastAttacker() && target != null) {
-            if (target.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) || target instanceof Player player && curiosLight(player)) {
+            if (CuriosCompat.hasLight(target)) {
                 this.setTarget(null);
             }
         }
     }
 
-    public boolean curiosLight(Player player){
-        if (ModList.get().isLoaded("curiouslanterns")) {
-            ICuriosItemHandler handler = CuriosApi.getCuriosInventory(player).orElseThrow(() -> new IllegalStateException("Player " + player.getName() + " has no curios inventory!"));
-            return handler.getStacksHandler("belt").orElseThrow().getStacks().getStackInSlot(0).is(ACExexmplifiedTagRegistry.LIGHT);
-        } else return false;
-    }
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 8))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
