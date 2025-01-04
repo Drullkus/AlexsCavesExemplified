@@ -4,6 +4,7 @@ import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
 import com.github.alexmodguy.alexscaves.server.block.blockentity.TeslaBulbBlockEntity;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
+import com.google.errorprone.annotations.Var;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -35,7 +36,9 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(TeslaBulbBlockEntity.class)
 public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements TeslaCharge {
 
-    private static int charge;
+    @Unique
+    private int charge;
+    TeslaCharge accessor = (TeslaCharge)(Object)this;
 
     public ACETeslaBulbEntityMixin(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
@@ -50,39 +53,44 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
 
     public int getCharge(){
-        return charge;
+        return accessor.getCharge();
+    }
+
+    public void setCharge(int num){
+        accessor.setCharge(num);
     }
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         if (packet != null && packet.getTag() != null) {
-            charge = packet.getTag().getInt("TeslaCharge");
+            accessor.setCharge(packet.getTag().getInt("TeslaCharge"));
         }
     }
 
     public void load(CompoundTag tag) {
         super.load(tag);
-        charge = tag.getInt("TeslaCharge");
+        accessor.setCharge(tag.getInt("TeslaCharge"));
     }
 
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putInt("TeslaCharge", charge);
+        tag.putInt("TeslaCharge", getCharge());
     }
 
 
     @Inject(method = "tick", at = @At(value = "HEAD"),remap = false)
     private static void alexsCavesExemplified$tick2(Level level, BlockPos blockPos, BlockState state, TeslaBulbBlockEntity entity, CallbackInfo ci) {
         if(ACExemplifiedConfig.TESLA_COILED_ENABLED){
+            TeslaCharge tickAccesor = (TeslaCharge)(Object)entity;
 
             for (LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(blockPos.offset(-5, -5, -5), blockPos.offset(5, 5, 5)))) {
                 if (livingEntity != null && !livingEntity.getType().is(ACTagRegistry.MAGNETIC_ENTITIES)) {
 
-                    charge++;
-                    if (charge >= 5 && charge <= 10){
+                    tickAccesor.setCharge(tickAccesor.getCharge() + 1);
+                    if (tickAccesor.getCharge() >= 5 && tickAccesor.getCharge() <= 10){
                         level.playLocalSound(blockPos, ACESoundRegistry.TESLA_POWERUP.get(), SoundSource.AMBIENT, 2, 1, false);
                     }
-                    if (charge > 30 && charge < 35){
+                    if (tickAccesor.getCharge() > 30 && tickAccesor.getCharge() < 35){
                         Vec3 vec3 = findTargetPos(blockPos, livingEntity);
                         Vec3 from = Vec3.atCenterOf(blockPos);
                         if (!level.isClientSide) {
@@ -96,8 +104,8 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
                         livingEntity.playSound( ACESoundRegistry.TESLA_FIRE.get());
 
                     }
-                    if (charge > 45) {
-                        charge = -200;
+                    if (tickAccesor.getCharge() > 45) {
+                        tickAccesor.setCharge(200);
                     }
                 }
             }

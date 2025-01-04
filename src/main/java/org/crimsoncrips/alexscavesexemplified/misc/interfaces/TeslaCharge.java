@@ -4,4 +4,6 @@ public interface TeslaCharge {
 
     int getCharge();
 
+    void setCharge(int value);
+
 }
