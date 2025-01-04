@@ -25,7 +25,7 @@ public abstract class ACELicowitchMixin extends Monster {
         super(pEntityType, pLevel);
     }
 
-    @Inject(method = "registerGoals", at = @At("TAIL"),remap = false)
+    @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         if (ACExemplifiedConfig.LICOWITCH_VENGEANCE_ENABLED) {
             this.targetSelector.addGoal(2, new NearestAttackableTargetGoal(this, Villager.class, true, false));

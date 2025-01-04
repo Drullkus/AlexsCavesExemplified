@@ -6,7 +6,7 @@ import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEGammafied;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.Gammafied;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -26,7 +26,7 @@ public abstract class ACETremorzillaModelMixin extends AdvancedEntityModel<Tremo
 
     @ModifyExpressionValue(method = "setupAnim(Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;getBeamProgress(F)F"),remap = false)
     private float onlyFlyIfAllowed(float original) {
-        ACEGammafied myAccessor = (ACEGammafied) tremorzilla;
+        Gammafied myAccessor = (Gammafied) tremorzilla;
         if (myAccessor != null) {
             return ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && myAccessor.isAnimationBeaming() ? (float) (original * 0.1) : original;
         } return original;

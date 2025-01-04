@@ -5,11 +5,11 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
-    "blocks.ACEDinosaurChops",
     "blocks.ACEDinosaurEggBlock",
     "blocks.ACENuclearBomb",
     "blocks.ACEPingPongSpongeMixin",
     "blocks.ACEPrimalMagma",
+    "blocks.ACETeslaBulbMixin",
     "blocks.ACEVolcanicCoreBlockEntity",
     "external_mobs.ACEAgeableMob",
     "external_mobs.ACECreeper",
@@ -55,6 +55,8 @@
     "mobs.ACEVallumraptor",
     "mobs.ACEVesper",
     "mobs.ACEWatcher",
+    "mobs.tesla_bulb.ACETeslaBulbEntityMixin",
+    "mobs.tesla_bulb.ACETeslaBulbRenderMixin",
     "mobs.tremorzilla.ACETremorzillaMixin",
     "mobs.underzealot.ACEUnderzealot"
   ],

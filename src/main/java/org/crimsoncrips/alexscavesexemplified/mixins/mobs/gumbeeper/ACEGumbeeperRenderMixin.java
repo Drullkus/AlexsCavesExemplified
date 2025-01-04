@@ -1,12 +1,7 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs.gumbeeper;
 
-import com.github.alexmodguy.alexscaves.client.model.BrainiacModel;
 import com.github.alexmodguy.alexscaves.client.model.GumbeeperModel;
-import com.github.alexmodguy.alexscaves.client.render.entity.BrainiacRenderer;
 import com.github.alexmodguy.alexscaves.client.render.entity.GumbeeperRenderer;
-import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.living.AtlatitanEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.GumbeeperEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.math.Axis;
@@ -15,18 +10,9 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.network.chat.Component;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.FastColor;
 import net.minecraft.util.Mth;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
-import net.minecraft.world.item.crafting.Ingredient;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEBrainiacPowered;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(GumbeeperRenderer.class)

@@ -98,6 +98,8 @@ public class ACExemplifiedConfig {
     public static boolean COOKIE_CRUMBLE_ENABLED;
     public static boolean DECIPHERABLE_EXPERIENCE_ENABLED;
     public static boolean ABYSSAL_LIGHT_CHECK_ENABLED;
+    public static boolean SHOCKING_THERAPY_ENABLED;
+    public static boolean TESLA_COILED_ENABLED;
 
 
     public static void bake() {
@@ -197,6 +199,8 @@ public class ACExemplifiedConfig {
             FORLORN_LIGHT_EFFECT_ENABLED = ACEConfigHolder.EXEMPLIFIED.FORLORN_LIGHT_EFFECT_ENABLED.get();
             ANTI_SACRIFICE_ENABLED = ACEConfigHolder.EXEMPLIFIED.ANTI_SACRIFICE_ENABLED.get();
             DECIPHERABLE_EXPERIENCE_ENABLED = ACEConfigHolder.EXEMPLIFIED.DECIPHERABLE_EXPERIENCE_ENABLED.get();
+            SHOCKING_THERAPY_ENABLED = ACEConfigHolder.EXEMPLIFIED.SHOCKING_THERAPY_ENABLED.get();
+            TESLA_COILED_ENABLED = ACEConfigHolder.EXEMPLIFIED.TESLA_COILED_ENABLED.get();
 
 
 

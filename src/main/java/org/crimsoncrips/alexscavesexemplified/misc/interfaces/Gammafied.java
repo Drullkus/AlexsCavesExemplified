@@ -1,6 +1,6 @@
 package org.crimsoncrips.alexscavesexemplified.misc.interfaces;
 
-public interface ACEGammafied {
+public interface Gammafied {
     boolean isGamma();
 
     void setGamma(boolean gamma);

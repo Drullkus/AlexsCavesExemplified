@@ -100,6 +100,8 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue REMINEDING_ENABLED ;
     public final  ForgeConfigSpec.BooleanValue DECIPHERABLE_EXPERIENCE_ENABLED;
     public final  ForgeConfigSpec.BooleanValue ABYSSAL_LIGHT_CHECK_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue TESLA_COILED_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue SHOCKING_THERAPY_ENABLED;
 
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
@@ -261,6 +263,8 @@ public class ACEConfigList {
         builder.push("Magnetic Caves");
         this.RESISTOR_MAGNETISM_ENABLED = buildBoolean(builder, "RESISTOR_MAGNETISM_ENABLED", " ", true, "Resistor Shield attracts/repels magnetic items, or more..");
         this.HEAVY_GRAVITY_ENABLED = buildBoolean(builder, "HEAVY_GRAVITY_ENABLED", " ", true, "Entities holding heavy-weight item will increase falling speed");
+        this.SHOCKING_THERAPY_ENABLED = buildBoolean(builder, "SHOCKING_THERAPY_ENABLED", " ", true, "Tesla bulbs rarely directly shock nearby intruders");
+        this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command And Conquer");
         builder.pop();
 
         builder.push("Abyssal Chasm");
@@ -285,7 +289,7 @@ public class ACEConfigList {
         this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Whether Relentless Darkness dreadbow has no cooldown on its firing");
         this.NUCLEAR_PISTONATION_ENABLED = buildBoolean(builder, "NUCLEAR_PISTONATION_ENABLED", " ", false, "Whether Nuclear Bombs can be pushed by piston (therefore duplicatable)");
         this.BRAINDEAD_MODE_ENABLED = buildBoolean(builder, "BRAINDEAD_MODE_ENABLED", " ", false, "Whether the spelunkery table text is revealed already for easy answering");
-        this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", true, "Allows parrots explode with cookie block");
+        this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", false, "Allows parrots explode with cookie block");
 
 
     }

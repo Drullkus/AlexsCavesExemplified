@@ -7,7 +7,7 @@ import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEBrainiacPowered;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.BrainiacPowered;
 import org.spongepowered.asm.mixin.Mixin;
 
 
@@ -25,7 +25,7 @@ public abstract class ACEBraniacRenderMixin extends MobRenderer<BrainiacEntity, 
     @Override
     public ResourceLocation getTextureLocation(BrainiacEntity entity) {
         if (ACExemplifiedConfig.WASTE_POWERUP_ENABLED){
-            ACEBrainiacPowered accesor = (ACEBrainiacPowered) entity;
+            BrainiacPowered accesor = (BrainiacPowered) entity;
             return accesor.isPowered() ? POWERED_TEXTURE : TEXTURE;
         } else {
             return TEXTURE;
