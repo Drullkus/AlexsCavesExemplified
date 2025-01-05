@@ -100,6 +100,7 @@ public class ACExemplifiedConfig {
     public static boolean ABYSSAL_LIGHT_CHECK_ENABLED;
     public static boolean SHOCKING_THERAPY_ENABLED;
     public static boolean TESLA_COILED_ENABLED;
+    public static boolean LIQUID_REPLICATION_ENABLED;
 
 
     public static void bake() {
@@ -201,6 +202,7 @@ public class ACExemplifiedConfig {
             DECIPHERABLE_EXPERIENCE_ENABLED = ACEConfigHolder.EXEMPLIFIED.DECIPHERABLE_EXPERIENCE_ENABLED.get();
             SHOCKING_THERAPY_ENABLED = ACEConfigHolder.EXEMPLIFIED.SHOCKING_THERAPY_ENABLED.get();
             TESLA_COILED_ENABLED = ACEConfigHolder.EXEMPLIFIED.TESLA_COILED_ENABLED.get();
+            LIQUID_REPLICATION_ENABLED = ACEConfigHolder.EXEMPLIFIED.LIQUID_REPLICATION_ENABLED.get();
 
 
 

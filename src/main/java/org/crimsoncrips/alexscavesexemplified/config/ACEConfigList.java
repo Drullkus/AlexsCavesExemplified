@@ -102,6 +102,7 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue ABYSSAL_LIGHT_CHECK_ENABLED;
     public final  ForgeConfigSpec.BooleanValue TESLA_COILED_ENABLED;
     public final  ForgeConfigSpec.BooleanValue SHOCKING_THERAPY_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue LIQUID_REPLICATION_ENABLED;
 
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
@@ -113,6 +114,7 @@ public class ACEConfigList {
         this.NON_INSTA_LOSE_ENABLED = buildBoolean(builder, "NON_INSTA_LOSE_ENABLED", " ", true, "Reduces level instead of insta-losing in spelunkery minigame");
         this.CAVIAL_BONEMEAL_ENABLED = buildBoolean(builder, "CAVIAL_BONEMEAL_ENABLED", " ", true, "Whether it adds new interactions of bone meal with Alex's Cave's flora");
         this.DECIPHERABLE_EXPERIENCE_ENABLED = buildBoolean(builder, "DECIPHERABLE_EXPERIENCE_ENABLED", " ", true, "Whether deciphering tablets give decent xp");
+        this.LIQUID_REPLICATION_ENABLED = buildBoolean(builder, "LIQUID_REPLICATION_ENABLED", " ", true, "Whether AC liquids can be renewable");
 
 
         builder.pop();

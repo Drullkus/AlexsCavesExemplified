@@ -1,0 +1,11 @@
+{
+  "parent": "minecraft:block/template_cauldron_full",
+  "textures": {
+    "bottom": "alexscavesexemplified:block/metal_cauldron_bottom",
+    "content": "alexscaves:block/acid_still",
+    "inside": "alexscavesexemplified:block/metal_cauldron_inner",
+    "particle": "alexscavesexemplified:block/metal_cauldron_side",
+    "side": "alexscavesexemplified:block/metal_cauldron_side",
+    "top": "alexscavesexemplified:block/metal_cauldron_top"
+  }
+}

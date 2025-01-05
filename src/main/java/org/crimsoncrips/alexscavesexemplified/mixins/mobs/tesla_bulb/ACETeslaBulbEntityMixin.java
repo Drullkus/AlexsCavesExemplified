@@ -15,6 +15,7 @@ import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
+import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
@@ -53,28 +54,28 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
 
     public int getCharge(){
-        return accessor.getCharge();
+        return charge;
     }
 
     public void setCharge(int num){
-        accessor.setCharge(num);
+        charge = num;
     }
 
     @Override
     public void onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet) {
         if (packet != null && packet.getTag() != null) {
-            accessor.setCharge(packet.getTag().getInt("TeslaCharge"));
+            charge = packet.getTag().getInt("TeslaCharge");
         }
     }
 
     public void load(CompoundTag tag) {
         super.load(tag);
-        accessor.setCharge(tag.getInt("TeslaCharge"));
+        charge = tag.getInt("TeslaCharge");
     }
 
     protected void saveAdditional(CompoundTag tag) {
         super.saveAdditional(tag);
-        tag.putInt("TeslaCharge", getCharge());
+        tag.putInt("TeslaCharge", charge);
     }
 
 
@@ -83,32 +84,40 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
         if(ACExemplifiedConfig.TESLA_COILED_ENABLED){
             TeslaCharge tickAccesor = (TeslaCharge)(Object)entity;
 
+            LivingEntity target = null;
             for (LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(blockPos.offset(-5, -5, -5), blockPos.offset(5, 5, 5)))) {
-                if (livingEntity != null && !livingEntity.getType().is(ACTagRegistry.MAGNETIC_ENTITIES)) {
+                target = livingEntity;
+            }
 
-                    tickAccesor.setCharge(tickAccesor.getCharge() + 1);
-                    if (tickAccesor.getCharge() >= 5 && tickAccesor.getCharge() <= 10){
-                        level.playLocalSound(blockPos, ACESoundRegistry.TESLA_POWERUP.get(), SoundSource.AMBIENT, 2, 1, false);
-                    }
-                    if (tickAccesor.getCharge() > 30 && tickAccesor.getCharge() < 35){
-                        Vec3 vec3 = findTargetPos(blockPos, livingEntity);
-                        Vec3 from = Vec3.atCenterOf(blockPos);
-                        if (!level.isClientSide) {
-                            ((ServerLevel) level).sendParticles(ACParticleRegistry.TESLA_BULB_LIGHTNING.get(), from.x, from.y, from.z, 0, -vec3.x, -vec3.y + 1, -vec3.z, 1.3D);
-                        }
-                        if (!level.isClientSide) {
-                            LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
-                            lightningBolt.setDamage(5);
-                            livingEntity.thunderHit((ServerLevel) level, lightningBolt);
-                        }
-                        livingEntity.playSound( ACESoundRegistry.TESLA_FIRE.get());
+            if (target != null && !target.getType().is(ACTagRegistry.MAGNETIC_ENTITIES)) {
 
+                if (target instanceof Player player && player.isCreative())
+                    return;
+
+                tickAccesor.setCharge(tickAccesor.getCharge() + 1);
+                if (tickAccesor.getCharge() == 5){
+                    level.playLocalSound(blockPos, ACESoundRegistry.TESLA_POWERUP.get(), SoundSource.AMBIENT, 2, 1, false);
+                }
+                if (tickAccesor.getCharge() > 30 && tickAccesor.getCharge() < 35){
+                    Vec3 vec3 = findTargetPos(blockPos, target);
+                    Vec3 from = Vec3.atCenterOf(blockPos);
+                    if (!level.isClientSide) {
+                        ((ServerLevel) level).sendParticles(ACParticleRegistry.TESLA_BULB_LIGHTNING.get(), from.x, from.y, from.z, 0, -vec3.x, -vec3.y + 1, -vec3.z, 1.3D);
                     }
-                    if (tickAccesor.getCharge() > 45) {
-                        tickAccesor.setCharge(200);
+                    if (!level.isClientSide) {
+                        LightningBolt lightningBolt = new LightningBolt(EntityType.LIGHTNING_BOLT, level);
+                        lightningBolt.setDamage(7);
+                        target.thunderHit((ServerLevel) level, lightningBolt);
+                        target.setRemainingFireTicks(30);
                     }
                 }
-            }
+                if (tickAccesor.getCharge() == 33){
+                    target.playSound( ACESoundRegistry.TESLA_FIRE.get());
+                }
+                if (tickAccesor.getCharge() > 45) {
+                    tickAccesor.setCharge(-100);
+                }
+            } else tickAccesor.setCharge(0);
 
 
 

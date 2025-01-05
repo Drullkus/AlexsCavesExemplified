@@ -19,6 +19,12 @@
   "death.attack.depth_crush_0": "%s died from the crushing depths",
   "death.attack.depth_crush_1": "%s got Ocean Gated",
   "death.attack.depth_crush_2": "%s imploded",
-  "death.attack.depth_crush_3": "%s flattened as a pancake"
+  "death.attack.depth_crush_3": "%s flattened as a pancake",
+
+  "alexscavesexemplified.sound.subtitle.tesla_fire": "Tesla fired",
+  "alexscavesexemplified.sound.subtitle.tesla_powerup": "Tesla powering",
+  "alexscavesexemplified.sound.subtitle.tesla_exploding": "Tesla exploding",
+
+  "blocks.alexscavesexemplified.acid_cauldron" : "Acid Cauldron"
 }
 
