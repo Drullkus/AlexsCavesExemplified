@@ -61,8 +61,10 @@ public abstract class ACECauldron extends Block {
         return SHAPE;
     }
 
-    public void tick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+    @Override
+    public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
         System.out.println("YAY");
+        super.randomTick(pState, pLevel, pPos, pRandom);
     }
 
     public VoxelShape getInteractionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {
