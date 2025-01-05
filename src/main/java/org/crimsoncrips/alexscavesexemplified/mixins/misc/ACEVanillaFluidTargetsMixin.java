@@ -25,8 +25,8 @@ public abstract class ACEVanillaFluidTargetsMixin{
 
         if (state.is(ACEBlockRegistry.ACID_CAULDRON.get())) {
             cir.setReturnValue(ACEBlockRegistry.ACID_CAULDRON.getHolder().isPresent());
-        } else if (state.is(ACEBlockRegistry.PURPLE_CAULDRON.get())) {
-            cir.setReturnValue(ACEBlockRegistry.PURPLE_CAULDRON.getHolder().isPresent());
+        } else if (state.is(ACEBlockRegistry.PURPLE_SODA_CAULDRON.get())) {
+            cir.setReturnValue(ACEBlockRegistry.PURPLE_SODA_CAULDRON.getHolder().isPresent());
         }
     }
 
@@ -35,12 +35,12 @@ public abstract class ACEVanillaFluidTargetsMixin{
     private static void alexsCavesExemplified$removeFluidFromSpace(Level level, BlockPos pos, BlockState state, boolean simulate, CallbackInfoReturnable<FluidStack> cir) {
         if (state.is(ACEBlockRegistry.ACID_CAULDRON.get())) {
             if (!simulate) {
-                level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3);
+                level.setBlock(pos, ACEBlockRegistry.METAL_CAULDRON.get().defaultBlockState(), 3);
             }
             cir.setReturnValue(new FluidStack(ACFluidRegistry.ACID_FLUID_SOURCE.get(), 1000));
-        } else if (state.is(ACEBlockRegistry.PURPLE_CAULDRON.get())) {
+        } else if (state.is(ACEBlockRegistry.PURPLE_SODA_CAULDRON.get())) {
             if (!simulate) {
-                level.setBlock(pos, Blocks.CAULDRON.defaultBlockState(), 3);
+                level.setBlock(pos, ACEBlockRegistry.METAL_CAULDRON.get().defaultBlockState(), 3);
             }
             cir.setReturnValue(new FluidStack(ACFluidRegistry.PURPLE_SODA_FLUID_SOURCE.get(), 1000));
         }

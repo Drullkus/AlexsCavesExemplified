@@ -1,7 +1,11 @@
 package org.crimsoncrips.alexscavesexemplified.server.blocks.cauldron;
 
 import java.util.Map;
+
+import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import com.github.alexmodguy.alexscaves.server.block.ACSoundTypes;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
@@ -19,14 +23,17 @@ import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
+import org.jetbrains.annotations.NotNull;
 
-public abstract class ACECauldron extends Block {
+public class ACECauldron extends Block {
     private static final int SIDE_THICKNESS = 2;
     private static final int LEG_WIDTH = 4;
     private static final int LEG_HEIGHT = 3;
@@ -37,10 +44,9 @@ public abstract class ACECauldron extends Block {
     private final Map<Item, ACECauldronInteraction> interactions;
 
     public ACECauldron(BlockBehaviour.Properties pProperties, Map<Item, ACECauldronInteraction> pInteractions) {
-        super(pProperties);
+        super(pProperties.randomTicks());
         this.interactions = pInteractions;
     }
-
 
 
     protected double getContentHeight(BlockState pState) {
@@ -63,8 +69,13 @@ public abstract class ACECauldron extends Block {
 
     @Override
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        System.out.println("YAY");
-        super.randomTick(pState, pLevel, pPos, pRandom);
+        BlockPos blockAbove = pPos.above();
+        while (pLevel.getBlockState(blockAbove).isAir() && blockAbove.getY() < pLevel.getMaxBuildHeight()) {
+            blockAbove = blockAbove.above();
+        }
+        if (pLevel.getBlockState(blockAbove).is(ACBlockRegistry.ACIDIC_RADROCK.get())) {
+            pLevel.setBlockAndUpdate(pPos, ACEBlockRegistry.ACID_CAULDRON.get().defaultBlockState());
+        }
     }
 
     public VoxelShape getInteractionShape(BlockState pState, BlockGetter pLevel, BlockPos pPos) {

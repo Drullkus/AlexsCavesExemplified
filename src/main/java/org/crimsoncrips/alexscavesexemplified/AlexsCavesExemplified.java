@@ -2,7 +2,6 @@ package org.crimsoncrips.alexscavesexemplified;
 
 
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -29,6 +28,7 @@ import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;
 import org.crimsoncrips.alexscavesexemplified.server.ACExemplifiedEvents;
 import org.crimsoncrips.alexscavesexemplified.loot.ACELootModifiers;
 import org.crimsoncrips.alexscavesexemplified.server.entity.ACEEntityRegistry;
+import org.crimsoncrips.alexscavesexemplified.server.item.ACEItemRegistry;
 
 import java.util.Locale;
 
@@ -50,6 +50,7 @@ public class AlexsCavesExemplified {
         ACEParticleRegistry.DEF_REG.register(modEventBus);
         ACEEntityRegistry.DEF_REG.register(modEventBus);
         ACEBlockRegistry.DEF_REG.register(modEventBus);
+        ACEItemRegistry.DEF_REG.register(modEventBus);
         PROXY.init();
         ACEEffects.EFFECT_REGISTER.register(modEventBus);
         ACESoundRegistry.DEF_REG.register(modEventBus);

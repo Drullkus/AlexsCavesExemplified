@@ -6,17 +6,22 @@ import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.google.errorprone.annotations.Var;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
+import net.minecraft.util.ParticleUtils;
+import net.minecraft.util.valueproviders.UniformInt;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.LightningRodBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -39,7 +44,6 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
     @Unique
     private int charge;
-    TeslaCharge accessor = (TeslaCharge)(Object)this;
 
     public ACETeslaBulbEntityMixin(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
@@ -93,6 +97,10 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
                 if (target instanceof Player player && player.isCreative())
                     return;
+                if (tickAccesor.getCharge() > 0) {
+                    ParticleUtils.spawnParticlesAlongAxis(Direction.UP.getAxis(), level, blockPos, 0.125D, ParticleTypes.ELECTRIC_SPARK, UniformInt.of(1, 2));
+                }
+
 
                 tickAccesor.setCharge(tickAccesor.getCharge() + 1);
                 if (tickAccesor.getCharge() == 5){
@@ -117,7 +125,7 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
                 if (tickAccesor.getCharge() > 45) {
                     tickAccesor.setCharge(-100);
                 }
-            } else tickAccesor.setCharge(0);
+            } else tickAccesor.setCharge(-20);
 
 
 
