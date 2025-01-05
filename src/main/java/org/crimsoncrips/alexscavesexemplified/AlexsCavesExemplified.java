@@ -2,6 +2,7 @@ package org.crimsoncrips.alexscavesexemplified;
 
 
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
+import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.FireBlock;
@@ -22,6 +23,7 @@ import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.ACESoundRegistry;
+import org.crimsoncrips.alexscavesexemplified.server.blocks.cauldron.ACECauldronInteraction;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;
 import org.crimsoncrips.alexscavesexemplified.server.ACExemplifiedEvents;
@@ -114,6 +116,8 @@ public class AlexsCavesExemplified {
             fireblock.setFlammable(ACBlockRegistry.THORNWOOD_TRAPDOOR.get(), 5, 20);
             fireblock.setFlammable(ACBlockRegistry.UNDERWEED.get(), 5, 20);
             fireblock.setFlammable(ACBlockRegistry.FORSAKEN_IDOL.get(), 5, 20);
+
+            ACECauldronInteraction.bootStrap();
         }
     }
 

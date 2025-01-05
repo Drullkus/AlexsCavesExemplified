@@ -17,7 +17,6 @@
     "external_mobs.ACELivingEntity",
     "external_mobs.ACEPlayer",
     "external_mobs.ACEThrownPotion",
-    "misc.ACEAcidBucketMixin",
     "misc.ACEAmberFeature",
     "misc.ACEDreadbowItem",
     "misc.ACEEnigmaticEngineMixin",

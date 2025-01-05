@@ -36,9 +36,8 @@ public interface ACECauldronInteraction {
     Map<Item, ACECauldronInteraction> EMPTY = newInteractionMap();
     Map<Item, ACECauldronInteraction> ACID = newInteractionMap();
 
-    ACECauldronInteraction FILL_ACID = (p_175676_, p_175677_, p_175678_, p_175679_, p_175680_, p_175681_) -> {
-        return emptyBucket(p_175677_, p_175678_, p_175679_, p_175680_, p_175681_, ACEBlockRegistry.ACID_CAULDRON.get().defaultBlockState(), ACSoundRegistry.ACID_SUBMERGE.get());
-    };
+
+    ACECauldronInteraction FILL_ACID = (p_175676_, p_175677_, p_175678_, p_175679_, p_175680_, p_175681_) -> emptyBucket(p_175677_, p_175678_, p_175679_, p_175680_, p_175681_, ACEBlockRegistry.ACID_CAULDRON.get().defaultBlockState(), ACSoundRegistry.ACID_SUBMERGE.get());
 
     static Object2ObjectOpenHashMap<Item, ACECauldronInteraction> newInteractionMap() {
         return Util.make(new Object2ObjectOpenHashMap<>(), (p_175646_) -> {
@@ -51,7 +50,24 @@ public interface ACECauldronInteraction {
     InteractionResult interact(BlockState pBlockState, Level pLevel, BlockPos pBlockPos, Player pPlayer, InteractionHand pHand, ItemStack pStack);
 
     static void bootStrap() {
+        addDefaultInteractions(EMPTY);
+        EMPTY.put(Items.POTION, (p_175732_, p_175733_, p_175734_, p_175735_, p_175736_, p_175737_) -> {
+            if (PotionUtils.getPotion(p_175737_) != Potions.WATER) {
+                return InteractionResult.PASS;
+            } else {
+                if (!p_175733_.isClientSide) {
+                    Item item = p_175737_.getItem();
+                    p_175735_.setItemInHand(p_175736_, ItemUtils.createFilledResult(p_175737_, p_175735_, new ItemStack(Items.GLASS_BOTTLE)));
+                    p_175735_.awardStat(Stats.USE_CAULDRON);
+                    p_175735_.awardStat(Stats.ITEM_USED.get(item));
+                    p_175733_.setBlockAndUpdate(p_175734_, Blocks.WATER_CAULDRON.defaultBlockState());
+                    p_175733_.playSound((Player)null, p_175734_, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
+                    p_175733_.gameEvent((Entity)null, GameEvent.FLUID_PLACE, p_175734_);
+                }
 
+                return InteractionResult.sidedSuccess(p_175733_.isClientSide);
+            }
+        });
         ACID.put(Items.BUCKET, (p_175697_, p_175698_, p_175699_, p_175700_, p_175701_, p_175702_) -> {
             return fillBucket(p_175697_, p_175698_, p_175699_, p_175700_, p_175701_, p_175702_, new ItemStack(ACItemRegistry.ACID_BUCKET.get()), (p_175651_) -> {
                 return true;
