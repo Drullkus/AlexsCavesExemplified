@@ -57,29 +57,24 @@ public interface ACECauldronInteraction {
     InteractionResult interact(BlockState pBlockState, Level pLevel, BlockPos pBlockPos, Player pPlayer, InteractionHand pHand, ItemStack pStack);
 
     static void bootStrap() {
-        addDefaultInteractions(EMPTY);
-        EMPTY.put(ACItemRegistry.PURPLE_SODA_BOTTLE.get(), (p_175732_, p_175733_, p_175734_, p_175735_, p_175736_, p_175737_) -> {
-            if (!p_175733_.isClientSide) {
-                p_175735_.setItemInHand(p_175736_, ItemUtils.createFilledResult(p_175737_, p_175735_, new ItemStack(Items.GLASS_BOTTLE)));
-                p_175735_.awardStat(Stats.USE_CAULDRON);
-                p_175735_.awardStat(Stats.ITEM_USED.get(p_175737_.getItem()));
-                p_175733_.setBlockAndUpdate(p_175734_, ACEBlockRegistry.PURPLE_SODA_CAULDRON.get().defaultBlockState());
-                p_175733_.playSound((Player)null, p_175734_, SoundEvents.BOTTLE_EMPTY, SoundSource.BLOCKS, 1.0F, 1.0F);
-                p_175733_.gameEvent((Entity)null, GameEvent.FLUID_PLACE, p_175734_);
-            }
-            return InteractionResult.sidedSuccess(p_175733_.isClientSide);
-        });
         ACID.put(Items.BUCKET, (p_175697_, p_175698_, p_175699_, p_175700_, p_175701_, p_175702_) -> {
             return fillBucket(p_175697_, p_175698_, p_175699_, p_175700_, p_175701_, p_175702_, new ItemStack(ACItemRegistry.ACID_BUCKET.get()), (p_175651_) -> {
                 return true;
             }, ACSoundRegistry.ACID_SUBMERGE.get());
         });
         addDefaultInteractions(ACID);
+
+        PURPLE_SODA.put(Items.BUCKET, (p_175697_, p_175698_, p_175699_, p_175700_, p_175701_, p_175702_) -> {
+            return fillBucket(p_175697_, p_175698_, p_175699_, p_175700_, p_175701_, p_175702_, new ItemStack(ACItemRegistry.PURPLE_SODA_BUCKET.get()), (p_175651_) -> {
+                return true;
+            }, ACSoundRegistry.PURPLE_SODA_SUBMERGE.get());
+        });
+        addDefaultInteractions(PURPLE_SODA);
     }
 
     static void addDefaultInteractions(Map<Item, ACECauldronInteraction> pInteractionsMap) {
         pInteractionsMap.put(ACItemRegistry.ACID_BUCKET.get(), FILL_ACID);
-        pInteractionsMap.put(ACItemRegistry.PU, FILL_ACID);
+        pInteractionsMap.put(ACItemRegistry.PURPLE_SODA_BUCKET.get(), FILL_SODA);
     }
 
     static InteractionResult fillBucket(BlockState pBlockState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, ItemStack pEmptyStack, ItemStack pFilledStack, Predicate<BlockState> pStatePredicate, SoundEvent pFillSound) {
