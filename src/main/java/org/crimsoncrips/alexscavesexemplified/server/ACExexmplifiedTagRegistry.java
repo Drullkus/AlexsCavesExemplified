@@ -27,6 +27,7 @@ public class ACExexmplifiedTagRegistry {
     public static final TagKey<Item> KNAWING = registerItemTag("knawing");
     public static final TagKey<Item> GELATINABLE = registerItemTag("gelatinable");
     public static final TagKey<Item> COLD_FOOD = registerItemTag("cold_food");
+    public static final TagKey<Item> CANDY = registerItemTag("cold_food");
 
 
     public ACExexmplifiedTagRegistry() {
