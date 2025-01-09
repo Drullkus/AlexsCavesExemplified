@@ -44,6 +44,37 @@ public class ACEMineGuardian extends Monster implements MineGuardianXtra {
     }
 
 
+
+
+    @Override
+    public boolean alexsCavesExemplified$isNoon() {
+        return this.entityData.get(NOON);
+    }
+
+    @Override
+    public boolean alexsCavesExemplified$isNuclear() {
+        return this.entityData.get(NUCLEAR);
+    }
+
+    public String alexsCavesExemplified$getOwner() {
+        return this.entityData.get(OWNER);
+    }
+
+    @Override
+    public void alexsCavesExemplified$setNuclear(boolean nuclear) {
+        this.entityData.set(NUCLEAR, Boolean.valueOf(nuclear));
+    }
+
+    @Override
+    public void alexsCavesExemplified$setOwner(String playerUUID) {
+        this.entityData.set(OWNER, String.valueOf(playerUUID));
+    }
+
+    @Unique
+    public void alexsCavesExemplified$setNoon(boolean noon) {
+        this.entityData.set(NOON, Boolean.valueOf(noon));
+    }
+
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     private void define(CallbackInfo ci) {
         this.entityData.define(OWNER, "-1");
@@ -51,53 +82,24 @@ public class ACEMineGuardian extends Monster implements MineGuardianXtra {
         this.entityData.define(NOON , false);
     }
 
-    @Override
-    public boolean alexscavesexemplified$isNoon() {
-        return this.entityData.get(NOON);
-    }
-
-    @Override
-    public boolean alexscavesexemplified$isNuclear() {
-        return this.entityData.get(NUCLEAR);
-    }
-
-    public String alexscavesexemplified$getOwner() {
-        return this.entityData.get(OWNER);
-    }
-
-    @Override
-    public void alexscavesexemplified$setNuclear(boolean nuclear) {
-        this.entityData.set(NUCLEAR, Boolean.valueOf(nuclear));
-    }
-
-    @Override
-    public void alexscavesexemplified$setOwner(String playerUUID) {
-        this.entityData.set(OWNER, String.valueOf(playerUUID));
-    }
-
-    @Unique
-    public void alexscavesexemplified$setNoon(boolean noon) {
-        this.entityData.set(NOON, Boolean.valueOf(noon));
-    }
-
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void add(CompoundTag compound, CallbackInfo ci) {
-        compound.putBoolean("Nuclear", this.alexscavesexemplified$isNuclear());
-        compound.putBoolean("Noon", this.alexscavesexemplified$isNoon());
-        compound.putString("MineOwner", this.alexscavesexemplified$getOwner());
+        compound.putBoolean("Nuclear", this.alexsCavesExemplified$isNuclear());
+        compound.putBoolean("Noon", this.alexsCavesExemplified$isNoon());
+        compound.putString("MineOwner", this.alexsCavesExemplified$getOwner());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void read(CompoundTag compound, CallbackInfo ci) {
-        this.alexscavesexemplified$setNoon(compound.getBoolean("Noon"));
-        this.alexscavesexemplified$setNuclear(compound.getBoolean("Nuclear"));
-        this.alexscavesexemplified$setOwner(compound.getString("MineOwner"));
+        this.alexsCavesExemplified$setNoon(compound.getBoolean("Noon"));
+        this.alexsCavesExemplified$setNuclear(compound.getBoolean("Nuclear"));
+        this.alexsCavesExemplified$setOwner(compound.getString("MineOwner"));
     }
 
     @Inject(method = "isValidTarget", at = @At("HEAD"),cancellable = true,remap = false)
     private void isValidTarget(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if(ACExemplifiedConfig.REMINEDING_ENABLED && entity instanceof Player player){
-            cir.setReturnValue(canAttack(player) && !Objects.equals(player.getUUID().toString(), alexscavesexemplified$getOwner()));
+            cir.setReturnValue(canAttack(player) && !Objects.equals(player.getUUID().toString(), alexsCavesExemplified$getOwner()));
         }
     }
 

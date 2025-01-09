@@ -30,6 +30,7 @@ import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
 import org.jetbrains.annotations.NotNull;
 
@@ -69,6 +70,8 @@ public class ACECauldron extends Block {
 
     @Override
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
+        if (!ACExemplifiedConfig.LIQUID_REPLICATION_ENABLED)
+            return;
         BlockPos blockAbove = pPos.above();
         while (pLevel.getBlockState(blockAbove).isAir() && blockAbove.getY() < pLevel.getMaxBuildHeight()) {
             blockAbove = blockAbove.above();

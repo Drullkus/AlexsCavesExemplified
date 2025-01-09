@@ -1,15 +1,13 @@
-package org.crimsoncrips.alexscavesexemplified;//
+package org.crimsoncrips.alexscavesexemplified.server;//
 
 
 
 import net.minecraft.core.registries.Registries;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.tags.TagKey;
-import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.material.Fluid;
 
 
 public class ACExexmplifiedTagRegistry {
@@ -28,6 +26,7 @@ public class ACExexmplifiedTagRegistry {
     public static final TagKey<Item> LIGHT = registerItemTag("light");
     public static final TagKey<Item> KNAWING = registerItemTag("knawing");
     public static final TagKey<Item> GELATINABLE = registerItemTag("gelatinable");
+    public static final TagKey<Item> COLD_FOOD = registerItemTag("cold_food");
 
 
     public ACExexmplifiedTagRegistry() {

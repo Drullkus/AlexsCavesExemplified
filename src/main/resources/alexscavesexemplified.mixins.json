@@ -5,7 +5,9 @@
   "compatibilityLevel": "JAVA_8",
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
+    "blocks.ACEBeholderMixin",
     "blocks.ACEDinosaurEggBlock",
+    "blocks.ACEIceCreamBlockMixin",
     "blocks.ACENuclearBomb",
     "blocks.ACEPingPongSpongeMixin",
     "blocks.ACEPrimalMagma",
@@ -30,6 +32,7 @@
     "misc.ACESugarStaffHex",
     "misc.ACEVanillaFluidTargetsMixin",
     "mobs.ACEAtlatitan",
+    "mobs.ACEBaseDeepEntityMixin",
     "mobs.ACEBrainiac",
     "mobs.ACECaniac",
     "mobs.ACECorrodent",

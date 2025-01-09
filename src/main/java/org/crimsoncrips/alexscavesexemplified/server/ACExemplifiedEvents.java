@@ -19,6 +19,7 @@ import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
 import net.minecraft.core.particles.BlockParticleOption;
+import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.server.level.ServerLevel;
@@ -35,14 +36,12 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
-import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -51,20 +50,16 @@ import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
-import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import top.theillusivec4.curios.api.CuriosApi;
-import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 
 import java.util.*;
 
@@ -171,30 +166,82 @@ public class ACExemplifiedEvents {
     public void onInteractWithEntity(PlayerInteractEvent.EntityInteract event) {
         Player player = event.getEntity();
         ItemStack itemStack = event.getItemStack();
-        RandomSource random = player.getRandom();
-        if (event.getTarget() instanceof GingerbreadManEntity gingerbreadMan) {
+        Level level = event.getLevel();
+        Entity target = event.getTarget();
 
-            if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.AMPUTATION_ENABLED) {
-                if (gingerbreadMan.hasBothLegs()) {
-                    gingerbreadMan.hurt(player.damageSources().mobAttack(player), 0.5F);
-                    gingerbreadMan.setLostLimb(gingerbreadMan.getRandom().nextBoolean(), false, true);
-                    player.swing(player.getUsedItemHand());
-                } else if (gingerbreadMan.getRandom().nextInt(2) == 0) {
-                    player.swing(player.getUsedItemHand());
-                    gingerbreadMan.hurt(player.damageSources().mobAttack(player), 0.5F);
-                    gingerbreadMan.setLostLimb(gingerbreadMan.getRandom().nextBoolean(), true, true);
+        if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.AMPUTATION_ENABLED && target instanceof GingerbreadManEntity gingerbread) {
+            if (gingerbread.hasBothLegs()) {
+                gingerbread.hurt(player.damageSources().mobAttack(player), 0.5F);
+                gingerbread.setLostLimb(gingerbread.getRandom().nextBoolean(), false, true);
+                player.swing(player.getUsedItemHand());
+            } else if (gingerbread.getRandom().nextInt(2) == 0) {
+                player.swing(player.getUsedItemHand());
+                gingerbread.hurt(player.damageSources().mobAttack(player), 0.5F);
+                gingerbread.setLostLimb(gingerbread.getRandom().nextBoolean(), true, true);
+            }
+        }
+
+        if (ACExemplifiedConfig.GLUTTONY_ENABLED && player.isCrouching()) {
+
+            if (player.getEffect(MobEffects.HUNGER) == null)
+                return;
+
+
+
+            if (target instanceof GingerbreadManEntity gingerbread && !gingerbread.isOvenSpawned()) {
+                ParticleOptions particle = new ItemParticleOption(ParticleTypes.ITEM, ACItemRegistry.GINGERBREAD_CRUMBS.get().asItem().getDefaultInstance());
+                Vec3 lookAngle = player.getLookAngle();
+                level.addParticle(particle, player.getX(), player.getY() + 1.5, player.getZ(), lookAngle.x * 0.2, lookAngle.y * 0.6, lookAngle.z * 0.2);
+
+
+                for (GingerbreadManEntity entity : level.getEntitiesOfClass(GingerbreadManEntity.class, gingerbread.getBoundingBox().inflate(10, 5, 10))) {
+                    if (!entity.isOvenSpawned() && !player.isCreative()) {
+                        entity.setTarget(player);
+                    }
+                }
+                event.getTarget().discard();
+                player.getFoodData().setFoodLevel(player.getFoodData().getFoodLevel() + 2);
+                player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+            }
+
+            if (target instanceof CaramelCubeEntity caramelCube && caramelCube.getSlimeSize() <= 0) {
+                ParticleOptions particle = new ItemParticleOption(ParticleTypes.ITEM, ACItemRegistry.CARAMEL.get().asItem().getDefaultInstance());
+                Vec3 lookAngle = player.getLookAngle();
+                level.addParticle(particle, player.getX(), player.getY() + 1.5, player.getZ(), lookAngle.x * 0.2, lookAngle.y * 0.6, lookAngle.z * 0.2);
+
+                player.getFoodData().setFoodLevel(player.getFoodData().getFoodLevel() + 3);
+                player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 0,false,false));
+                event.getTarget().discard();
+                player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+            }
+
+            if (target instanceof GummyBearEntity gummyBearEntity && gummyBearEntity.isBaby()) {
+                Vec3 lookAngle = player.getLookAngle();
+
+                ItemStack gelatinColor = switch (gummyBearEntity.getGummyColor()) {
+                    case GREEN -> ACItemRegistry.GELATIN_GREEN.get().asItem().getDefaultInstance();
+                    case BLUE -> ACItemRegistry.GELATIN_BLUE.get().asItem().getDefaultInstance();
+                    case YELLOW -> ACItemRegistry.GELATIN_YELLOW.get().asItem().getDefaultInstance();
+                    case PINK -> ACItemRegistry.GELATIN_PINK.get().asItem().getDefaultInstance();
+                    default -> ACItemRegistry.GELATIN_RED.get().asItem().getDefaultInstance();
+                };
+
+                ParticleOptions particle = new ItemParticleOption(ParticleTypes.ITEM, gelatinColor.getItem().getDefaultInstance());
+
+                for (int i = 0; i <= 15; i++) {
+                    level.addParticle(particle, player.getX(), player.getY() + 1.5, player.getZ(), lookAngle.x * 0.2, lookAngle.y * 0.6, lookAngle.z * 0.2);
                 }
 
-            }
-            if (ACExemplifiedConfig.GLUTTONY_ENABLED && player.isCrouching()) {
-                MobEffectInstance hunger = player.getEffect(MobEffects.HUNGER);
-                if (hunger != null) {
-                    event.getTarget().discard();
-                    player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+                player.getFoodData().setFoodLevel(player.getFoodData().getFoodLevel() + 5);
+                for (GummyBearEntity entity : level.getEntitiesOfClass(GummyBearEntity.class, player.getBoundingBox().inflate(10, 5, 10))) {
+                    if (!player.isCreative()) {
+                        entity.setTarget(player);
+                    }
                 }
-                player.playSound(SoundEvents.GENERIC_EAT, 1.0F, 1.0F);
+                event.getTarget().discard();
+                player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+                player.playSound(ACSoundRegistry.GUMMY_BEAR_DEATH.get(), 0.4F, 2F);
             }
-
         }
 
         if(event.getTarget() instanceof Parrot parrot && ACExemplifiedConfig.COOKIE_CRUMBLE_ENABLED){
@@ -208,7 +255,7 @@ public class ACExemplifiedEvents {
         }
 
         if (event.getTarget() instanceof CandicornEntity candicornEntity) {
-            if (itemStack.is(ACItemRegistry.CARAMEL_APPLE.get()) && ACExemplifiedConfig.AMPUTATION_ENABLED) {
+            if (itemStack.is(ACItemRegistry.CARAMEL_APPLE.get()) && ACExemplifiedConfig.CANDICORN_HEAL_ENABLED) {
                 if (!player.isCreative()) {
                     itemStack.shrink(1);
                 }
@@ -357,7 +404,7 @@ public class ACExemplifiedEvents {
 
         if (livingEntity instanceof Player player) {
             for (int x = -1; x < 2; x++) {
-                for (int y = 0; y < 3; y++) {
+                for (int y = -1; y < 2; y++) {
                     for (int z = -1; z < 2; z++) {
                         BlockPos pickedBlock = new BlockPos(player.getBlockX() + x, player.getBlockY() + y , player.getBlockZ() + z);
                         BlockState blockState = level.getBlockState(pickedBlock);
@@ -487,7 +534,7 @@ public class ACExemplifiedEvents {
 
             }
         }
-        
+
 
 
         if (ACExemplifiedConfig.STICKY_SODA_ENABLED && livingEntity.getFeetBlockState().is(ACBlockRegistry.PURPLE_SODA.get()) && !livingEntity.getType().is(ACTagRegistry.CANDY_MOBS)){

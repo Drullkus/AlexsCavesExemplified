@@ -21,6 +21,9 @@
   "death.attack.depth_crush_1": "%s got Ocean Gated",
   "death.attack.depth_crush_2": "%s imploded",
   "death.attack.depth_crush_3": "%s flattened as a pancake",
+  "death.attack.candy_punish_0": "%s disobeyed",
+  "death.attack.candy_punish_1": "%s got slippered to death",
+  "death.attack.candy_punish_2": "%s got spanked for disobedience",
 
   "alexscavesexemplified.sound.subtitle.tesla_fire": "Tesla fired",
   "alexscavesexemplified.sound.subtitle.tesla_powerup": "Tesla powering",
@@ -28,6 +31,8 @@
 
   "block.alexscavesexemplified.acid_cauldron" : "Acid Cauldron",
   "block.alexscavesexemplified.metal_cauldron" : "Metal Cauldron",
-  "block.alexscavesexemplified.purple_soda_cauldron" : "Purple Soda Cauldron"
+  "block.alexscavesexemplified.purple_soda_cauldron" : "Purple Soda Cauldron",
+
+  "item.alexscavesexemplified.ice_cream_cone" : "Ice Cream Cone"
 }
 

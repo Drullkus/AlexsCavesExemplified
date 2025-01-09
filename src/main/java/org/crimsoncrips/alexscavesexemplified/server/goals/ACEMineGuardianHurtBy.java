@@ -23,7 +23,7 @@ public class ACEMineGuardianHurtBy extends HurtByTargetGoal {
 
     @Override
     public void start() {
-        if (this.mob.getLastHurtByMob() instanceof Player player && !Objects.equals(player.getUUID().toString(), ((MineGuardianXtra)mineGuardian).alexscavesexemplified$getOwner())) {
+        if (this.mob.getLastHurtByMob() instanceof Player player && !Objects.equals(player.getUUID().toString(), ((MineGuardianXtra)mineGuardian).alexsCavesExemplified$getOwner())) {
             this.mob.setTarget(this.mob.getLastHurtByMob());
         }
         this.targetMob = this.mob.getTarget();

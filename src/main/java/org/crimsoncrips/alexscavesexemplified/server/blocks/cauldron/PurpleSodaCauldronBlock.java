@@ -20,7 +20,7 @@ public class PurpleSodaCauldronBlock extends ACECauldron {
 
 
     public PurpleSodaCauldronBlock(Properties p_153498_) {
-        super(p_153498_, ACECauldronInteraction.ACID);
+        super(p_153498_, ACECauldronInteraction.PURPLE_SODA);
     }
 
     protected double getContentHeight(BlockState p_153500_) {

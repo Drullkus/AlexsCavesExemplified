@@ -1,14 +1,14 @@
 package org.crimsoncrips.alexscavesexemplified.misc.interfaces;
 
 public interface MineGuardianXtra {
-    boolean alexscavesexemplified$isNoon();
+    boolean alexsCavesExemplified$isNoon();
 
-    boolean alexscavesexemplified$isNuclear();
+    boolean alexsCavesExemplified$isNuclear();
 
-    String alexscavesexemplified$getOwner();
+    String alexsCavesExemplified$getOwner();
 
-    void alexscavesexemplified$setNuclear(boolean nuclear);
+    void alexsCavesExemplified$setNuclear(boolean nuclear);
 
-    void alexscavesexemplified$setOwner(String playerUUID);
+    void alexsCavesExemplified$setOwner(String playerUUID);
 
 }

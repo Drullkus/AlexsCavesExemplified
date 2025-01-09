@@ -78,7 +78,7 @@ public abstract class ACEEnigmaticEngineMixin extends BlockEntity {
                 mineGuardian.setYRot(assembleIn.toYRot());
                 mineGuardian.setPos(vec31.x, vec31.y, vec31.z);
                 if (owner != null) {
-                    ((MineGuardianXtra) mineGuardian).alexscavesexemplified$setOwner(owner.getUUID().toString());
+                    ((MineGuardianXtra) mineGuardian).alexsCavesExemplified$setOwner(owner.getUUID().toString());
                 }
                 level.addFreshEntity(mineGuardian);
             }

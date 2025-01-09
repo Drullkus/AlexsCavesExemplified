@@ -1,11 +1,9 @@
 package org.crimsoncrips.alexscavesexemplified.compat;
 
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraftforge.fml.ModList;
-import org.crimsoncrips.alexscavesexemplified.ACExexmplifiedTagRegistry;
+import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
 import top.theillusivec4.curios.api.CuriosApi;
 import top.theillusivec4.curios.api.type.capability.ICuriosItemHandler;
 

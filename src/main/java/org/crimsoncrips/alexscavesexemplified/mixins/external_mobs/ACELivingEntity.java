@@ -37,11 +37,34 @@ public abstract class ACELivingEntity extends Entity {
     }
 
     @WrapOperation(method = "causeFallDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;calculateFallDamage(FF)I"))
-    private int causeFallDamage(LivingEntity instance, float f, float v, Operation<Integer> original) {
+    private int alexsCavesExemplified$causeFallDamage(LivingEntity instance, float f, float v, Operation<Integer> original) {
         if (ACExemplifiedConfig.HEAVY_GRAVITY_ENABLED) {
             return original.call(instance, f, v * 1.5F);
         } else {
             return original.call(instance, f, v);
+        }
+    }
+
+    @Inject(method = "baseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getAirSupply()I"))
+    private void baseTick(CallbackInfo ci) {
+        LivingEntity livingEntity = (LivingEntity)(Object)this;
+        Block block = livingEntity.level().getBlockState(livingEntity.blockPosition()).getBlock();
+        if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && block != ACBlockRegistry.AMBER.get()) {
+            if (ModList.get().isLoaded("alexsmobs")) {
+                amberReset(livingEntity);
+            }
+            if (livingEntity instanceof Frog frog && frog.isNoAi()) {
+                frog.setNoAi(false);
+                frog.setInvulnerable(false);
+                frog.setSilent(false);
+                frog.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1,false,false));
+            }
+            if (livingEntity instanceof Tadpole tadpole && tadpole.isNoAi()) {
+                tadpole.setNoAi(false);
+                tadpole.setInvulnerable(false);
+                tadpole.setSilent(false);
+                tadpole.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1,false,false));
+            }
         }
     }
     //Props to Drullkus for assistance

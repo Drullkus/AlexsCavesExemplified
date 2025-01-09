@@ -103,6 +103,8 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue TESLA_COILED_ENABLED;
     public final  ForgeConfigSpec.BooleanValue SHOCKING_THERAPY_ENABLED;
     public final  ForgeConfigSpec.BooleanValue LIQUID_REPLICATION_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue ICE_CREAM_CONE_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue BEHOLDENT_STALKING_ENABLED;
 
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
@@ -131,6 +133,7 @@ public class ACEConfigList {
         this.OVERTUNED_CONSUMPTION_ENABLED = buildBoolean(builder, "OVERTUNED_CONSUMPTION_ENABLED", " ", true, "Adds interactions when eating things from Candy Cavity");
         this.CRYONIC_CAVITY_ENABLED = buildBoolean(builder, "CRYONIC_CAVITY_ENABLED", " ", true, "Makes the candy cavity freeze outsiders slowly");
         this.BREAKING_CANDY_ENABLED = buildBoolean(builder, "BREAKING_CANDY_ENABLED", " ", true, "Allows the creation of gelatin with bone blocks");
+        this.ICE_CREAM_CONE_ENABLED = buildBoolean(builder, "ICE_CREAM_CONE_ENABLED", " ", true, "You can make Ice Cream Cones");
 
 
         builder.push("Caniac");
@@ -182,6 +185,7 @@ public class ACEConfigList {
         this.RABIES_ENABLED = buildBoolean(builder, "RABIES_ENABLED", " ", true, "Whether corrodents inflict rabies-like symptoms");
         this.GUANO_SLOW_ENABLED = buildBoolean(builder, "GUANO_SLOW_ENABLED", " ", true, "Whether guano slows you down");
         this.PEERING_TRIGGER_ENABLED = buildBoolean(builder, "PEERING_TRIGGER_ENABLED", " ", true, "Whether peering coprolith interact with players holding light in different ways");
+        this.BEHOLDENT_STALKING_ENABLED = buildBoolean(builder, "BEHOLDENT_STALKING_ENABLED", " ", true, "Whether beholders stalk nearby players when unused");
 
         builder.push("Corrodent");
         this.CORRODENT_CONVERSION_ENABLED = buildBoolean(builder, "CORRODENT_CONVERSION_ENABLED", " ", true, "Whether corrodents can be converted to underzealots through ritual");

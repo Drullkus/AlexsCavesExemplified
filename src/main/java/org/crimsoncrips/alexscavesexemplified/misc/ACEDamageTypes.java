@@ -19,9 +19,14 @@ public class ACEDamageTypes {
     public static final ResourceKey<DamageType> SUGAR_CRASH = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "sugar_crash"));
     public static final ResourceKey<DamageType> STOMACH_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "stomach_damage"));
     public static final ResourceKey<DamageType> DEPTH_DAMAGE = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "depth_crush"));
+    public static final ResourceKey<DamageType> CANDY_PUNISHMENT = ResourceKey.create(Registries.DAMAGE_TYPE, new ResourceLocation(AlexsCavesExemplified.MODID, "candy_punish"));
+
 
     public static DamageSource causeRabialWaterDamage(RegistryAccess registryAccess) {
         return new DamageSourceRandomMessages(registryAccess.registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(RABIAL_WATER), 1);
+    }
+    public static DamageSource causeCandyPunishDamage(RegistryAccess registryAccess) {
+        return new DamageSourceRandomMessages(registryAccess.registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(CANDY_PUNISHMENT), 1);
     }
     public static DamageSource causeEndRabialDamage(RegistryAccess registryAccess) {
         return new DamageSourceRandomMessages(registryAccess.registry(Registries.DAMAGE_TYPE).get().getHolderOrThrow(RABIAL_END), 1);
