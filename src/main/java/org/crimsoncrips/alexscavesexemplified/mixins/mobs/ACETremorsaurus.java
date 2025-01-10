@@ -134,7 +134,7 @@ public abstract class ACETremorsaurus extends DinosaurEntity implements TargetsD
                                 tremorsaurus.heal(4);
                                 tremorsaurus.level().destroyBlock(blockPos, false);
                                 tremorsaurus.playSound(ACSoundRegistry.TREMORSAURUS_BITE.get(), 1F, 1F);
-                                if (ACExemplifiedConfig.SEETHED_TAMING_ENABLED && level().getRandom().nextDouble() < 0.2) {
+                                if (ACExemplifiedConfig.SEETHED_TAMING_ENABLED && level().getRandom().nextDouble() < 0.09) {
                                     setSeethed(true);
                                 }
                             }
@@ -199,7 +199,7 @@ public abstract class ACETremorsaurus extends DinosaurEntity implements TargetsD
                                 tremorsaurus.heal(4);
                                 tremorsaurus.playSound(ACSoundRegistry.TREMORSAURUS_BITE.get(), 1F, 1F);
                                 targetEntity.kill();
-                                if (ACExemplifiedConfig.SEETHED_TAMING_ENABLED && level().getRandom().nextDouble() < 0.1) {
+                                if (ACExemplifiedConfig.SEETHED_TAMING_ENABLED && level().getRandom().nextDouble() < 0.08) {
                                     setSeethed(true);
                                 }
                             }

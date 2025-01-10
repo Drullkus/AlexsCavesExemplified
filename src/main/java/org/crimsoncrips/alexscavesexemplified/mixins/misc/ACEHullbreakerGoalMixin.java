@@ -67,7 +67,6 @@ public abstract class ACEHullbreakerGoalMixin extends Goal {
             if (this.entity.getRandom().nextInt(20) == 0 && ! NEW_TARGETTING.test(this.inspectingTarget)) {
                 this.inspectingTarget = null;
             } else {
-                System.out.println("it is fucking working");
                 if (this.entity.getAnimation() == HullbreakerEntity.ANIMATION_PUZZLE && this.entity.getAnimationTick() > 50) {
                     this.phaseTime = this.maxPhaseTime;
                 }

@@ -21,5 +21,13 @@
       "alexscavesexemplified:block/tesla_fire_2"
     ],
     "subtitle": "alexscavesexemplified.sound.subtitle.tesla_fire"
+  },
+  "caramel_eat": {
+    "sounds": [
+      {
+        "name": "alexscavesexemplified:entity/caramel_eat"
+      }
+    ],
+    "subtitle": "alexscavesexemplified.sound.subtitle.caramel_eat"
   }
 }

@@ -1,5 +1,6 @@
-package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
+package org.crimsoncrips.alexscavesexemplified.mixins.mobs.mine_guardian;
 
+import com.github.alexmodguy.alexscaves.server.entity.living.CaniacEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.MineGuardianEntity;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import net.minecraft.nbt.CompoundTag;
@@ -38,13 +39,23 @@ public class ACEMineGuardian extends Monster implements MineGuardianXtra {
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
-    private void registerGoals(CallbackInfo ci) {
+    private void alexsCavesExemplified$registerGoals(CallbackInfo ci) {
         MineGuardianEntity mineGuardian = (MineGuardianEntity)(Object)this;
         mineGuardian.targetSelector.addGoal(1, new ACEMineGuardianHurtBy(mineGuardian, new Class[0]));
     }
 
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void alexsCavesExemplified$tick(CallbackInfo ci) {
+        if (!ACExemplifiedConfig.NOON_GUARDIAN_ENABLED && alexsCavesExemplified$isNoon()){
+            alexsCavesExemplified$setNoon(false);
+        }
+        if (!ACExemplifiedConfig.REMINEDING_ENABLED && !Objects.equals(alexsCavesExemplified$getOwner(), "-1")){
+            alexsCavesExemplified$setOwner("-1");
+        }
 
-
+        MineGuardianEntity mineGuardian = (MineGuardianEntity)(Object)this;
+        alexsCavesExemplified$setNoon(mineGuardian.getName().getString().equals("Noon") && ACExemplifiedConfig.NOON_GUARDIAN_ENABLED && Objects.equals(alexsCavesExemplified$getOwner(), "-1"));
+    }
 
     @Override
     public boolean alexsCavesExemplified$isNoon() {
@@ -76,35 +87,35 @@ public class ACEMineGuardian extends Monster implements MineGuardianXtra {
     }
 
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
-    private void define(CallbackInfo ci) {
+    private void alexsCavesExemplified$define(CallbackInfo ci) {
         this.entityData.define(OWNER, "-1");
         this.entityData.define(NUCLEAR, false);
         this.entityData.define(NOON , false);
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
-    private void add(CompoundTag compound, CallbackInfo ci) {
+    private void alexsCavesExemplified$add(CompoundTag compound, CallbackInfo ci) {
         compound.putBoolean("Nuclear", this.alexsCavesExemplified$isNuclear());
         compound.putBoolean("Noon", this.alexsCavesExemplified$isNoon());
         compound.putString("MineOwner", this.alexsCavesExemplified$getOwner());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
-    private void read(CompoundTag compound, CallbackInfo ci) {
+    private void alexsCavesExemplified$read(CompoundTag compound, CallbackInfo ci) {
         this.alexsCavesExemplified$setNoon(compound.getBoolean("Noon"));
         this.alexsCavesExemplified$setNuclear(compound.getBoolean("Nuclear"));
         this.alexsCavesExemplified$setOwner(compound.getString("MineOwner"));
     }
 
     @Inject(method = "isValidTarget", at = @At("HEAD"),cancellable = true,remap = false)
-    private void isValidTarget(Entity entity, CallbackInfoReturnable<Boolean> cir) {
+    private void alexsCavesExemplified$isValidTarget(Entity entity, CallbackInfoReturnable<Boolean> cir) {
         if(ACExemplifiedConfig.REMINEDING_ENABLED && entity instanceof Player player){
             cir.setReturnValue(canAttack(player) && !Objects.equals(player.getUUID().toString(), alexsCavesExemplified$getOwner()));
         }
     }
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 2))
-    private boolean hurtAttacker(GoalSelector instance, int pPriority, Goal pGoal) {
+    private boolean alexsCavesExemplified$registerGoalsOverride(GoalSelector instance, int pPriority, Goal pGoal) {
         return !ACExemplifiedConfig.REMINEDING_ENABLED;
     }
 

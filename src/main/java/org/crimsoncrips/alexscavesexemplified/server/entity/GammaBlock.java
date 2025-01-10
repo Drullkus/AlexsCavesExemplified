@@ -91,7 +91,6 @@ public class GammaBlock extends TephraEntity {
 
             this.setScale(Mth.approach(this.getScale(), this.getMaxScale(), 0.1F));
         } else {
-            System.out.println("SPAWNS PROTON");
             this.level().addAlwaysVisibleParticle(ACEParticleRegistry.GAMMA_PROTON.get(),getX(),getY(),getZ(),this.getId(),0,0);
         }
 

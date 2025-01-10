@@ -55,8 +55,9 @@ import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
-import org.crimsoncrips.alexscavesexemplified.misc.ACEDamageTypes;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
@@ -86,6 +87,7 @@ public class ACExemplifiedEvents {
                 nucleeper.setCharged(true);
             }
         }
+
         if (ACExemplifiedConfig.RABIES_ENABLED && entity.getRandom().nextDouble() < 0.05){
             if (entity instanceof CorrodentEntity || entity instanceof UnderzealotEntity || entity instanceof VesperEntity){
                 entity.addEffect(new MobEffectInstance(ACEEffects.RABIAL.get(), 140000, 0));
@@ -127,6 +129,8 @@ public class ACExemplifiedEvents {
                 if (player.isCrouching()) {
                     MobEffectInstance hunger = player.getEffect(MobEffects.HUNGER);
                     if (hunger != null) {
+                        ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
+
                         if (!hunger.isInfiniteDuration()) {
                             player.removeEffect(MobEffects.HUNGER);
                             player.addEffect(new MobEffectInstance(MobEffects.HUNGER, hunger.getDuration() - 60, hunger.getAmplifier()));
@@ -143,6 +147,8 @@ public class ACExemplifiedEvents {
 
 
                     } else if (player.getFoodData().needsFood()) {
+                        ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
+
                         player.getFoodData().eat(2, 2);
                         player.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
                         for (int i = 0; i <= 15; i++) {
@@ -185,9 +191,6 @@ public class ACExemplifiedEvents {
 
             if (player.getEffect(MobEffects.HUNGER) == null)
                 return;
-
-
-
             if (target instanceof GingerbreadManEntity gingerbread && !gingerbread.isOvenSpawned()) {
                 ParticleOptions particle = new ItemParticleOption(ParticleTypes.ITEM, ACItemRegistry.GINGERBREAD_CRUMBS.get().asItem().getDefaultInstance());
                 Vec3 lookAngle = player.getLookAngle();
@@ -202,6 +205,8 @@ public class ACExemplifiedEvents {
                 event.getTarget().discard();
                 player.getFoodData().setFoodLevel(player.getFoodData().getFoodLevel() + 2);
                 player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+                ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
+
             }
 
             if (target instanceof CaramelCubeEntity caramelCube && caramelCube.getSlimeSize() <= 0) {
@@ -213,6 +218,8 @@ public class ACExemplifiedEvents {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 0,false,false));
                 event.getTarget().discard();
                 player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
+                ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
+
             }
 
             if (target instanceof GummyBearEntity gummyBearEntity && gummyBearEntity.isBaby()) {
@@ -241,6 +248,8 @@ public class ACExemplifiedEvents {
                 event.getTarget().discard();
                 player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
                 player.playSound(ACSoundRegistry.GUMMY_BEAR_DEATH.get(), 0.4F, 2F);
+                ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
+
             }
         }
 

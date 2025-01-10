@@ -105,7 +105,6 @@ public abstract class ACEEnigmaticEngineMixin extends BlockEntity {
                 }
             }
         }
-        System.out.println(scrap.size() == 17 && level.getBlockState(blockPos.relative(direction)).is(ACBlockRegistry.DEPTH_GLASS.get()));
         return scrap.size() == 17 && level.getBlockState(blockPos.relative(direction)).is(ACBlockRegistry.DEPTH_GLASS.get());
     }
 }

@@ -79,7 +79,7 @@ public class ACExemplifiedConfig {
     public static boolean ABYSSAL_CRUSH_ENABLED;
     public static boolean GOSSAMER_FEEDING_ENABLED;
     public static boolean REMINEDING_ENABLED;
-
+    public static boolean NOON_GUARDIAN_ENABLED;
     public static boolean GEOTHERMAL_EFFECTS_ENABLED;
     public static boolean CANIACAL_EXPLOSION_ENABLED;
     public static boolean LOGICAL_RIDING_ENABLED;
@@ -103,6 +103,9 @@ public class ACExemplifiedConfig {
     public static boolean LIQUID_REPLICATION_ENABLED;
     public static boolean ICE_CREAM_CONE_ENABLED;
     public static boolean BEHOLDENT_STALKING_ENABLED;
+    public static boolean SWEET_PUNISHMENT_ENABLED;
+    public static boolean GROUNDED_NUKE_ENABLED;
+
 
 
 
@@ -207,6 +210,9 @@ public class ACExemplifiedConfig {
             TESLA_COILED_ENABLED = ACEConfigHolder.EXEMPLIFIED.TESLA_COILED_ENABLED.get();
             LIQUID_REPLICATION_ENABLED = ACEConfigHolder.EXEMPLIFIED.LIQUID_REPLICATION_ENABLED.get();
             ICE_CREAM_CONE_ENABLED = ACEConfigHolder.EXEMPLIFIED.ICE_CREAM_CONE_ENABLED.get();
+            NOON_GUARDIAN_ENABLED = ACEConfigHolder.EXEMPLIFIED.NOON_GUARDIAN_ENABLED.get();
+            SWEET_PUNISHMENT_ENABLED = ACEConfigHolder.EXEMPLIFIED.SWEET_PUNISHMENT_ENABLED.get();
+            GROUNDED_NUKE_ENABLED = ACEConfigHolder.EXEMPLIFIED.GROUNDED_NUKE_ENABLED.get();
 
 
 

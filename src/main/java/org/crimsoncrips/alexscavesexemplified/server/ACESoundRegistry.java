@@ -14,6 +14,7 @@ public class ACESoundRegistry {
     public static final RegistryObject<SoundEvent> TESLA_POWERUP = createSoundEvent("tesla_powerup");
     public static final RegistryObject<SoundEvent> TESLA_EXPLODING = createSoundEvent("tesla_exploding");
     public static final RegistryObject<SoundEvent> TESLA_FIRE = createSoundEvent("tesla_fire");
+    public static final RegistryObject<SoundEvent> CARAMEL_EAT = createSoundEvent("caramel_eat");
 
     private static RegistryObject<SoundEvent> createSoundEvent(final String soundName) {
         return DEF_REG.register(soundName, () -> SoundEvent.createVariableRangeEvent(new ResourceLocation(AlexsCavesExemplified.MODID, soundName)));

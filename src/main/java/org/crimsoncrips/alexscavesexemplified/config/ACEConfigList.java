@@ -106,6 +106,14 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue ICE_CREAM_CONE_ENABLED;
     public final  ForgeConfigSpec.BooleanValue BEHOLDENT_STALKING_ENABLED;
 
+    public final  ForgeConfigSpec.BooleanValue NOON_GUARDIAN_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue SWEET_PUNISHMENT_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue GROUNDED_NUKE_ENABLED;
+
+
+
+
+
     public ACEConfigList(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
          this.REDOABLE_SPELUNKY_ENABLED = buildBoolean(builder, "REDOABLE_SPELUNKY_ENABLED", " ", true, "Whether it gives you back the tablet when exiting the spelunky table");
@@ -220,6 +228,8 @@ public class ACEConfigList {
         this.HAZMAT_AMPLIFIED_ENABLED = buildBoolean(builder, "HAZMAT_AMPLIFIED_ENABLED", " ", true, "Hazmat reduces amount of irradiation recieved from rayguns");
         this.RADIOACTIVE_AWARENESS_ENABLED = buildBoolean(builder, "RADIOACTIVE_AWARENESS_ENABLED", " ", true, "Radioactive blocks emit irradiation to nearby players");
         this.RERAYGUNNED_ENABLED = buildBoolean(builder, "RERAYGUNNED_ENABLED", " ", true, "Amplifies raygun effects.such as block destruction and item annhilation");
+        this.GROUNDED_NUKE_ENABLED = buildBoolean(builder, "GROUNDED_NUKE_ENABLED", " ", false, "Explosions only progress when in ground (primarily used for non-midair nuking)");
+
 
         builder.push("Braniac");
         this.MUTATED_DEATH_ENABLED = buildBoolean(builder, "MUTATED_DEATH_ENABLED", " ", true, "Whether players with irradiated with an amplifier of 2 or more spawns braniacs");
@@ -283,6 +293,8 @@ public class ACEConfigList {
         builder.pop();
         builder.push("Mine Guardian");
         this.REMINEDING_ENABLED = buildBoolean(builder, "REMINEDING_ENABLED", " ", true, "Whether mine guardians can be made");
+        this.NOON_GUARDIAN_ENABLED = buildBoolean(builder, "NOON_GUARDIAN_ENABLED", " ", true, "Noon variant");
+
         builder.pop();
         builder.push("Sea Pig");
         this.POISONOUS_SKIN_ENABLED = buildBoolean(builder, "POISONOUS_SKIN_ENABLED", " ", true, "Whether seapigs can inflict poison in nearby mobs");
@@ -296,6 +308,7 @@ public class ACEConfigList {
         this.NUCLEAR_PISTONATION_ENABLED = buildBoolean(builder, "NUCLEAR_PISTONATION_ENABLED", " ", false, "Whether Nuclear Bombs can be pushed by piston (therefore duplicatable)");
         this.BRAINDEAD_MODE_ENABLED = buildBoolean(builder, "BRAINDEAD_MODE_ENABLED", " ", false, "Whether the spelunkery table text is revealed already for easy answering");
         this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", false, "Allows parrots explode with cookie block");
+        this.SWEET_PUNISHMENT_ENABLED = buildBoolean(builder, "SWEET_PUNISHMENT_ENABLED", " ", false, "Punished for too much sweets");
 
 
     }

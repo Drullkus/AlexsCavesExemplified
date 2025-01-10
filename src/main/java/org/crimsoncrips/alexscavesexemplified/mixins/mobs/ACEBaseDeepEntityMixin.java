@@ -31,7 +31,6 @@ public abstract class ACEBaseDeepEntityMixin extends PathfinderMob {
     @Inject(method = "tick", at = @At("HEAD"))
     private void alexsCavesExemplified$tick(CallbackInfo ci) {
         if (ACExemplifiedConfig.WASTE_PICKUP_ENABLED){
-            System.out.println(this.getAirSupply());
             this.handleAirSupply(this.getAirSupply());
         }
     }
