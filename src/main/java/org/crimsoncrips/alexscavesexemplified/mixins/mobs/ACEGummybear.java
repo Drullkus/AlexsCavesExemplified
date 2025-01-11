@@ -4,6 +4,7 @@ import com.github.alexmodguy.alexscaves.server.entity.living.GummyBearEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.GummyColors;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.InteractionHand;
@@ -90,41 +91,39 @@ public abstract class ACEGummybear extends Animal {
             return InteractionResult.SUCCESS;
         }
 
-        if (isBearSleeping() && ACExemplifiedConfig.SWEETISH_SPEEDUP_ENABLED){
-            switch (this.getGummyColor().toString()) {
-                case "GREEN":
-                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_GREEN.get()) && this.sleepFor > 0){
-                        this.sleepFor = sleepFor - 1000;
-                        this.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
+        if (isBearSleeping() && ACExemplifiedConfig.SWEETISH_SPEEDUP_ENABLED && this.sleepFor > 0){
+            return switch (this.getGummyColor().toString()) {
+                case "GREEN" -> {
+                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_GREEN.get())) {
+                        boost();
                     }
-                    return InteractionResult.SUCCESS;
-                case "BLUE":
-                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_BLUE.get())  && this.sleepFor > 0){
-                        this.sleepFor = sleepFor - 1000;
-                        this.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
-
+                    yield InteractionResult.SUCCESS;
+                }
+                case "BLUE" -> {
+                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_BLUE.get())) {
+                        boost();
                     }
-                    return InteractionResult.SUCCESS;
-                case "YELLOW":
-                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_YELLOW.get()) && this.sleepFor > 0){
-                        this.sleepFor = sleepFor - 1000;
-                        this.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
+                    yield InteractionResult.SUCCESS;
+                }
+                case "YELLOW" -> {
+                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_YELLOW.get())) {
+                        boost();
                     }
-                    return InteractionResult.SUCCESS;
-                case "PINK":
-                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_PINK.get()) && this.sleepFor > 0){
-                        this.sleepFor = sleepFor - 1000;
-                        this.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
+                    yield InteractionResult.SUCCESS;
+                }
+                case "PINK" -> {
+                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_PINK.get())) {
+                        boost();
                     }
-                    return InteractionResult.SUCCESS;
-                case "RED":
-                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_RED.get()) && this.sleepFor > 0){
-                        this.sleepFor = sleepFor - 1000;
-                        this.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
+                    yield InteractionResult.SUCCESS;
+                }
+                default -> {
+                    if (itemstack.is(ACItemRegistry.SWEETISH_FISH_RED.get())) {
+                        boost();
                     }
-                    return InteractionResult.SUCCESS;
-                default:
-            }
+                    yield InteractionResult.SUCCESS;
+                }
+            };
         }
 
         return super.mobInteract(player, hand);
@@ -136,6 +135,17 @@ public abstract class ACEGummybear extends Animal {
             return 100000000;
         } else {
             return amount;
+        }
+    }
+
+    public void boost(){
+        this.sleepFor = sleepFor - 1000;
+        this.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
+        for(int i = 0; i < 5; ++i) {
+            double d0 = this.random.nextGaussian() * 0.02D;
+            double d1 = this.random.nextGaussian() * 0.02D;
+            double d2 = this.random.nextGaussian() * 0.02D;
+            this.level().addParticle(ParticleTypes.HEART, this.getRandomX(1.0D), this.getRandomY() + 1.0D, this.getRandomZ(1.0D), d0, d1, d2);
         }
     }
 

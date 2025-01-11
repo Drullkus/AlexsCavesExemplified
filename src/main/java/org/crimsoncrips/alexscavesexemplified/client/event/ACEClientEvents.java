@@ -1,12 +1,28 @@
 package org.crimsoncrips.alexscavesexemplified.client.event;
 
+import com.github.alexmodguy.alexscaves.AlexsCaves;
+import com.github.alexmodguy.alexscaves.client.ClientProxy;
+import com.github.alexmodguy.alexscaves.client.gui.ACAdvancementTabs;
+import com.github.alexmodguy.alexscaves.server.entity.item.BeholderEyeEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.CaniacEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.WatcherEntity;
+import com.github.alexmodguy.alexscaves.server.entity.util.PossessesCamera;
+import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
+import com.github.alexmodguy.alexscaves.server.level.biome.BiomeSampler;
 import com.mojang.math.Axis;
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.screens.advancements.AdvancementsScreen;
+import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.world.entity.Entity;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.api.distmarker.Dist;
 import net.minecraftforge.api.distmarker.OnlyIn;
 import net.minecraftforge.client.event.*;
+import net.minecraftforge.event.TickEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
@@ -53,6 +69,12 @@ public class ACEClientEvents {
         if (postEvent.getEntity() instanceof CaniacEntity) {
             postEvent.getPoseStack().popPose();
         }
+    }
+
+    @SubscribeEvent
+    public void onClientTick(TickEvent.ClientTickEvent event) {
+
+
     }
 
     @SubscribeEvent

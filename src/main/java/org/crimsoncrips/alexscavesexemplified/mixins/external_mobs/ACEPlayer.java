@@ -1,10 +1,14 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.external_mobs;
 
 import com.github.alexmodguy.alexscaves.AlexsCaves;
+import com.github.alexmodguy.alexscaves.server.entity.living.CaniacEntity;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.message.WorldEventMessage;
+import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
+import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.damagesource.DamageSource;
@@ -14,6 +18,7 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
@@ -42,52 +47,56 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
     }
 
     @Override
-    public void alexsCavesExemplified$setSweets(int sweets) {
-        if (!this.level().isClientSide) {
-            sweetCounter();
-        }
-        this.sweets = sweets;
-    }
-
-    public int alexsCavesExemplified$getSweets() {
-        return sweets;
+    public void alexsCavesExemplified$addSweets(int sweets) {
+        sweetCounter(sweets);
     }
 
     @Inject(method = "eat", at = @At(value = "HEAD"))
     private void alexsCavesExemplified$eat(Level pLevel, ItemStack pFood, CallbackInfoReturnable<ItemStack> cir) {
         if (!pLevel.isClientSide){
-            if (pFood.is(ACItemRegistry.SHARPENED_CANDY_CANE.get()) && ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
-                this.hurt(this.damageSources().generic(), 1);
-            }
-
-
-            if (pFood.is(ACItemRegistry.BIOME_TREAT.get()) && ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
-                this.hurt(this.damageSources().generic(), 1);
-            }
-            if (pFood.is(ACExexmplifiedTagRegistry.COLD_FOOD) && ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
-                this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), getTicksFrozen() + 65));
-            }
-            if (pFood.is(ACItemRegistry.HOT_CHOCOLATE_BOTTLE.get()) && ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
-                this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), getTicksFrozen() - 100));
-                this.setRemainingFireTicks(60);
-            }
-            if (pFood.is(ACExexmplifiedTagRegistry.SWEETS)) {
-                sweetCounter();
-            }
-
             if (lastAte[0] != null) {
                 lastAte[1] = lastAte[0];
             }
             lastAte[0] = pFood.getItem();
         }
+
+        if (ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
+            if (pFood.is(ACItemRegistry.SHARPENED_CANDY_CANE.get())) {
+                this.hurt(this.damageSources().generic(), 1);
+            }
+            if (pFood.is(ACItemRegistry.BIOME_TREAT.get())) {
+                this.hurt(this.damageSources().generic(), 1);
+            }
+            if (pFood.is(ACExexmplifiedTagRegistry.COLD_FOOD)) {
+                this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), getTicksFrozen() + 65));
+            }
+            if (pFood.is(ACItemRegistry.HOT_CHOCOLATE_BOTTLE.get())) {
+                this.setTicksFrozen(Math.min(this.getTicksRequiredToFreeze(), getTicksFrozen() - 100));
+                this.setRemainingFireTicks(60);
+            }
+        }
+
+        if (pFood.is(ACExexmplifiedTagRegistry.SWEETS)) {
+            alexsCavesExemplified$addSweets(1);
+        }
     }
 
+    @Inject(method = "die", at = @At(value = "TAIL"))
+    private void alexsCavesExemplified$die(CallbackInfo ci) {
+        sweets = 0;
+    }
 
+    @Inject(method = "isSleepingLongEnough", at = @At(value = "HEAD"))
+    private void alexsCavesExemplified$die(CallbackInfoReturnable<Boolean> cir) {
+        sweets = 0;
+    }
 
 
     @Inject(method = "tick", at = @At(value = "TAIL"))
     private void alexsCavesExemplified$tick(CallbackInfo ci) {
+        Player player = (Player)(Object)this;
         Level level = this.level();
+
         if (lastAte[0] != null && lastAte[1] != null && ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
             String[] foodItems = {"purple_soda_bottle", "frostmint"};
             String firstFood = foodItems[random.nextInt(0, 2)];
@@ -100,18 +109,22 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
                 lastAte[1] = null;
             }
         }
-        if (sweets >= 9) {
+        if (sweets >= 10) {
             sweets = 0;
-            this.hurt(ACEDamageTypes.causeSweetPunishDamage(this.level().registryAccess()), 10000);
+            player.playSound(ACESoundRegistry.SWEET_PUNISHED.get(), 1, 1);
+            this.hurt(ACEDamageTypes.causeSweetPunishDamage(level.registryAccess()), 10000);
         }
     }
 
-    private void sweetCounter(){
-        if (!ACExemplifiedConfig.SWEET_PUNISHMENT_ENABLED)
-            return;
-        sweets++;
-        if (sweets == 8) {
-            this.sendSystemMessage(Component.nullToEmpty("Thats enough candy child"));
+
+    private void sweetCounter(int value){
+        if (ACExemplifiedConfig.SWEET_PUNISHMENT_ENABLED) {
+            sweets = sweets + value;
+            if (sweets == 8 && this.level().isClientSide) {
+                if (this.level().getRandom().nextBoolean()) {
+                    this.sendSystemMessage(Component.nullToEmpty("Mom: That's enough candy for today child"));
+                } else this.sendSystemMessage(Component.nullToEmpty("Dad: That's enough candy for today child"));
+            }
         }
     }
 

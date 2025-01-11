@@ -29,5 +29,13 @@
       }
     ],
     "subtitle": "alexscavesexemplified.sound.subtitle.caramel_eat"
+  },
+  "sweet_punished": {
+    "sounds": [
+      {
+        "name": "alexscavesexemplified:entity/sweet_punished"
+      }
+    ],
+    "subtitle": "alexscavesexemplified.sound.subtitle.sweet_punished"
   }
 }

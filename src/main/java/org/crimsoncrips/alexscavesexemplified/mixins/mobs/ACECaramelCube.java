@@ -34,7 +34,7 @@ public abstract class ACECaramelCube extends Monster {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         CaramelCubeEntity caramelCube = (CaramelCubeEntity)(Object)this;
-        caramelCube.goalSelector.addGoal(2, new ACEAssimilateCaramel<>(caramelCube, CaramelCubeEntity.class, 1, 1));
+        caramelCube.targetSelector.addGoal(2, new ACEAssimilateCaramel<>(caramelCube, CaramelCubeEntity.class,true));
 
     }
 

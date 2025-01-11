@@ -12,13 +12,13 @@ import net.minecraft.world.phys.Vec3;
 
 public class AMCompat {
     public static void amberReset(LivingEntity entity) {
-        if (entity instanceof EntityCockroach roach) {
+        if (entity instanceof EntityCockroach roach && roach.isNoAi()) {
             roach.setNoAi(false);
             roach.setInvulnerable(false);
             roach.setSilent(false);
             roach.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 6000, 1, false, false));
         }
-        if (entity instanceof EntityFly fly) {
+        if (entity instanceof EntityFly fly && fly.isNoAi()) {
             fly.setNoAi(false);
             fly.setInvulnerable(false);
             fly.setSilent(false);
@@ -42,10 +42,14 @@ public class AMCompat {
             return fly;
         }
     }
-    public static Class AMmob(Level level){
-        return level.random.nextBoolean() ? EntityRaccoon.class : EntityBlueJay.class;
+    public static Class AMmob(boolean raccoon){
+        return raccoon ? EntityRaccoon.class : EntityBlueJay.class;
     }
     public static boolean fly (LivingEntity livingEntity){
         return livingEntity instanceof EntityFly;
+    }
+
+    public static boolean cockroach (LivingEntity livingEntity){
+        return livingEntity instanceof EntityCockroach;
     }
 }

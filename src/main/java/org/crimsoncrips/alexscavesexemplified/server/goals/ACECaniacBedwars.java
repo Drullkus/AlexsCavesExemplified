@@ -9,6 +9,7 @@ import com.github.alexmodguy.alexscaves.server.entity.living.CaniacEntity;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import net.minecraft.commands.arguments.EntityAnchorArgument.Anchor;
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
@@ -40,15 +41,14 @@ public class ACECaniacBedwars extends MoveToBlockGoal {
     public void tick() {
         super.tick();
         BlockPos target = this.getMoveToTarget();
-        if (target != null) {
-            caniac.setArmSpinSpeed(50);
-            this.caniac.lookAt(Anchor.EYES, Vec3.atCenterOf(target));
-            BlockState blockState = this.caniac.level().getBlockState(target);
 
-            if (this.isReachedTarget() && blockState.getBlock() instanceof BedBlock) {
-                caniac.level().destroyBlock(blockPos,  true);
-                stop();
-            }
+        caniac.setArmSpinSpeed(50);
+        this.caniac.lookAt(Anchor.EYES, Vec3.atCenterOf(target));
+        BlockState blockState = this.caniac.level().getBlockState(target);
+
+        if (this.isReachedTarget() && blockState.getBlock() instanceof BedBlock) {
+            caniac.level().destroyBlock(blockPos,  true);
+            stop();
         }
 
     }

@@ -2,16 +2,13 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs.tesla_bulb;
 
 import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
 import com.github.alexmodguy.alexscaves.server.block.blockentity.TeslaBulbBlockEntity;
-import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
-import com.google.errorprone.annotations.Var;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
-import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.ParticleUtils;
@@ -21,17 +18,14 @@ import net.minecraft.world.entity.LightningBolt;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.LightningRodBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.registries.ForgeRegistries;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.TeslaCharge;
-import org.crimsoncrips.alexscavesexemplified.server.ACESoundRegistry;
-import org.spongepowered.asm.mixin.Debug;
+import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -85,7 +79,7 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
     @Inject(method = "tick", at = @At(value = "HEAD"),remap = false)
     private static void alexsCavesExemplified$tick2(Level level, BlockPos blockPos, BlockState state, TeslaBulbBlockEntity entity, CallbackInfo ci) {
-        if(ACExemplifiedConfig.TESLA_COILED_ENABLED){
+        if(ACExemplifiedConfig.SHOCKING_THERAPY_ENABLED){
             TeslaCharge tickAccesor = (TeslaCharge)(Object)entity;
 
             LivingEntity target = null;
@@ -103,7 +97,7 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
 
                 tickAccesor.setCharge(tickAccesor.getCharge() + 1);
-                if (tickAccesor.getCharge() == 5){
+                if (tickAccesor.getCharge() == 5 && ACExemplifiedConfig.TESLA_COILED_ENABLED){
                     level.playLocalSound(blockPos, ACESoundRegistry.TESLA_POWERUP.get(), SoundSource.AMBIENT, 2, 1, false);
                 }
                 if (tickAccesor.getCharge() > 30 && tickAccesor.getCharge() < 35){
@@ -119,11 +113,11 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
                         target.setRemainingFireTicks(30);
                     }
                 }
-                if (tickAccesor.getCharge() == 33){
+                if (tickAccesor.getCharge() == 33 && ACExemplifiedConfig.TESLA_COILED_ENABLED){
                     target.playSound( ACESoundRegistry.TESLA_FIRE.get());
                 }
                 if (tickAccesor.getCharge() > 45) {
-                    tickAccesor.setCharge(-100);
+                    tickAccesor.setCharge(-300);
                 }
             } else tickAccesor.setCharge(-20);
 

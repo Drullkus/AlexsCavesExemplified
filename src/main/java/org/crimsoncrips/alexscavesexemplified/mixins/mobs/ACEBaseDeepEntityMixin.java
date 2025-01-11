@@ -5,6 +5,9 @@ import com.github.alexmodguy.alexscaves.server.entity.living.AtlatitanEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.DeepOneBaseEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.SauropodBaseEntity;
+import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
+import net.minecraft.world.effect.MobEffectInstance;
+import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.PathfinderMob;
@@ -30,22 +33,11 @@ public abstract class ACEBaseDeepEntityMixin extends PathfinderMob {
 
     @Inject(method = "tick", at = @At("HEAD"))
     private void alexsCavesExemplified$tick(CallbackInfo ci) {
-        if (ACExemplifiedConfig.WASTE_PICKUP_ENABLED){
-            this.handleAirSupply(this.getAirSupply());
-        }
-    }
-
-    @Unique
-    protected void handleAirSupply(int p_30344_) {
-        if (this.isAlive() && !this.isInWaterOrBubble()) {
-            this.setAirSupply(p_30344_ - 1);
-            if (this.getAirSupply() == -20) {
-                this.setAirSupply(0);
-                this.hurt(this.damageSources().drown(), 2.0F);
+        if (ACExemplifiedConfig.DEEP_WEAKENED_ENABLED){
+            if (!this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !this.isInWaterRainOrBubble()) {
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1));
+                this.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300, 0));
             }
-        } else {
-            this.setAirSupply(300);
         }
-
     }
 }

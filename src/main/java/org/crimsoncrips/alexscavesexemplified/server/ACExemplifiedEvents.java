@@ -34,6 +34,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.GameRules;
@@ -55,7 +56,6 @@ import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 
@@ -129,7 +129,7 @@ public class ACExemplifiedEvents {
                 if (player.isCrouching()) {
                     MobEffectInstance hunger = player.getEffect(MobEffects.HUNGER);
                     if (hunger != null) {
-                        ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
+                        ((PlayerSweets) player).alexsCavesExemplified$addSweets(1);
 
                         if (!hunger.isInfiniteDuration()) {
                             player.removeEffect(MobEffects.HUNGER);
@@ -147,7 +147,7 @@ public class ACExemplifiedEvents {
 
 
                     } else if (player.getFoodData().needsFood()) {
-                        ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
+                        ((PlayerSweets) player).alexsCavesExemplified$addSweets( 1);
 
                         player.getFoodData().eat(2, 2);
                         player.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);
@@ -205,7 +205,6 @@ public class ACExemplifiedEvents {
                 event.getTarget().discard();
                 player.getFoodData().setFoodLevel(player.getFoodData().getFoodLevel() + 2);
                 player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
-                ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
 
             }
 
@@ -218,7 +217,6 @@ public class ACExemplifiedEvents {
                 player.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 0,false,false));
                 event.getTarget().discard();
                 player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
-                ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
 
             }
 
@@ -248,10 +246,10 @@ public class ACExemplifiedEvents {
                 event.getTarget().discard();
                 player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
                 player.playSound(ACSoundRegistry.GUMMY_BEAR_DEATH.get(), 0.4F, 2F);
-                ((PlayerSweets) player).alexsCavesExemplified$setSweets(((PlayerSweets) player).alexsCavesExemplified$getSweets() + 1);
 
             }
         }
+
 
         if(event.getTarget() instanceof Parrot parrot && ACExemplifiedConfig.COOKIE_CRUMBLE_ENABLED){
             if (!player.isCreative()) {
@@ -294,7 +292,7 @@ public class ACExemplifiedEvents {
 
         if (died instanceof Player player && ACExemplifiedConfig.MUTATED_DEATH_ENABLED) {
             MobEffectInstance irradiated = player.getEffect(ACEffectRegistry.IRRADIATED.get());
-            if (irradiated != null && irradiated.getAmplifier() >= 2) {
+            if (irradiated != null && irradiated.getAmplifier() >= 2 && player.getRandom().nextDouble() < 0.3) {
                 ACEntityRegistry.BRAINIAC.get().spawn((ServerLevel) level, BlockPos.containing(player.getX(), player.getY(), player.getZ()), MobSpawnType.MOB_SUMMONED);
             }
         }

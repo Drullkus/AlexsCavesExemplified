@@ -1,5 +1,6 @@
 package org.crimsoncrips.alexscavesexemplified.config;
 
+import net.minecraft.world.entity.npc.Villager;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.LavaCauldronBlock;
 import net.minecraft.world.level.block.LayeredCauldronBlock;
@@ -91,7 +92,6 @@ public class ACEConfigList {
     public final ForgeConfigSpec.BooleanValue ECOLOGICAL_REPUTATION_ENABLED ;
     public final ForgeConfigSpec.BooleanValue GOSSAMER_FEEDING_ENABLED ;
     public final ForgeConfigSpec.BooleanValue CAVIAL_BONEMEAL_ENABLED ;
-    public final ForgeConfigSpec.BooleanValue SUBNAUTICAL_FLOATERS_ENABLED ;
     public final ForgeConfigSpec.BooleanValue COOKIE_CRUMBLE_ENABLED ;
     public final ForgeConfigSpec.BooleanValue CRYONIC_CAVITY_ENABLED ;
     public final ForgeConfigSpec.BooleanValue BREAKING_CANDY_ENABLED ;
@@ -109,6 +109,9 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue NOON_GUARDIAN_ENABLED;
     public final  ForgeConfigSpec.BooleanValue SWEET_PUNISHMENT_ENABLED;
     public final  ForgeConfigSpec.BooleanValue GROUNDED_NUKE_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue TOUGH_ROACHES_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue DEEP_WEAKENED_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue OVERDRIVED_CONVERSION_ENABLED;
 
 
 
@@ -142,6 +145,7 @@ public class ACEConfigList {
         this.CRYONIC_CAVITY_ENABLED = buildBoolean(builder, "CRYONIC_CAVITY_ENABLED", " ", true, "Makes the candy cavity freeze outsiders slowly");
         this.BREAKING_CANDY_ENABLED = buildBoolean(builder, "BREAKING_CANDY_ENABLED", " ", true, "Allows the creation of gelatin with bone blocks");
         this.ICE_CREAM_CONE_ENABLED = buildBoolean(builder, "ICE_CREAM_CONE_ENABLED", " ", true, "You can make Ice Cream Cones");
+        this.OVERDRIVED_CONVERSION_ENABLED = buildBoolean(builder, "OVERDRIVED_CONVERSION_ENABLED", " ", true, "You can amplify conversion crucibles with radiant essences");
 
 
         builder.push("Caniac");
@@ -162,7 +166,6 @@ public class ACEConfigList {
         this.HIVE_MIND_ENABLED = buildBoolean(builder, "HIVE_MIND_ENABLED", " ", true, "Whether Gingerbread Men will attack you if you attack one of them.");
         this.CRUMBY_RAGE_ENABLED = buildBoolean(builder, "CRUMBY_RAGE_ENABLED", " ", true, "Whether Gingerbread Men will attack you if you eat their crumbs");
         this.GINGER_DISINTEGRATE_ENABLED = buildBoolean(builder, "GINGER_DISINTEGRATE_ENABLED", " ", true, "Whether Gingerbread Men are sensitive to water");
-
         builder.pop();
         builder.push("Gumbeeper");
         this.REGULAR_REFERENCE_ENABLED = buildBoolean(builder, "REGULAR_REFERENCE_ENABLED", " ", true, "Whether Gumbeepers will attack, Blue jays and Raccoons in Alexs Mobs");
@@ -180,7 +183,6 @@ public class ACEConfigList {
         builder.pop();
         builder.push("Licowitch");
         this.LICOWITCH_VENGEANCE_ENABLED = buildBoolean(builder, "LICOWITCH_VENGEANCE_ENABLED", " ", true, "Whether licowitches attack villagers and iron golems");
-
         builder.pop();
         
         
@@ -263,7 +265,7 @@ public class ACEConfigList {
         this.AMBER_HEAL_ENABLED = buildBoolean(builder, "AMBER_HEAL_ENABLED", " ", true, "Whether stepping on amber can rarely heal you");
         this.STOMP_DAMAGE_ENABLED = buildBoolean(builder, "STOMP_DAMAGE_ENABLED", " ", true, "Whether Atlatitans/Lux stomps will cause damage");
         this.PAINT_EFFECTS_ENABLED = buildBoolean(builder, "PAINT_EFFECTS_ENABLED", " ", true, "Whether painting dinosaurs gives temporary effects");
-        this.PRESERVED_AMBER_ENABLED = buildBoolean(builder, "PRESERVED_AMBER_ENABLED", " ", true, "Whether amber when generated could contain mobs or items");
+        this.PRESERVED_AMBER_ENABLED = buildBoolean(builder, "PRESERVED_AMBER_ENABLED", " ", true, "Whether amber when generated could contain trapped mobs");
 
         builder.push("Atlatitan");
         this.VOLCANIC_SACRIFICE_ENABLED = buildBoolean(builder, "VOLCANIC_SACRIFICE_ENABLED", " ", true, "Whether atlatitan eggs or babies can be sacrificed to a volcano to refresh its lux cooldown");
@@ -280,16 +282,16 @@ public class ACEConfigList {
         this.RESISTOR_MAGNETISM_ENABLED = buildBoolean(builder, "RESISTOR_MAGNETISM_ENABLED", " ", true, "Resistor Shield attracts/repels magnetic items, or more..");
         this.HEAVY_GRAVITY_ENABLED = buildBoolean(builder, "HEAVY_GRAVITY_ENABLED", " ", true, "Entities holding heavy-weight item will increase falling speed");
         this.SHOCKING_THERAPY_ENABLED = buildBoolean(builder, "SHOCKING_THERAPY_ENABLED", " ", true, "Tesla bulbs rarely directly shock nearby intruders");
-        this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command And Conquer");
+        this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command & Conquer");
         builder.pop();
 
         builder.push("Abyssal Chasm");
         this.ABYSSAL_CRUSH_ENABLED = buildBoolean(builder, "ABYSSAL_CRUSH_ENABLED", " ", true, "Whether abyssal chasms cause crushing damage to you and your breath meter when deep enough");
         this.ECOLOGICAL_REPUTATION_ENABLED = buildBoolean(builder, "ECOLOGICAL_REPUTATION_ENABLED", " ", true, "Whether messing with the ecosystem reduces deep one reputation");
         this.ABYSSAL_LIGHT_CHECK_ENABLED = buildBoolean(builder, "ABYSSAL_LIGHT_CHECK_ENABLED", " ", true, "Whether abyssal mobs interact with entities holding light");
+        this.DEEP_WEAKENED_ENABLED = buildBoolean(builder, "DEEP_WEAKENED_ENABLED", " ", true, "Whether deep ones wilt when outside of abyssal chasm");
 
         builder.push("Floater");
-        this.SUBNAUTICAL_FLOATERS_ENABLED = buildBoolean(builder, "SUBNAUTICAL_FLOATERS_ENABLED", " ", true, "Whether floaters look like floaters from subnautica");
         builder.pop();
         builder.push("Mine Guardian");
         this.REMINEDING_ENABLED = buildBoolean(builder, "REMINEDING_ENABLED", " ", true, "Whether mine guardians can be made");
@@ -309,6 +311,7 @@ public class ACEConfigList {
         this.BRAINDEAD_MODE_ENABLED = buildBoolean(builder, "BRAINDEAD_MODE_ENABLED", " ", false, "Whether the spelunkery table text is revealed already for easy answering");
         this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", false, "Allows parrots explode with cookie block");
         this.SWEET_PUNISHMENT_ENABLED = buildBoolean(builder, "SWEET_PUNISHMENT_ENABLED", " ", false, "Punished for too much sweets");
+        this.TOUGH_ROACHES_ENABLED = buildBoolean(builder, "TOUGH_ROACHES_ENABLED", " ", false, "Roaches are nuke proof");
 
 
     }

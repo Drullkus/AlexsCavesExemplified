@@ -3,6 +3,7 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 import com.github.alexmodguy.alexscaves.server.entity.living.GumbeeperEntity;
 import com.github.alexthe666.alexsmobs.entity.EntityBlueJay;
 import com.github.alexthe666.alexsmobs.entity.EntityRaccoon;
+import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
@@ -28,9 +29,8 @@ public abstract class ACEGumbeeper extends Monster {
     private void registerGoals(CallbackInfo ci) {
         GumbeeperEntity gumbeeper = (GumbeeperEntity)(Object)this;
         if (ACExemplifiedConfig.REGULAR_REFERENCE_ENABLED &&  ModList.get().isLoaded("alexsmobs")) {
-            Class mob = AMmob(level());
-            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, mob, 100, true, false,null));
-            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, mob, 100, true, false,null));
+            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, AMmob(true), 100, true, false,null));
+            gumbeeper.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(gumbeeper, AMmob(false), 100, true, false,null));
 
         }
     }

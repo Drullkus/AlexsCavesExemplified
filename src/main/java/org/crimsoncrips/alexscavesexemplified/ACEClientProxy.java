@@ -25,7 +25,7 @@ public class ACEClientProxy extends ACECommonProxy {
 
 
     public void setupParticles(RegisterParticleProvidersEvent registry) {
-        registry.registerSpriteSet(ACEParticleRegistry.TREMORZILLA_GAMMA_EXPLOSION.get(), GammaTremorExplosion.TremorzillaFactory::new);
+        registry.registerSpriteSet(ACEParticleRegistry.TREMORZILLA_GAMMA_EXPLOSION.get(), SmallExplosions.TremorzillaFactory::new);
         registry.registerSpecial(ACEParticleRegistry.TREMORZILLA_GAMMA_PROTON.get(), new GammaTremorProton.Factory());
         registry.registerSpriteSet(ACEParticleRegistry.TREMORZILLA_GAMMA_LIGHTNING.get(), GammaTremorLightning.Factory::new);
 

@@ -4,12 +4,14 @@ import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetItemGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.TremorsaurusEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
 import com.github.alexmodguy.alexscaves.server.entity.util.UnderzealotSacrifice;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.mojang.datafixers.util.Pair;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -25,6 +27,7 @@ import net.minecraft.world.level.Level;
 import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.server.goals.ACEKnawingGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -58,7 +61,7 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
             }));
         }
         if (ACExemplifiedConfig.KNAWING_ENABLED){
-            corrodent.targetSelector.addGoal(1, new MobTargetItemGoal<>(this, false));
+            corrodent.targetSelector.addGoal(1, new ACEKnawingGoal(corrodent, false));
         }
 
 
@@ -115,11 +118,7 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
 
     @Override
     public boolean canTargetItem(ItemStack itemStack) {
-
-
-
-        return ACExemplifiedConfig.KNAWING_ENABLED && (itemStack.isEdible() || itemStack.is(ACExexmplifiedTagRegistry.KNAWING));
-
+        return  (itemStack.isEdible() || itemStack.is(ACExexmplifiedTagRegistry.KNAWING));
     }
 
     public void onGetItem(ItemEntity itemEntity) {

@@ -21,7 +21,7 @@ import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistr
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
-import org.crimsoncrips.alexscavesexemplified.server.ACESoundRegistry;
+import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.cauldron.ACECauldronInteraction;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;

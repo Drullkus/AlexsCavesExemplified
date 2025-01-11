@@ -94,7 +94,6 @@ public class ACExemplifiedConfig {
     public static boolean SOLIDIFIED_WATCHER_ENABLED;
     public static boolean HEAVY_GRAVITY_ENABLED;
     public static boolean CAVIAL_BONEMEAL_ENABLED;
-    public static boolean SUBNAUTICAL_FLOATERS_ENABLED;
     public static boolean COOKIE_CRUMBLE_ENABLED;
     public static boolean DECIPHERABLE_EXPERIENCE_ENABLED;
     public static boolean ABYSSAL_LIGHT_CHECK_ENABLED;
@@ -105,6 +104,9 @@ public class ACExemplifiedConfig {
     public static boolean BEHOLDENT_STALKING_ENABLED;
     public static boolean SWEET_PUNISHMENT_ENABLED;
     public static boolean GROUNDED_NUKE_ENABLED;
+    public static boolean TOUGH_ROACHES_ENABLED;
+    public static boolean DEEP_WEAKENED_ENABLED;
+    public static boolean OVERDRIVED_CONVERSION_ENABLED;
 
 
 
@@ -112,7 +114,6 @@ public class ACExemplifiedConfig {
     public static void bake() {
         try {
             ECOLOGICAL_REPUTATION_ENABLED = ACEConfigHolder.EXEMPLIFIED.ECOLOGICAL_REPUTATION_ENABLED.get();
-            SUBNAUTICAL_FLOATERS_ENABLED = ACEConfigHolder.EXEMPLIFIED.SUBNAUTICAL_FLOATERS_ENABLED.get();
             COOKIE_CRUMBLE_ENABLED = ACEConfigHolder.EXEMPLIFIED.COOKIE_CRUMBLE_ENABLED.get();
             CRYONIC_CAVITY_ENABLED = ACEConfigHolder.EXEMPLIFIED.CRYONIC_CAVITY_ENABLED.get();
             DARKNESS_APPLYED_ENABLED = ACEConfigHolder.EXEMPLIFIED.DARKNESS_APPLYED_ENABLED.get();
@@ -213,6 +214,9 @@ public class ACExemplifiedConfig {
             NOON_GUARDIAN_ENABLED = ACEConfigHolder.EXEMPLIFIED.NOON_GUARDIAN_ENABLED.get();
             SWEET_PUNISHMENT_ENABLED = ACEConfigHolder.EXEMPLIFIED.SWEET_PUNISHMENT_ENABLED.get();
             GROUNDED_NUKE_ENABLED = ACEConfigHolder.EXEMPLIFIED.GROUNDED_NUKE_ENABLED.get();
+            TOUGH_ROACHES_ENABLED = ACEConfigHolder.EXEMPLIFIED.TOUGH_ROACHES_ENABLED.get();
+            DEEP_WEAKENED_ENABLED = ACEConfigHolder.EXEMPLIFIED.DEEP_WEAKENED_ENABLED.get();
+            OVERDRIVED_CONVERSION_ENABLED = ACEConfigHolder.EXEMPLIFIED.OVERDRIVED_CONVERSION_ENABLED.get();
 
 
 

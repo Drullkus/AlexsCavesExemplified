@@ -1,66 +1,51 @@
 package org.crimsoncrips.alexscavesexemplified.server.goals;
 
 import com.github.alexmodguy.alexscaves.server.entity.living.CaramelCubeEntity;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
+import net.minecraft.world.entity.Mob;
 import net.minecraft.world.entity.ai.goal.Goal;
+import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
+import net.minecraft.world.entity.ai.goal.target.TargetGoal;
 import net.minecraft.world.entity.ai.navigation.PathNavigation;
-import org.crimsoncrips.alexscavesexemplified.server.ACESoundRegistry;
+import net.minecraft.world.entity.ai.targeting.TargetingConditions;
+import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
 
 import javax.annotation.Nullable;
-import java.util.function.Predicate;
 
-public class ACEAssimilateCaramel<T extends CaramelCubeEntity> extends Goal {
+public class ACEAssimilateCaramel<T extends CaramelCubeEntity> extends NearestAttackableTargetGoal {
 
-    protected final CaramelCubeEntity mob;
-    protected Class<T> targetType;
-    private final double speedModifier;
-    private final float areaSize;
-    private final PathNavigation navigation;
-    private int timeToRecalcPath;
+    protected final CaramelCubeEntity caramelCube;
 
-    public ACEAssimilateCaramel(CaramelCubeEntity mob, Class<T> targetType, float areaSize, double speedModifier) {
-        this.mob = mob;
-        this.targetType = targetType;
-        this.speedModifier = speedModifier;
-        this.areaSize = areaSize;
-        this.navigation = mob.getNavigation();
+    public ACEAssimilateCaramel(CaramelCubeEntity pMob, Class pTargetType, boolean pMustSee) {
+        super(pMob, pTargetType, pMustSee);
+        caramelCube = pMob;
     }
 
     @Override
-    public boolean canUse() {
-        return getTarget() != null;
+    public boolean canContinueToUse() {
+        return target instanceof CaramelCubeEntity caramelTarget && caramelTarget.getSlimeSize() == caramelCube.getSlimeSize() && caramelCube.getSlimeSize() < 2 && super.canContinueToUse();
     }
 
     public void tick() {
-        var target = getTarget();
-        if (target != null && !mob.isLeashed()) {
-            mob.getLookControl().setLookAt(target, 10.0F, (float) this.mob.getMaxHeadXRot());
-            if (--timeToRecalcPath <= 0) {
-                timeToRecalcPath = adjustedTickDelay(10);
-                navigation.moveTo(target, speedModifier);
-            }
-        } else {
-            timeToRecalcPath = adjustedTickDelay(10);
-            navigation.stop();
-        }
-        if (target != null && this.mob.distanceToSqr(target) < 4) {
-            mob.level().playSound(null, mob.getBlockX(), mob.getBlockY(), mob.getBlockZ(), ACESoundRegistry.CARAMEL_EAT.get(), SoundSource.AMBIENT, 2.0F, 1.0F);
-            mob.setSlimeSize(mob.getSlimeSize() + 1,true);
+        super.tick();
+        if (target != null && this.caramelCube.distanceToSqr(target) < 5) {
+            caramelCube.level().playSound(null, caramelCube.getBlockX(), caramelCube.getBlockY(), caramelCube.getBlockZ(), ACESoundRegistry.CARAMEL_EAT.get(), SoundSource.AMBIENT, 2.0F, 1.0F);
+            caramelCube.setSlimeSize(caramelCube.getSlimeSize() + 1,true);
+            caramelCube.setTarget(null);
+            caramelCube.setLastHurtByMob(null);
             target.discard();
             stop();
         }
     }
 
-    @Nullable
-    private LivingEntity getTarget() {
-        var level = this.mob.level();
-        var targetList = level.getEntitiesOfClass(targetType, mob.getBoundingBox().inflate(areaSize));
-        if (targetList.get(0).getSlimeSize() < mob.getSlimeSize() && mob.getSlimeSize() <= 2) {
-            return targetList.get(0);
+    @Override
+    protected void findTarget() {
+        if (targetType == CaramelCubeEntity.class){
+            this.target = this.mob.level().getNearestEntity(this.mob.level().getEntitiesOfClass(this.targetType, this.getTargetSearchArea(this.getFollowDistance()), (p_148152_) -> {
+                return p_148152_ instanceof CaramelCubeEntity caramelTarget && caramelTarget.getSlimeSize() == caramelCube.getSlimeSize() && caramelCube.getSlimeSize() < 2 && caramelTarget != caramelCube && caramelTarget.tickCount > 400;
+            }), this.targetConditions, this.mob, this.mob.getX(), this.mob.getEyeY(), this.mob.getZ());
         }
-        return null;
     }
+
 }

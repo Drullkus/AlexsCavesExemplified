@@ -41,7 +41,7 @@ public abstract class ACEGammaroach extends PathfinderMob implements TargetsDrop
 
     @Override
     public boolean canTargetItem(ItemStack itemStack) {
-        return ACExemplifiedConfig.GAMMAROACH_FOODING_ENABLED && itemStack.isEdible();
+        return itemStack.isEdible();
     }
 
     public void onGetItem(ItemEntity itemEntity) {
