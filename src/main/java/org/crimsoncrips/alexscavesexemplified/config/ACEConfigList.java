@@ -112,6 +112,7 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue TOUGH_ROACHES_ENABLED;
     public final  ForgeConfigSpec.BooleanValue DEEP_WEAKENED_ENABLED;
     public final  ForgeConfigSpec.BooleanValue OVERDRIVED_CONVERSION_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue DEFUSION_ENABLED;
 
 
 
@@ -244,6 +245,8 @@ public class ACEConfigList {
         builder.pop();
         builder.push("Nucleeper");
         this.NUCLEAR_CHAIN_ENABLED = buildBoolean(builder, "NUCLEAR_CHAIN_ENABLED", " ", true, "Whether nucleepers explode when they die from explosions");
+        this.DEFUSION_ENABLED = buildBoolean(builder, "DEFUSION_ENABLED", " ", true, "Whether nucleepers can be defused");
+
         builder.pop();
         builder.push("Radgill");
         this.FISH_MUTATION_ENABLED = buildBoolean(builder, "FISH_MUTATION_ENABLED", " ", true, "Whether fish have a chance to turn into radgill when dowsed in acid");

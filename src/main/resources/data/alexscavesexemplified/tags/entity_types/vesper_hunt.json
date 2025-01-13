@@ -3,8 +3,8 @@
   "values": [
     "alexsmobs:fly",
     "alexsmobs:cockroach",
-    "alexsmobs:bat",
-    "alexsmobs:spider",
-    "alexsmobs:cave_spider"
+    "minecraft:bat",
+    "minecraft:spider",
+    "minecraft:cave_spider"
   ]
 }

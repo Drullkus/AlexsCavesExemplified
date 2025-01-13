@@ -6,6 +6,7 @@
   "refmap": "alexscavesexemplified.refmap.json",
   "mixins": [
     "blocks.ACEBeholderMixin",
+    "blocks.ACEConversionCrucibleMixin",
     "blocks.ACEDinosaurEggBlock",
     "blocks.ACEIceCreamBlockMixin",
     "blocks.ACENuclearBomb",
@@ -64,6 +65,7 @@
     "mobs.ACEVesper",
     "mobs.ACEWatcher",
     "mobs.mine_guardian.ACEMineGuardian",
+    "mobs.nucleeper.ACENucleeperMixin",
     "mobs.tesla_bulb.ACETeslaBulbEntityMixin",
     "mobs.tesla_bulb.ACETeslaBulbRenderMixin",
     "mobs.tremorzilla.ACETremorzillaMixin",
@@ -83,6 +85,9 @@
     "mobs.mine_guardian.ACEMineGuardianModel",
     "mobs.mine_guardian.ACEMineRendererMixin",
     "mobs.mine_guardian.ACEMineRendererRenderMixin",
+    "mobs.nucleeper.ACENucleeperModelMixin",
+    "mobs.nucleeper.ACENucleeperRenderMixin",
+    "mobs.nucleeper.ACENucleeperRenderRenderMixin",
     "mobs.tremorzilla.ACETremorzillaModelMixin",
     "mobs.tremorzilla.ACETremorzillaRenderGlowMixin",
     "mobs.tremorzilla.ACETremorzillaRenderMixin"

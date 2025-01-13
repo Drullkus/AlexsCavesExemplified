@@ -107,6 +107,7 @@ public class ACExemplifiedConfig {
     public static boolean TOUGH_ROACHES_ENABLED;
     public static boolean DEEP_WEAKENED_ENABLED;
     public static boolean OVERDRIVED_CONVERSION_ENABLED;
+    public static boolean DEFUSION_ENABLED;
 
 
 
@@ -217,6 +218,7 @@ public class ACExemplifiedConfig {
             TOUGH_ROACHES_ENABLED = ACEConfigHolder.EXEMPLIFIED.TOUGH_ROACHES_ENABLED.get();
             DEEP_WEAKENED_ENABLED = ACEConfigHolder.EXEMPLIFIED.DEEP_WEAKENED_ENABLED.get();
             OVERDRIVED_CONVERSION_ENABLED = ACEConfigHolder.EXEMPLIFIED.OVERDRIVED_CONVERSION_ENABLED.get();
+            DEFUSION_ENABLED = ACEConfigHolder.EXEMPLIFIED.DEFUSION_ENABLED.get();
 
 
 

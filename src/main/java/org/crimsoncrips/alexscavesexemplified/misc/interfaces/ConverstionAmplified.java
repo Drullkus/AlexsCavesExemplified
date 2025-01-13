@@ -11,9 +11,10 @@ public interface ConverstionAmplified {
 
     void alexsCavesExemplified$setStack(ItemStack itemStack);
 
-    void alexsCavesExemplified$setOvertuned(boolean val);
+    void alexsCavesExemplified$setOverdrived(boolean val);
 
-    boolean alexsCavesExemplified$isOvertuned();
+    boolean alexsCavesExemplified$isOverdrived();
+
 
     List<ItemEntity> alexsCavesExemplified$getItemsAtAndAbove(Level level, BlockPos pos);
 

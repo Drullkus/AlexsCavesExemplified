@@ -38,7 +38,7 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
 
     @Inject(method = "drawOrb", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/WorldGenLevel;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"))
     private static void drawOrb(WorldGenLevel level, BlockPos center, RandomSource random, BlockState blockState, int radiusX, int radiusY, int radiusZ, CallbackInfo ci, @Local(ordinal = 1) BlockPos fill) {
-        if (random.nextDouble() < 0.03 && ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && level.ensureCanWrite(fill) && level.ensureCanWrite(center)) {
+        if (random.nextDouble() < 0.01 && ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && level.ensureCanWrite(fill) && level.ensureCanWrite(center)) {
             ServerLevel servLevel = level.getLevel();
             switch (level.getRandom().nextInt(0, 4)) {
                 case 0:

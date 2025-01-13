@@ -18,10 +18,13 @@ import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
+import net.minecraft.core.Holder;
 import net.minecraft.core.particles.BlockParticleOption;
 import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.core.registries.Registries;
+import net.minecraft.data.worldgen.placement.VegetationPlacements;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -42,6 +45,9 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
+import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
+import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
+import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
@@ -165,6 +171,21 @@ public class ACExemplifiedEvents {
 
 
         }
+        
+        if (player.getItemInHand(event.getHand()).is(ACItemRegistry.FERTILIZER.get())){
+            BlockPos blockpos = pos.above();
+            for(int i = 0; i < 128; ++i) {
+                BlockPos blockpos1 = blockpos;
+                for(int j = 0; j < i / 16; ++j) {
+                    blockpos1 = blockpos1.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
+                    if (worldIn.getBlockState(blockpos1).isAir() && worldIn.getBlockState(blockpos1.below()).is(Blocks.GRASS_BLOCK) && worldIn.getBiome(blockpos1).is(ACBiomeRegistry.PRIMORDIAL_CAVES)) {
+                        worldIn.setBlock(blockpos1, ACBlockRegistry.ACID.get().defaultBlockState(), 3);
+                    }
+                }
+            }
+        }
+
+        
 
     }
 
@@ -713,8 +734,7 @@ public class ACExemplifiedEvents {
             caramelCubeEntity.level().addFreshEntity(meltedCaramel);
         }
     }
-
-//   Future use
+    
 
     @SubscribeEvent
     public void bonemealEvent(BonemealEvent bonemealEvent) {
@@ -734,39 +754,12 @@ public class ACExemplifiedEvents {
                 }
             }
         }
+        if (level.getBiome(blockPos).is(ACBiomeRegistry.PRIMORDIAL_CAVES) && entity instanceof Player player && player.getItemInHand(bonemealEvent.getEntity().getUsedItemHand()).is(ACItemRegistry.FERTILIZER.get())){
+            bonemealEvent.setCanceled(true);
+        }
 
-//        Optional<Holder.Reference<PlacedFeature>> optional = level.registryAccess().registryOrThrow(Registries.PLACED_FEATURE).getHolder(ResourceKey.create(Registries.PLACED_FEATURE, new ResourceLocation("alexscaves", "primordial_caves_grass")));
-//        label49:
-//        for(int i = 0; i < 128; ++i) {
-//            for(int $$9 = 0; $$9 < i / 16; ++$$9) {
-//                blockAbove = blockAbove.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-//                if (!(level.getBlockState(blockAbove.below()).is(Blocks.GRASS_BLOCK) || level.getBlockState(blockAbove).isCollisionShapeFullBlock(level, blockAbove))) {
-//                    continue label49;
-//                }
-//            }
-//            BlockState blockState = level.getBlockState(blockAbove);
-//            if (blockState.is(grass.getBlock()) && random.nextInt(10) == 0) {
-//                ((BonemealableBlock)grass.getBlock()).performBonemeal((ServerLevel) level, random, blockAbove, blockState);
-//            }
-//            if (blockState.isAir()) {
-//                Holder<PlacedFeature> $$12;
-//                if (random.nextInt(8) == 0) {
-//                    List<ConfiguredFeature<?, ?>> $$11 = (level.getBiome(blockAbove).value()).getGenerationSettings().getFlowerFeatures();
-//                    if ($$11.isEmpty()) {
-//                        continue;
-//                    }
-//                    $$12 = ((RandomPatchConfiguration)((ConfiguredFeature)$$11.get(0)).config()).feature();
-//                } else {
-//                    if (!optional.isPresent()) {
-//                        continue;
-//                    }
-//                    $$12 = (Holder)optional.get();
-//                }
-//                ServerLevel serverLevel = (ServerLevel) level;
-//                ($$12.value()).place(serverLevel, serverLevel.getChunkSource().getGenerator(), random, blockAbove);
-//            }
-//        }
     }
+
 
     private void checkLeatherArmor(ItemStack item, Level level, LivingEntity living){
         if (item.getItem() instanceof DyeableLeatherItem dyeableLeatherItem && living.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get())) {
