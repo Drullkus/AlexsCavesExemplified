@@ -171,19 +171,7 @@ public class ACExemplifiedEvents {
 
 
         }
-        
-        if (player.getItemInHand(event.getHand()).is(ACItemRegistry.FERTILIZER.get())){
-            BlockPos blockpos = pos.above();
-            for(int i = 0; i < 128; ++i) {
-                BlockPos blockpos1 = blockpos;
-                for(int j = 0; j < i / 16; ++j) {
-                    blockpos1 = blockpos1.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-                    if (worldIn.getBlockState(blockpos1).isAir() && worldIn.getBlockState(blockpos1.below()).is(Blocks.GRASS_BLOCK) && worldIn.getBiome(blockpos1).is(ACBiomeRegistry.PRIMORDIAL_CAVES)) {
-                        worldIn.setBlock(blockpos1, ACBlockRegistry.ACID.get().defaultBlockState(), 3);
-                    }
-                }
-            }
-        }
+
 
         
 
@@ -195,6 +183,18 @@ public class ACExemplifiedEvents {
         ItemStack itemStack = event.getItemStack();
         Level level = event.getLevel();
         Entity target = event.getTarget();
+
+        if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.AMPUTATION_ENABLED && target instanceof GingerbreadManEntity gingerbread) {
+            if (gingerbread.hasBothLegs()) {
+                gingerbread.hurt(player.damageSources().mobAttack(player), 0.5F);
+                gingerbread.setLostLimb(gingerbread.getRandom().nextBoolean(), false, true);
+                player.swing(player.getUsedItemHand());
+            } else if (gingerbread.getRandom().nextInt(2) == 0) {
+                player.swing(player.getUsedItemHand());
+                gingerbread.hurt(player.damageSources().mobAttack(player), 0.5F);
+                gingerbread.setLostLimb(gingerbread.getRandom().nextBoolean(), true, true);
+            }
+        }
 
         if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.AMPUTATION_ENABLED && target instanceof GingerbreadManEntity gingerbread) {
             if (gingerbread.hasBothLegs()) {
@@ -739,23 +739,32 @@ public class ACExemplifiedEvents {
     @SubscribeEvent
     public void bonemealEvent(BonemealEvent bonemealEvent) {
         Entity entity = bonemealEvent.getEntity();
-        Level level = entity.level();
+        Level level = bonemealEvent.getLevel();
         BlockPos blockPos = bonemealEvent.getPos();
         BlockState blockState = level.getBlockState(blockPos);
         RandomSource random = level.getRandom();
-        BlockState grass = Blocks.GRASS.defaultBlockState();
+
+        if (level.getBiome(blockPos).is(ACBiomeRegistry.PRIMORDIAL_CAVES) && ACExemplifiedConfig.CAVIAL_BONEMEAL_ENABLED && level.getBlockState(blockPos).is(Blocks.GRASS_BLOCK) && !level.isClientSide){
+            bonemealEvent.setCanceled(true);
+            for(int i = 0; i < 128; ++i) {
+                BlockPos blockpos1 = blockPos.above();
+                for(int j = 0; j < i / 16; ++j) {
+                    blockpos1 = blockpos1.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
+                    if (level.getBlockState(blockpos1).isAir() && level.getBlockState(blockpos1.below()).is(Blocks.GRASS_BLOCK)) {
+                        level.setBlock(blockpos1, ACBlockRegistry.SCRAP_METAL.get().defaultBlockState(), 2);
+                    }
+                }
+            }
+        }
 
         if (ACExemplifiedConfig.ECOLOGICAL_REPUTATION_ENABLED) {
             if (blockState.is(ACBlockRegistry.PING_PONG_SPONGE.get()) && level.getBiome(blockPos).is(ACBiomeRegistry.ABYSSAL_CHASM)) {
-                for (LivingEntity deepOne : entity.level().getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(30))) {
+                for (LivingEntity deepOne : level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(30))) {
                     if (deepOne instanceof DeepOneBaseEntity deepOneBaseEntity && entity instanceof Player player) {
                         deepOneBaseEntity.addReputation(player.getUUID(),2);
                     }
                 }
             }
-        }
-        if (level.getBiome(blockPos).is(ACBiomeRegistry.PRIMORDIAL_CAVES) && entity instanceof Player player && player.getItemInHand(bonemealEvent.getEntity().getUsedItemHand()).is(ACItemRegistry.FERTILIZER.get())){
-            bonemealEvent.setCanceled(true);
         }
 
     }

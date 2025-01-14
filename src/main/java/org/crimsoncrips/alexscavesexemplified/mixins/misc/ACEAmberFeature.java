@@ -29,7 +29,6 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(AmbersolFeature.class)
 public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> {
 
-
     public ACEAmberFeature(Codec<NoneFeatureConfiguration> pCodec) {
         super(pCodec);
     }
@@ -38,9 +37,9 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
 
     @Inject(method = "drawOrb", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/WorldGenLevel;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"))
     private static void drawOrb(WorldGenLevel level, BlockPos center, RandomSource random, BlockState blockState, int radiusX, int radiusY, int radiusZ, CallbackInfo ci, @Local(ordinal = 1) BlockPos fill) {
-        if (random.nextDouble() < 0.01 && ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && level.ensureCanWrite(fill) && level.ensureCanWrite(center)) {
+        if (random.nextDouble() < 0.02 && ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && level.ensureCanWrite(fill) && level.ensureCanWrite(center)) {
             ServerLevel servLevel = level.getLevel();
-            switch (level.getRandom().nextInt(0, 4)) {
+            switch (random.nextInt(0, 4)) {
                 case 0:
                     if (!ModList.get().isLoaded("alexsmobs"))
                         return;
@@ -78,7 +77,7 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
         entity.setSilent(true);
 
         if (entity instanceof Frog frog){
-            FrogVariant frogVariant = switch (level.getRandom().nextInt(0, 4)) {
+            FrogVariant frogVariant = switch (random.nextInt(0, 4)) {
                 case 0 -> FrogVariant.COLD;
                 case 1 -> FrogVariant.WARM;
                 case 2 -> FrogVariant.TEMPERATE;

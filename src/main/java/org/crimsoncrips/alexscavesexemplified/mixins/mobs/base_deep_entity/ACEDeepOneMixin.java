@@ -17,6 +17,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -45,12 +46,12 @@ public abstract class ACEDeepOneMixin extends MobRenderer<DeepOneEntity, DeepOne
 
 
     protected RenderType getRenderType(DeepOneEntity entity, boolean normal, boolean translucent, boolean outline) {
-        boolean wilted = !entity.level().getBiome(entity.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entity.isInWaterRainOrBubble();
+        boolean wilted = !entity.hasEffect(MobEffects.WATER_BREATHING) && (!entity.level().getBiome(entity.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entity.isInWaterRainOrBubble());
         return this.sepia ? ACRenderTypes.getBookWidget(wilted ? TEXTURE_WILTED : TEXTURE, true) : super.getRenderType(entity, normal, translucent, outline);
     }
 
     public ResourceLocation getTextureLocation(DeepOneEntity entity) {
-        boolean wilted = !entity.level().getBiome(entity.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entity.isInWaterRainOrBubble();
+        boolean wilted = !entity.hasEffect(MobEffects.WATER_BREATHING) && (!entity.level().getBiome(entity.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entity.isInWaterRainOrBubble());
         return wilted ? TEXTURE_WILTED : TEXTURE;
     }
 

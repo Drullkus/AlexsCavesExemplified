@@ -18,6 +18,7 @@ import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
 import org.crimsoncrips.alexscavesexemplified.ACEReflectionUtil;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
@@ -33,14 +34,14 @@ public abstract class ACEDeepMageMixin extends RenderLayer<DeepOneMageEntity, De
         super(pRenderer);
     }
 
-    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, DeepOneMageEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
-        if (!entitylivingbaseIn.isInvisible()) {
+    public void render(PoseStack matrixStackIn, MultiBufferSource bufferIn, int packedLightIn, DeepOneMageEntity entity, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
+        if (!entity.isInvisible()) {
             DeepOneMageRenderer deepOneMageRenderer = this$0;
             boolean sepia = (boolean) ACEReflectionUtil.getField(deepOneMageRenderer, "sepia");
-            boolean wilted = !entitylivingbaseIn.level().getBiome(entitylivingbaseIn.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entitylivingbaseIn.isInWaterRainOrBubble();
+            boolean wilted = !entity.hasEffect(MobEffects.WATER_BREATHING) && (!entity.level().getBiome(entity.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entity.isInWaterRainOrBubble());
             VertexConsumer ivertexbuilder = bufferIn.getBuffer(sepia ? ACRenderTypes.getBookWidget(wilted ? TEXTURE_WILTED : DeepOneMageRenderer.TEXTURE, true) : ACRenderTypes.getGhostly(wilted ? TEXTURE_WILTED : DeepOneMageRenderer.TEXTURE));
             float alpha = 1.0F;
-            ((DeepOneMageModel)this.getParentModel()).renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, alpha);
+            ((DeepOneMageModel)this.getParentModel()).renderToBuffer(matrixStackIn, ivertexbuilder, packedLightIn, LivingEntityRenderer.getOverlayCoords(entity, 0.0F), 1.0F, 1.0F, 1.0F, alpha);
         }
 
     }

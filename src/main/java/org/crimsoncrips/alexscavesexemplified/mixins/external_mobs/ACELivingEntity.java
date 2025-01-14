@@ -73,7 +73,7 @@ public abstract class ACELivingEntity extends Entity {
     private void tick(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity)(Object)this;
         Block block = livingEntity.level().getBlockState(livingEntity.blockPosition()).getBlock();
-        if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && block != ACBlockRegistry.AMBER.get()) {
+        if (block != ACBlockRegistry.AMBER.get()) {
             if (ModList.get().isLoaded("alexsmobs")) {
                 amberReset(livingEntity);
             }

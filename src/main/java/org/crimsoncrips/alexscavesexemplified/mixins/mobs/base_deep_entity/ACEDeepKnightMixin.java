@@ -13,6 +13,7 @@ import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.effect.MobEffects;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 
@@ -30,7 +31,7 @@ public abstract class ACEDeepKnightMixin extends MobRenderer<DeepOneKnightEntity
     }
 
     public ResourceLocation getTextureLocation(DeepOneKnightEntity entity) {
-        boolean wilted = !entity.level().getBiome(entity.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entity.isInWaterRainOrBubble();
+        boolean wilted = !entity.hasEffect(MobEffects.WATER_BREATHING) && (!entity.level().getBiome(entity.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !entity.isInWaterRainOrBubble());
         return wilted ? (entity.isNoon() ? TEXTURE_NOON_WILTED : TEXTURE_WILTED) : (entity.isNoon() ? TEXTURE_NOON : TEXTURE);
     }
 
