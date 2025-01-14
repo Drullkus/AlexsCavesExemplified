@@ -196,18 +196,6 @@ public class ACExemplifiedEvents {
             }
         }
 
-        if (itemStack.getItem() instanceof AxeItem && ACExemplifiedConfig.AMPUTATION_ENABLED && target instanceof GingerbreadManEntity gingerbread) {
-            if (gingerbread.hasBothLegs()) {
-                gingerbread.hurt(player.damageSources().mobAttack(player), 0.5F);
-                gingerbread.setLostLimb(gingerbread.getRandom().nextBoolean(), false, true);
-                player.swing(player.getUsedItemHand());
-            } else if (gingerbread.getRandom().nextInt(2) == 0) {
-                player.swing(player.getUsedItemHand());
-                gingerbread.hurt(player.damageSources().mobAttack(player), 0.5F);
-                gingerbread.setLostLimb(gingerbread.getRandom().nextBoolean(), true, true);
-            }
-        }
-
         if (ACExemplifiedConfig.GLUTTONY_ENABLED && player.isCrouching()) {
 
             if (player.getEffect(MobEffects.HUNGER) == null)
