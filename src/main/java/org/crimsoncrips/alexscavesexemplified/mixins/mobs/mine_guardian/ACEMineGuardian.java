@@ -1,48 +1,57 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs.mine_guardian;
 
-import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.living.CaniacEntity;
+import com.github.alexmodguy.alexscaves.AlexsCaves;
+import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.MineGuardianEntity;
-import com.github.alexmodguy.alexscaves.server.entity.util.MineExplosion;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import com.llamalad7.mixinextras.sugar.Local;
-import net.minecraft.core.particles.SimpleParticleType;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.DifficultyInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.MobSpawnType;
+import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.level.Explosion;
+import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistry;
+import net.minecraft.world.level.ServerLevelAccessor;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEMineGuardianHurtBy;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Unique;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 import java.util.Objects;
 
 
 @Mixin(MineGuardianEntity.class)
-public class ACEMineGuardian extends Monster implements MineGuardianXtra {
+public abstract class ACEMineGuardian extends Monster implements MineGuardianXtra {
 
+    @Shadow public abstract boolean isExploding();
+
+    @Shadow private float explodeProgress;
     private static final EntityDataAccessor<String> OWNER = SynchedEntityData.defineId(MineGuardianEntity.class, EntityDataSerializers.STRING);
     private static final EntityDataAccessor<Boolean> NUCLEAR = SynchedEntityData.defineId(MineGuardianEntity.class, EntityDataSerializers.BOOLEAN);
 
     protected ACEMineGuardian(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
+    }
+
+    @Inject(method = "finalizeSpawn", at = @At("TAIL"))
+    private void alexsCavesExemplified$finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn, CompoundTag dataTag, CallbackInfoReturnable<SpawnGroupData> cir) {
+        alexsCavesExemplified$setNuclear(true);
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
@@ -56,8 +65,9 @@ public class ACEMineGuardian extends Monster implements MineGuardianXtra {
         if (!ACExemplifiedConfig.REMINEDING_ENABLED && !Objects.equals(alexsCavesExemplified$getOwner(), "-1")){
             alexsCavesExemplified$setOwner("-1");
         }
-
     }
+
+
 
     @Override
     public boolean alexsCavesExemplified$isNoon() {
@@ -106,6 +116,36 @@ public class ACEMineGuardian extends Monster implements MineGuardianXtra {
         if(ACExemplifiedConfig.REMINEDING_ENABLED && entity instanceof Player player){
             cir.setReturnValue(canAttack(player) && !Objects.equals(player.getUUID().toString(), alexsCavesExemplified$getOwner()));
         }
+    }
+
+    @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/MineGuardianEntity;isExploding()Z",ordinal = 2))
+    private boolean alexsCavesExemplified$tick(MineGuardianEntity instance, Operation<Boolean> original) {
+        return original.call(instance) && !alexsCavesExemplified$isNuclear();
+    }
+
+    @Inject(method = "tick", at = @At("TAIL"))
+    private void alexsCavesExemplified$tick1(CallbackInfo ci) {
+        if(this.alexsCavesExemplified$isNuclear()){
+            if (this.isExploding()) {
+                if (this.explodeProgress >= 10.0F) {
+                    this.remove(RemovalReason.KILLED);
+                    this.nukeExplode();
+                }
+
+                this.setDeltaMovement(this.getDeltaMovement().multiply((double)0.3F, (double)1.0F, (double)0.3F));
+            }
+        }
+    }
+
+    private void nukeExplode() {
+        NuclearExplosionEntity explosion = (NuclearExplosionEntity)((EntityType) ACEntityRegistry.NUCLEAR_EXPLOSION.get()).create(this.level());
+        explosion.copyPosition(this);
+        explosion.setSize(AlexsCaves.COMMON_CONFIG.nukeExplosionSizeModifier.get().floatValue());
+        if (!this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
+            explosion.setNoGriefing(true);
+        }
+
+        this.level().addFreshEntity(explosion);
     }
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 2))

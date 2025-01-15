@@ -35,8 +35,8 @@ public abstract class ACEBaseDeepEntityMixin extends PathfinderMob {
     private void alexsCavesExemplified$tick(CallbackInfo ci) {
         if (ACExemplifiedConfig.DEEP_WEAKENED_ENABLED){
             if (!this.hasEffect(MobEffects.WATER_BREATHING) && (!this.level().getBiome(this.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM) || !this.isInWaterRainOrBubble())) {
-                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 300, 1));
-                this.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 300, 0));
+                this.addEffect(new MobEffectInstance(MobEffects.MOVEMENT_SLOWDOWN, 60, 1));
+                this.addEffect(new MobEffectInstance(MobEffects.WEAKNESS, 60, 0));
             }
         }
     }

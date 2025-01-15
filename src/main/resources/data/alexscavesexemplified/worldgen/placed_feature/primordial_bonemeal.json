@@ -1,0 +1,12 @@
+{
+  "feature": "alexscavesexemplified:primordial_flora",
+  "placement": [
+    {
+      "type": "minecraft:block_predicate_filter",
+      "predicate": {
+        "type": "minecraft:matching_blocks",
+        "blocks": "minecraft:air"
+      }
+    }
+  ]
+}

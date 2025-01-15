@@ -63,23 +63,16 @@ public abstract class ACEItemEntity extends Entity {
                 for (ItemEntity itemEntity : this.level().getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(0.1))) {
                     ItemStack nearBone = itemEntity.getItem();
                     if (!nearBone.isEmpty() && timeToCook >= 200) {
-                        switch (checkDye(nearBone)) {
-                            case 1:
-                                newGelatin(ACItemRegistry.GELATIN_RED.get(),nearBone,item);
-                                break;
-                            case 2:
-                                newGelatin(ACItemRegistry.GELATIN_GREEN.get(),nearBone,item);
-                                break;
-                            case 3:
-                                newGelatin(ACItemRegistry.GELATIN_YELLOW.get(),nearBone,item);
-                                break;
-                            case 4:
-                                newGelatin(ACItemRegistry.GELATIN_BLUE.get(),nearBone,item);
-                                break;
-                            case 5:
-                                newGelatin(ACItemRegistry.GELATIN_PINK.get(),nearBone,item);
-                                break;
-                        }
+                        ItemStack gelatinColor = switch (checkDye(nearBone)) {
+                            case 1 -> ACItemRegistry.GELATIN_GREEN.get().asItem().getDefaultInstance();
+                            case 2 -> ACItemRegistry.GELATIN_BLUE.get().asItem().getDefaultInstance();
+                            case 3 -> ACItemRegistry.GELATIN_YELLOW.get().asItem().getDefaultInstance();
+                            case 4 -> ACItemRegistry.GELATIN_PINK.get().asItem().getDefaultInstance();
+                            default -> ACItemRegistry.GELATIN_RED.get().asItem().getDefaultInstance();
+                        };
+
+                        newGelatin(gelatinColor.getItem(),nearBone,item);
+
                         level.addParticle(ParticleTypes.EXPLOSION, this.getX(), this.getY() + 1, this.getZ(), 0,0,0);
 
                     } else timeToCook++;
@@ -150,6 +143,7 @@ public abstract class ACEItemEntity extends Entity {
         if (possibleDye.is(Items.PINK_DYE)){
             dyeDeterminer = dyeDeterminer + 5;
         }
+
 
         return dyeDeterminer;
     }

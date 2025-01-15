@@ -39,6 +39,8 @@ public abstract class ACEMineRendererRenderMixin extends RenderLayer<MineGuardia
 
     private static final ResourceLocation TEXTURE_EYE = new ResourceLocation("alexscaves:textures/entity/mine_guardian_eye.png");
     private static final ResourceLocation TEXTURE_EXPLODE = new ResourceLocation("alexscaves:textures/entity/mine_guardian_explode.png");
+    private static final ResourceLocation TEXTURE_NUCLEAR_EYE = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_guardian_eye.png");
+    private static final ResourceLocation TEXTURE_NUCLEAR_EXPLODE = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_guardian_explode.png");
 
 
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, MineGuardianEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
@@ -46,11 +48,11 @@ public abstract class ACEMineRendererRenderMixin extends RenderLayer<MineGuardia
 
         float explodeProgress = entitylivingbaseIn.getExplodeProgress(partialTicks);
         if (!entitylivingbaseIn.isEyeClosed() && !accesor.alexsCavesExemplified$isNoon()) {
-            VertexConsumer ivertexbuilder1 = bufferIn.getBuffer(RenderType.eyes(TEXTURE_EYE));
+            VertexConsumer ivertexbuilder1 = bufferIn.getBuffer(RenderType.eyes(accesor.alexsCavesExemplified$isNuclear() ? TEXTURE_NUCLEAR_EYE : TEXTURE_EYE));
             ((MineGuardianModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder1, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
         }
 
-        VertexConsumer ivertexbuilder4 = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(TEXTURE_EXPLODE));
+        VertexConsumer ivertexbuilder4 = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(accesor.alexsCavesExemplified$isNuclear() ? TEXTURE_NUCLEAR_EXPLODE : TEXTURE_NUCLEAR_EYE));
         ((MineGuardianModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder4, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, explodeProgress);
     }
 

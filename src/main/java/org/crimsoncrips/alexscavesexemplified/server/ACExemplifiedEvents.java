@@ -252,10 +252,18 @@ public class ACExemplifiedEvents {
                         entity.setTarget(player);
                     }
                 }
-                event.getTarget().discard();
+                target.discard();
                 player.playSound(SoundEvents.GENERIC_EAT, 1.0F, -2F);
                 player.playSound(ACSoundRegistry.GUMMY_BEAR_DEATH.get(), 0.4F, 2F);
 
+            }
+        }
+
+        if(target instanceof SeaPigEntity && ACExemplifiedConfig.ECOLOGICAL_REPUTATION_ENABLED && level.getBiome(target.getOnPos()).is(ACBiomeRegistry.ABYSSAL_CHASM) && player.getItemInHand(player.getUsedItemHand()).is(ACBlockRegistry.MUCK.get().asItem())){
+            for (LivingEntity deepOne : level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(50))) {
+                if (deepOne instanceof DeepOneBaseEntity deepOneBaseEntity) {
+                    deepOneBaseEntity.addReputation(player.getUUID(),1);
+                }
             }
         }
 
@@ -285,6 +293,7 @@ public class ACExemplifiedEvents {
     @SubscribeEvent
     public void onEntityDeath(LivingDeathEvent deathEvent) {
         LivingEntity died = deathEvent.getEntity();
+        Entity killer = deathEvent.getSource().getEntity();
         Level level = died.level();
 
         if (died instanceof NucleeperEntity nucleeper && ACExemplifiedConfig.NUCLEAR_CHAIN_ENABLED){
@@ -301,8 +310,28 @@ public class ACExemplifiedEvents {
 
         if (died instanceof Player player && ACExemplifiedConfig.MUTATED_DEATH_ENABLED) {
             MobEffectInstance irradiated = player.getEffect(ACEffectRegistry.IRRADIATED.get());
-            if (irradiated != null && irradiated.getAmplifier() >= 2 && player.getRandom().nextDouble() < 0.3) {
+            if (irradiated != null && irradiated.getAmplifier() >= 2 && player.getRandom().nextDouble() < 0.2) {
                 ACEntityRegistry.BRAINIAC.get().spawn((ServerLevel) level, BlockPos.containing(player.getX(), player.getY(), player.getZ()), MobSpawnType.MOB_SUMMONED);
+            }
+        }
+
+        if (killer instanceof Player player && ACExemplifiedConfig.ECOLOGICAL_REPUTATION_ENABLED) {
+            for (LivingEntity deepOne : level.getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(50))) {
+                if (deepOne instanceof DeepOneBaseEntity deepOneBaseEntity) {
+                    if (died instanceof SeaPigEntity){
+                        deepOneBaseEntity.addReputation(player.getUUID(),-1);
+                    } else if (died instanceof GossamerWormEntity){
+                        deepOneBaseEntity.addReputation(player.getUUID(),-2);
+                    } else if (died instanceof LanternfishEntity && player.getRandom().nextDouble() < 0.3){
+                        deepOneBaseEntity.addReputation(player.getUUID(),-1);
+                    } else if (died instanceof TripodfishEntity){
+                        deepOneBaseEntity.addReputation(player.getUUID(),-1);
+                    } else if (died instanceof HullbreakerEntity){
+                        deepOneBaseEntity.addReputation(player.getUUID(),-10);
+                    } else if (died instanceof MineGuardianEntity){
+                        deepOneBaseEntity.addReputation(player.getUUID(),2);
+                    }
+                }
             }
         }
 
@@ -344,8 +373,8 @@ public class ACExemplifiedEvents {
 
         if (ACExemplifiedConfig.ECOLOGICAL_REPUTATION_ENABLED) {
             if (blockState.is(ACExexmplifiedTagRegistry.ABYSSAL_ECOSYSTEM) && level.getBiome(breakEvent.getPos()).is(ACBiomeRegistry.ABYSSAL_CHASM)) {
-                for (LivingEntity entity : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(30))) {
-                    if (entity instanceof DeepOneBaseEntity deepOneBaseEntity) {
+                for (LivingEntity entity : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(50))) {
+                    if (entity instanceof DeepOneBaseEntity deepOneBaseEntity && player.getRandom().nextBoolean()) {
                         deepOneBaseEntity.addReputation(player.getUUID(),-1);
                     }
                 }
@@ -394,9 +423,9 @@ public class ACExemplifiedEvents {
         }
 
         if (livingEntity instanceof SeaPigEntity seaPigEntity && level.random.nextDouble() < 0.01 && ACExemplifiedConfig.POISONOUS_SKIN_ENABLED) {
-            for (LivingEntity entity : seaPigEntity.level().getEntitiesOfClass(LivingEntity.class, seaPigEntity.getBoundingBox().inflate(1.2))) {
+            for (LivingEntity entity : seaPigEntity.level().getEntitiesOfClass(LivingEntity.class, seaPigEntity.getBoundingBox().inflate(0.5))) {
                 if (entity != seaPigEntity && entity.getBbHeight() <= 3.5F && !(entity instanceof SeaPigEntity)) {
-                    entity.addEffect(new MobEffectInstance(MobEffects.POISON, 100, 0));
+                    entity.addEffect(new MobEffectInstance(MobEffects.POISON, 60, 0));
                 }
             }
         }
@@ -749,7 +778,7 @@ public class ACExemplifiedEvents {
             if (blockState.is(ACBlockRegistry.PING_PONG_SPONGE.get()) && level.getBiome(blockPos).is(ACBiomeRegistry.ABYSSAL_CHASM)) {
                 for (LivingEntity deepOne : level.getEntitiesOfClass(LivingEntity.class, entity.getBoundingBox().inflate(30))) {
                     if (deepOne instanceof DeepOneBaseEntity deepOneBaseEntity && entity instanceof Player player) {
-                        deepOneBaseEntity.addReputation(player.getUUID(),2);
+                        deepOneBaseEntity.addReputation(player.getUUID(),1);
                     }
                 }
             }
