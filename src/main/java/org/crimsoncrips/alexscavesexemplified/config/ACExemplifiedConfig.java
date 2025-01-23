@@ -108,6 +108,9 @@ public class ACExemplifiedConfig {
     public static boolean DEEP_WEAKENED_ENABLED;
     public static boolean OVERDRIVED_CONVERSION_ENABLED;
     public static boolean DEFUSION_ENABLED;
+    public static boolean NAVAL_NUCLEARITY_ENABLED;
+    public static boolean LOCATABLE_CAVES_ENABLED;
+    public static boolean CATASTROPHE_ENABLED;
 
 
 
@@ -219,6 +222,9 @@ public class ACExemplifiedConfig {
             DEEP_WEAKENED_ENABLED = ACEConfigHolder.EXEMPLIFIED.DEEP_WEAKENED_ENABLED.get();
             OVERDRIVED_CONVERSION_ENABLED = ACEConfigHolder.EXEMPLIFIED.OVERDRIVED_CONVERSION_ENABLED.get();
             DEFUSION_ENABLED = ACEConfigHolder.EXEMPLIFIED.DEFUSION_ENABLED.get();
+            NAVAL_NUCLEARITY_ENABLED = ACEConfigHolder.EXEMPLIFIED.NAVAL_NUCLEARITY_ENABLED.get();
+            LOCATABLE_CAVES_ENABLED = ACEConfigHolder.EXEMPLIFIED.LOCATABLE_CAVES_ENABLED.get();
+            CATASTROPHE_ENABLED = ACEConfigHolder.EXEMPLIFIED.CATASTROPHE_ENABLED.get();
 
 
 

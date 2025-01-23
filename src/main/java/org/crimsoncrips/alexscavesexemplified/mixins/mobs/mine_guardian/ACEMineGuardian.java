@@ -1,9 +1,12 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs.mine_guardian;
 
 import com.github.alexmodguy.alexscaves.AlexsCaves;
+import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
+import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.MineGuardianEntity;
+import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
@@ -11,31 +14,37 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
 import net.minecraft.network.syncher.SynchedEntityData;
-import net.minecraft.world.DifficultyInstance;
+import net.minecraft.sounds.SoundEvents;
+import net.minecraft.sounds.SoundSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
-import net.minecraft.world.entity.MobSpawnType;
-import net.minecraft.world.entity.SpawnGroupData;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
+import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.ServerLevelAccessor;
+import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEMineGuardianHurtBy;
+import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
+import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 import java.util.Objects;
 
-
+@Debug (export = true)
 @Mixin(MineGuardianEntity.class)
 public abstract class ACEMineGuardian extends Monster implements MineGuardianXtra {
 
@@ -43,15 +52,10 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
 
     @Shadow private float explodeProgress;
     private static final EntityDataAccessor<String> OWNER = SynchedEntityData.defineId(MineGuardianEntity.class, EntityDataSerializers.STRING);
-    private static final EntityDataAccessor<Boolean> NUCLEAR = SynchedEntityData.defineId(MineGuardianEntity.class, EntityDataSerializers.BOOLEAN);
+    private static final EntityDataAccessor<Integer> VARIANT = SynchedEntityData.defineId(MineGuardianEntity.class, EntityDataSerializers.INT);
 
     protected ACEMineGuardian(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
-    }
-
-    @Inject(method = "finalizeSpawn", at = @At("TAIL"))
-    private void alexsCavesExemplified$finalizeSpawn(ServerLevelAccessor worldIn, DifficultyInstance difficultyIn, MobSpawnType reason, SpawnGroupData spawnDataIn, CompoundTag dataTag, CallbackInfoReturnable<SpawnGroupData> cir) {
-        alexsCavesExemplified$setNuclear(true);
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
@@ -65,18 +69,38 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
         if (!ACExemplifiedConfig.REMINEDING_ENABLED && !Objects.equals(alexsCavesExemplified$getOwner(), "-1")){
             alexsCavesExemplified$setOwner("-1");
         }
+        if (alexsCavesExemplified$getVariant() >= 1){
+            if (this.getName().getString().equals("Ae")){
+                alexsCavesExemplified$setVariant(1);
+            }
+            if (this.getName().getString().equals("Jesse")){
+                alexsCavesExemplified$setVariant(2);
+            }
+        }
+        if (alexsCavesExemplified$getVariant() > 0){
+            if (this.random.nextInt(80) == 0) {
+                this.level().playLocalSound(this.getX() + 0.5D, this.getY() + 0.5D, this.getZ() + 0.5D, ACSoundRegistry.URANIUM_HUM.get(), SoundSource.BLOCKS, 0.5F, this.random.nextFloat() * 0.4F + 0.8F, false);
+            }
+            if (this.random.nextInt(10) == 0) {
+                this.level().addParticle(ACParticleRegistry.PROTON.get(), this.getX(), this.getY() + 0.5, this.getZ(), this.getX(), this.getY(), this.getZ());
+            }
+
+            if (!ACExemplifiedConfig.NAVAL_NUCLEARITY_ENABLED){
+                alexsCavesExemplified$setVariant(0);
+            }
+        }
+        if (ACExemplifiedConfig.NOON_GUARDIAN_ENABLED){
+            if (this.getName().getString().equals("Noon") && alexsCavesExemplified$getVariant() == 0){
+                this.alexsCavesExemplified$setVariant(-1);
+            }
+        } else if (alexsCavesExemplified$getVariant() == -1){
+            alexsCavesExemplified$setVariant(1);
+        }
     }
 
-
-
     @Override
-    public boolean alexsCavesExemplified$isNoon() {
-        return this.getName().getString().equals("Noon") && ACExemplifiedConfig.NOON_GUARDIAN_ENABLED && Objects.equals(alexsCavesExemplified$getOwner(), "-1");
-    }
-
-    @Override
-    public boolean alexsCavesExemplified$isNuclear() {
-        return this.entityData.get(NUCLEAR);
+    public int alexsCavesExemplified$getVariant() {
+        return this.entityData.get(VARIANT);
     }
 
     public String alexsCavesExemplified$getOwner() {
@@ -84,8 +108,8 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
     }
 
     @Override
-    public void alexsCavesExemplified$setNuclear(boolean nuclear) {
-        this.entityData.set(NUCLEAR, Boolean.valueOf(nuclear));
+    public void alexsCavesExemplified$setVariant(int variant) {
+        this.entityData.set(VARIANT, Integer.valueOf(variant));
     }
 
     @Override
@@ -96,18 +120,18 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
     @Inject(method = "defineSynchedData", at = @At("TAIL"))
     private void alexsCavesExemplified$define(CallbackInfo ci) {
         this.entityData.define(OWNER, "-1");
-        this.entityData.define(NUCLEAR, false);
+        this.entityData.define(VARIANT, 0);
     }
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void alexsCavesExemplified$add(CompoundTag compound, CallbackInfo ci) {
-        compound.putBoolean("Nuclear", this.alexsCavesExemplified$isNuclear());
+        compound.putInt("Variant", this.alexsCavesExemplified$getVariant());
         compound.putString("MineOwner", this.alexsCavesExemplified$getOwner());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void alexsCavesExemplified$read(CompoundTag compound, CallbackInfo ci) {
-        this.alexsCavesExemplified$setNuclear(compound.getBoolean("Nuclear"));
+        this.alexsCavesExemplified$setVariant(compound.getInt("Variant"));
         this.alexsCavesExemplified$setOwner(compound.getString("MineOwner"));
     }
 
@@ -120,12 +144,12 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
 
     @WrapOperation(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/MineGuardianEntity;isExploding()Z",ordinal = 2))
     private boolean alexsCavesExemplified$tick(MineGuardianEntity instance, Operation<Boolean> original) {
-        return original.call(instance) && !alexsCavesExemplified$isNuclear();
+        return original.call(instance) && alexsCavesExemplified$getVariant() < 1;
     }
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void alexsCavesExemplified$tick1(CallbackInfo ci) {
-        if(this.alexsCavesExemplified$isNuclear()){
+        if(alexsCavesExemplified$getVariant() > 0){
             if (this.isExploding()) {
                 if (this.explodeProgress >= 10.0F) {
                     this.remove(RemovalReason.KILLED);
@@ -140,7 +164,7 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
     private void nukeExplode() {
         NuclearExplosionEntity explosion = (NuclearExplosionEntity)((EntityType) ACEntityRegistry.NUCLEAR_EXPLOSION.get()).create(this.level());
         explosion.copyPosition(this);
-        explosion.setSize(AlexsCaves.COMMON_CONFIG.nukeExplosionSizeModifier.get().floatValue());
+        explosion.setSize((float) (AlexsCaves.COMMON_CONFIG.nukeExplosionSizeModifier.get().floatValue() * 0.8));
         if (!this.level().getGameRules().getBoolean(GameRules.RULE_MOBGRIEFING)) {
             explosion.setNoGriefing(true);
         }
@@ -151,6 +175,21 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 2))
     private boolean alexsCavesExemplified$registerGoals(GoalSelector instance, int pPriority, Goal pGoal) {
         return !ACExemplifiedConfig.REMINEDING_ENABLED;
+    }
+
+
+    @Override
+    protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
+        ItemStack itemHeld = pPlayer.getItemInHand(pHand);
+        if (ACExemplifiedConfig.NAVAL_NUCLEARITY_ENABLED && itemHeld.is(ACBlockRegistry.NUCLEAR_BOMB.get().asItem()) && alexsCavesExemplified$getVariant() == 0){
+            alexsCavesExemplified$setVariant(random.nextBoolean() ? 1 : 2);
+            if (!pPlayer.isCreative()){
+                itemHeld.shrink(1);
+            }
+            playSound(SoundEvents.SMITHING_TABLE_USE, 8.0F, 1.0F);
+            return InteractionResult.SUCCESS;
+        }
+        return super.mobInteract(pPlayer, pHand);
     }
 
 

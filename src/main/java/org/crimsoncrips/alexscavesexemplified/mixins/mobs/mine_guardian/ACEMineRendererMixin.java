@@ -3,6 +3,7 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs.mine_guardian;
 import com.github.alexmodguy.alexscaves.client.model.MineGuardianModel;
 import com.github.alexmodguy.alexscaves.client.render.ACRenderTypes;
 import com.github.alexmodguy.alexscaves.client.render.entity.MineGuardianRenderer;
+import com.github.alexmodguy.alexscaves.server.entity.ACFrogRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.living.MineGuardianEntity;
 import com.github.alexmodguy.alexscaves.server.misc.ACMath;
 import com.mojang.blaze3d.vertex.PoseStack;
@@ -11,6 +12,7 @@ import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.entity.EntityRendererProvider;
 import net.minecraft.client.renderer.entity.MobRenderer;
 import net.minecraft.resources.ResourceLocation;
+import net.minecraft.world.entity.animal.FrogVariant;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.joml.Matrix3f;
 import org.joml.Matrix4f;
@@ -32,8 +34,12 @@ public abstract class ACEMineRendererMixin extends MobRenderer<MineGuardianEntit
     private static final ResourceLocation TEXTURE_NOON_SLEEPING = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/noon_guardian_sleeping.png");
     private static final ResourceLocation TEXTURE_NOON_ACTIVE = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/noon_guardian_active.png");
 
-    private static final ResourceLocation TEXTURE_NUCLEAR = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_guardian.png");
-    private static final ResourceLocation TEXTURE_NUCLEAR_SLEEPING = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_guardian_sleeping.png");
+    private static final ResourceLocation TEXTURE_AE_NUCLEAR = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_ae_guardian.png");
+    private static final ResourceLocation TEXTURE_AE_NUCLEAR_SLEEPING = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_ae_guardian_sleeping.png");
+
+    private static final ResourceLocation TEXTURE_JESSE_NUCLEAR = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_jesse_guardian.png");
+    private static final ResourceLocation TEXTURE_JESSE_NUCLEAR_SLEEPING = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_jesse_guardian_sleeping.png");
+
 
     public ACEMineRendererMixin(EntityRendererProvider.Context pContext, MineGuardianModel pModel, float pShadowRadius) {
         super(pContext, pModel, pShadowRadius);
@@ -63,15 +69,20 @@ public abstract class ACEMineRendererMixin extends MobRenderer<MineGuardianEntit
         p_114224_.vertex(p_114225_, ACMath.HALF_SQRT_3 * p_114227_, p_114226_, 0).color(64, 233, 255, 0).uv(xOffset, yOffset).overlayCoords(NO_OVERLAY).uv2(240).normal(p_114092_, 0.0F, -1.0F, 0.0F).endVertex();
     }
 
+    @Override
     public ResourceLocation getTextureLocation(MineGuardianEntity entity) {
-        MineGuardianXtra accesor = (MineGuardianXtra) entity;
-        return accesor.alexsCavesExemplified$isNoon() ? (entity.isEyeClosed() ? TEXTURE_NOON_SLEEPING : (entity.isScanning() ? TEXTURE_NOON : TEXTURE_NOON_ACTIVE)) : accesor.alexsCavesExemplified$isNuclear() ? (entity.isEyeClosed() ? TEXTURE_NUCLEAR_SLEEPING : TEXTURE_NUCLEAR) : (entity.isEyeClosed() ? TEXTURE_SLEEPING : TEXTURE);
+        return switch (((MineGuardianXtra) entity).alexsCavesExemplified$getVariant()) {
+            case -1 -> entity.isEyeClosed() ? TEXTURE_NOON_SLEEPING : (entity.isScanning() ? TEXTURE_NOON : TEXTURE_NOON_ACTIVE);
+            case 1 -> entity.isEyeClosed() ? TEXTURE_AE_NUCLEAR_SLEEPING : TEXTURE_AE_NUCLEAR;
+            case 2 -> entity.isEyeClosed() ? TEXTURE_JESSE_NUCLEAR_SLEEPING : TEXTURE_JESSE_NUCLEAR;
+            default -> entity.isEyeClosed() ? TEXTURE_SLEEPING : TEXTURE;
+        };
     }
 
     @Inject(method = "render(Lcom/github/alexmodguy/alexscaves/server/entity/living/MineGuardianEntity;FFLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;I)V", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V" ,ordinal = 2),locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void alexsCavesExemplified$render(MineGuardianEntity entityIn, float entityYaw, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, CallbackInfo ci, float bodyYaw, float scanProgress, float ticks, float length, float width, float extraX) {
         MineGuardianXtra accesor = (MineGuardianXtra) entityIn;
-        if (accesor.alexsCavesExemplified$isNoon()){
+        if (accesor.alexsCavesExemplified$getVariant() == -1){
             ci.cancel();
             poseStack.translate(0.3F, -0.5F, -0.1F);
             PoseStack.Pose posestack$pose = poseStack.last();
@@ -85,7 +96,7 @@ public abstract class ACEMineRendererMixin extends MobRenderer<MineGuardianEntit
             poseStack.popPose();
             poseStack.popPose();
         }
-        if (accesor.alexsCavesExemplified$isNuclear()){
+        if (accesor.alexsCavesExemplified$getVariant() > 0){
             ci.cancel();
             poseStack.translate(0.0F, -0.5F, 0.0F);
             PoseStack.Pose posestack$pose = poseStack.last();
@@ -100,11 +111,5 @@ public abstract class ACEMineRendererMixin extends MobRenderer<MineGuardianEntit
             poseStack.popPose();
         }
     }
-
-
-
-
-
-
 
 }

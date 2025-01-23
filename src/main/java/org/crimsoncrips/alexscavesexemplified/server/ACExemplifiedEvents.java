@@ -25,6 +25,7 @@ import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
 import net.minecraft.data.worldgen.placement.VegetationPlacements;
+import net.minecraft.network.chat.Component;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -36,6 +37,8 @@ import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
+import net.minecraft.world.entity.animal.Cat;
+import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.animal.Parrot;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
@@ -49,6 +52,7 @@ import net.minecraft.world.level.levelgen.feature.ConfiguredFeature;
 import net.minecraft.world.level.levelgen.feature.configurations.RandomPatchConfiguration;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
 import net.minecraft.world.phys.Vec3;
+import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.BonemealEvent;
@@ -587,12 +591,12 @@ public class ACExemplifiedEvents {
         }
 
         if (ACExemplifiedConfig.PURPLE_LEATHERED_ENABLED) {
-            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.HEAD),level,livingEntity);
-            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.FEET),level,livingEntity);
-            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.CHEST),level,livingEntity);
-            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.LEGS),level,livingEntity);
-            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND),level,livingEntity);
-            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND),level,livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.HEAD),livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.FEET),livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.CHEST),livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.LEGS),livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.MAINHAND),livingEntity);
+            checkLeatherArmor(livingEntity.getItemBySlot(EquipmentSlot.OFFHAND),livingEntity);
         }
 
         if (ACExemplifiedConfig.CRUMBY_RAGE_ENABLED){
@@ -786,8 +790,29 @@ public class ACExemplifiedEvents {
 
     }
 
+    @SubscribeEvent
+    public void talkEvent(ServerChatEvent serverChatEvent){
+        Player player = serverChatEvent.getPlayer();
 
-    private void checkLeatherArmor(ItemStack item, Level level, LivingEntity living){
+        if (Objects.equals(serverChatEvent.getMessage().getString(), "pspsps") && ACExemplifiedConfig.CATASTROPHE_ENABLED){
+            System.out.println("it pspsps");
+            for (LivingEntity cats : player.level().getEntitiesOfClass(LivingEntity.class, player.getBoundingBox().inflate(4, 4, 4))) {
+                if (cats instanceof Cat || cats instanceof Ocelot || cats instanceof RaycatEntity || AMCompat.tiger(cats)){
+                    NuclearExplosionEntity explosion = ACEntityRegistry.NUCLEAR_EXPLOSION.get().create(cats.level());
+                    explosion.copyPosition(cats);
+                    explosion.setSize(1.75F);
+
+                    cats.level().addFreshEntity(explosion);
+                }
+            }
+        }
+        if (ACExemplifiedConfig.RABIES_ENABLED && player.getRandom().nextDouble() < 0.01 && player.hasEffect(ACEEffects.RABIAL.get())){
+            serverChatEvent.setMessage(Component.nullToEmpty("rrRRRrrrAgh!... " + serverChatEvent.getMessage().getString()));
+        }
+    }
+
+
+    private void checkLeatherArmor(ItemStack item, LivingEntity living){
         if (item.getItem() instanceof DyeableLeatherItem dyeableLeatherItem && living.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get())) {
             dyeableLeatherItem.setColor(item, 0Xb839e6);
         }
@@ -811,6 +836,8 @@ public class ACExemplifiedEvents {
         i = i + CreateCompat.createDivingSuit(entity);
         return i;
     }
+
+
 
 
 }

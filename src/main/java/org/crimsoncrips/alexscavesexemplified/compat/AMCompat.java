@@ -42,13 +42,16 @@ public class AMCompat {
             return fly;
         }
     }
+
     public static Class AMmob(boolean raccoon){
         return raccoon ? EntityRaccoon.class : EntityBlueJay.class;
     }
     public static boolean fly (LivingEntity livingEntity){
         return livingEntity instanceof EntityFly;
     }
-
+    public static boolean tiger (LivingEntity livingEntity){
+        return livingEntity instanceof EntityTiger;
+    }
     public static boolean cockroach (LivingEntity livingEntity){
         return livingEntity instanceof EntityCockroach;
     }

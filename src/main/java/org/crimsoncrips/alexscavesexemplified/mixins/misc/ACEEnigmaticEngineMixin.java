@@ -10,6 +10,7 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.GrassBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
@@ -94,14 +95,17 @@ public abstract class ACEEnigmaticEngineMixin extends BlockEntity {
                 for (int z = -1; z < 2; z++) {
                     BlockPos blockCheck = new BlockPos(blockPos.getX() + x,blockPos.getY() + y,blockPos.getZ() + z);
                     if (y == 0){
-                        if (level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL_PLATE.get())) {
+                        if (level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL_PLATE.get()) || level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL.get())) {
                             scrap.add(blockCheck);
                         }
-                    } else {
-                        if (level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL_PLATE.get()) && ((x == 0 && z == 0) || (x + z == 1 || x + z == -1))) {
+                    } else if (((x == 0 && z == 0) || (x + z == 1 || x + z == -1))){
+                        if ((level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL_PLATE.get()) || level.getBlockState(blockCheck).is(ACBlockRegistry.SCRAP_METAL.get()))) {
                             scrap.add(blockCheck);
                         }
+                    } else if (level.getBlockState(blockCheck).isCollisionShapeFullBlock(level,blockCheck)) {
+                        scrap.clear();
                     }
+
                 }
             }
         }

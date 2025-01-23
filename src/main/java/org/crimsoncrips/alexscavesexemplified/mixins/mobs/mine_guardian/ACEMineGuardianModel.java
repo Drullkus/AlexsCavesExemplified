@@ -35,7 +35,7 @@ public abstract class ACEMineGuardianModel extends AdvancedEntityModel<MineGuard
     @Inject(method = "setupAnim(Lcom/github/alexmodguy/alexscaves/server/entity/living/MineGuardianEntity;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;getCameraEntity()Lnet/minecraft/world/entity/Entity;"),locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void alexsCavesExemplified$setupAnim(MineGuardianEntity entity, float limbSwing, float limbSwingAmount, float ageInTicks, float netHeadYaw, float headPitch, CallbackInfo ci, float partialTicks, float explodeProgress, float scanProgress) {
         MineGuardianXtra accesor = (MineGuardianXtra) entity;
-        if (accesor.alexsCavesExemplified$isNoon()){
+        if (accesor.alexsCavesExemplified$getVariant() == -1){
             ci.cancel();
             eye.setPos(eye.defaultPositionX - 4, eye.defaultPositionY - 2, eye.defaultPositionZ + 2);
         }

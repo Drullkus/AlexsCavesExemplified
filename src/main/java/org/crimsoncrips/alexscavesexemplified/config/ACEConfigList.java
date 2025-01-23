@@ -113,6 +113,9 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue DEEP_WEAKENED_ENABLED;
     public final  ForgeConfigSpec.BooleanValue OVERDRIVED_CONVERSION_ENABLED;
     public final  ForgeConfigSpec.BooleanValue DEFUSION_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue NAVAL_NUCLEARITY_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue LOCATABLE_CAVES_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue CATASTROPHE_ENABLED;
 
 
 
@@ -129,7 +132,7 @@ public class ACEConfigList {
         this.CAVIAL_BONEMEAL_ENABLED = buildBoolean(builder, "CAVIAL_BONEMEAL_ENABLED", " ", true, "Whether it adds new interactions of bone meal with Alex's Cave's flora");
         this.DECIPHERABLE_EXPERIENCE_ENABLED = buildBoolean(builder, "DECIPHERABLE_EXPERIENCE_ENABLED", " ", true, "Whether deciphering tablets give decent xp");
         this.LIQUID_REPLICATION_ENABLED = buildBoolean(builder, "LIQUID_REPLICATION_ENABLED", " ", true, "Whether AC liquids can be renewable");
-
+        this.LOCATABLE_CAVES_ENABLED = buildBoolean(builder, "LOCATABLE_CAVES_ENABLED", " ", false, "Whether AC caves and structures are locatable with Natures/Structure compass");
 
         builder.pop();
         builder.push("Candy Cavity");
@@ -297,8 +300,9 @@ public class ACEConfigList {
         builder.push("Floater");
         builder.pop();
         builder.push("Mine Guardian");
-        this.REMINEDING_ENABLED = buildBoolean(builder, "REMINEDING_ENABLED", " ", true, "Whether mine guardians can be made");
+        this.REMINEDING_ENABLED = buildBoolean(builder, "REMINEDING_ENABLED", " ", true, "Whether mine guardians can be made and owned");
         this.NOON_GUARDIAN_ENABLED = buildBoolean(builder, "NOON_GUARDIAN_ENABLED", " ", true, "Noon variant");
+        this.NAVAL_NUCLEARITY_ENABLED = buildBoolean(builder, "NAVAL_NUCLEARITY_ENABLED", " ", true, "Whether owned Mine Guardians can be turned to nuclear variants with nuclear bombs");
 
         builder.pop();
         builder.push("Sea Pig");
@@ -315,6 +319,7 @@ public class ACEConfigList {
         this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", false, "Allows parrots explode with cookie block");
         this.SWEET_PUNISHMENT_ENABLED = buildBoolean(builder, "SWEET_PUNISHMENT_ENABLED", " ", false, "Punished for too much sweets");
         this.TOUGH_ROACHES_ENABLED = buildBoolean(builder, "TOUGH_ROACHES_ENABLED", " ", false, "Roaches are nuke proof");
+        this.CATASTROPHE_ENABLED = buildBoolean(builder, "CATASTROPHE_ENABLED", " ", false, "dont ever say pspsps to cats");
 
 
     }

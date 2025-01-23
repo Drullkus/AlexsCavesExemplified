@@ -1,7 +1,10 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
 import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
+import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity;
+import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
+import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -10,6 +13,7 @@ import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.monster.Monster;
+import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
@@ -24,7 +28,7 @@ import static com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEnti
 
 
 @Mixin(BrainiacEntity.class)
-public abstract class ACEBrainiac extends Monster implements BrainiacPowered {
+public abstract class ACEBrainiac extends Monster implements BrainiacPowered, TargetsDroppedItems {
 
     protected ACEBrainiac(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
@@ -35,8 +39,18 @@ public abstract class ACEBrainiac extends Monster implements BrainiacPowered {
     private void registerGoals(CallbackInfo ci) {
         BrainiacEntity brainiac = (BrainiacEntity)(Object)this;
         if (ACExemplifiedConfig.WASTE_PICKUP_ENABLED){
-            brainiac.targetSelector.addGoal(1, new ACEPickupDroppedBarrels<>(brainiac,true,true,1,30));
+            brainiac.targetSelector.addGoal(4, new ACEPickupDroppedBarrels<>(brainiac,true));
         }
+    }
+
+    @Override
+    public boolean canTargetItem(ItemStack itemStack) {
+        return itemStack.is(ACBlockRegistry.WASTE_DRUM.get().asItem());
+    }
+
+    @Override
+    public double getMaxDistToItem() {
+        return 8;
     }
 
     @Override
