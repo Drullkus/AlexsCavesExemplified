@@ -7,9 +7,7 @@ import net.minecraftforge.client.event.RegisterParticleProvidersEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
-import org.crimsoncrips.alexscavesexemplified.client.entity.GammaBlockRenderer;
 import org.crimsoncrips.alexscavesexemplified.client.particle.*;
-import org.crimsoncrips.alexscavesexemplified.server.entity.ACEEntityRegistry;
 
 @OnlyIn(Dist.CLIENT)
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, value = Dist.CLIENT)
@@ -18,9 +16,6 @@ public class ACEClientProxy extends ACECommonProxy {
     public void init() {
         IEventBus bus = FMLJavaModLoadingContext.get().getModEventBus();
         bus.addListener(this::setupParticles);
-    }
-    public void clientInit() {
-        EntityRenderers.register(ACEEntityRegistry.GAMMA_BLOCK.get(), GammaBlockRenderer::new);
     }
 
 

@@ -111,6 +111,7 @@ public class ACExemplifiedConfig {
     public static boolean NAVAL_NUCLEARITY_ENABLED;
     public static boolean LOCATABLE_CAVES_ENABLED;
     public static boolean CATASTROPHE_ENABLED;
+    public static boolean BOUNDED_MAGNETISM_ENABLED;
 
 
 
@@ -225,6 +226,7 @@ public class ACExemplifiedConfig {
             NAVAL_NUCLEARITY_ENABLED = ACEConfigHolder.EXEMPLIFIED.NAVAL_NUCLEARITY_ENABLED.get();
             LOCATABLE_CAVES_ENABLED = ACEConfigHolder.EXEMPLIFIED.LOCATABLE_CAVES_ENABLED.get();
             CATASTROPHE_ENABLED = ACEConfigHolder.EXEMPLIFIED.CATASTROPHE_ENABLED.get();
+            BOUNDED_MAGNETISM_ENABLED = ACEConfigHolder.EXEMPLIFIED.BOUNDED_MAGNETISM_ENABLED.get();
 
 
 

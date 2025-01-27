@@ -26,7 +26,6 @@ import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.Gammafied;
-import org.crimsoncrips.alexscavesexemplified.server.entity.GammaBlock;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Final;
@@ -144,15 +143,7 @@ public abstract class ACETremorzillaMixin extends DinosaurEntity implements Gamm
                         lightningBolt.setPos(vec3);
                         level.addFreshEntity(lightningBolt);
                     }
-                    
-                    for (int summonGamma = 0;summonGamma < 2; summonGamma++){
-                        GammaBlock gammaBlock = new GammaBlock(level, this);
-                        gammaBlock.setPos(vec3.add(0,100,0).offsetRandom(random,10));
-                        gammaBlock.setMaxScale(1F + 2F * level.random.nextFloat());
-                        Vec3 targetVec = new Vec3(level.random.nextFloat() - 0.5F, -1, level.random.nextFloat() - 0.5F).normalize().scale(level.random.nextInt(20) + 20);
-                        gammaBlock.shoot(targetVec.x,targetVec.y,targetVec.z, 6, 1 + level.random.nextFloat() * 0.5F);
-                        level.addFreshEntity(gammaBlock);
-                    }
+
                 }
                 beamTime = 0;
                 this.beamServerTarget = null;

@@ -20,6 +20,7 @@ import org.crimsoncrips.alexscavesexemplified.client.event.ACEClientEvents;
 import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistry;
 import org.crimsoncrips.alexscavesexemplified.config.ACEConfigHolder;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.datagen.ACEDatagen;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
 import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.cauldron.ACECauldronInteraction;
@@ -27,7 +28,6 @@ import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;
 import org.crimsoncrips.alexscavesexemplified.server.ACExemplifiedEvents;
 import org.crimsoncrips.alexscavesexemplified.loot.ACELootModifiers;
-import org.crimsoncrips.alexscavesexemplified.server.entity.ACEEntityRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.item.ACEItemRegistry;
 
 import java.util.Locale;
@@ -42,13 +42,15 @@ public class AlexsCavesExemplified {
 
     public AlexsCavesExemplified() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();
+        modEventBus.addListener(ACEDatagen::generateData);
+
+
         modEventBus.addListener(this::onModConfigEvent);
         ACELootModifiers.register(modEventBus);
         ACEEnchants.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACExemplifiedEvents());
         MinecraftForge.EVENT_BUS.register(this);
         ACEParticleRegistry.DEF_REG.register(modEventBus);
-        ACEEntityRegistry.DEF_REG.register(modEventBus);
         ACEBlockRegistry.DEF_REG.register(modEventBus);
         ACEItemRegistry.DEF_REG.register(modEventBus);
         PROXY.init();
@@ -56,7 +58,6 @@ public class AlexsCavesExemplified {
         ACESoundRegistry.DEF_REG.register(modEventBus);
         ACEEffects.POTION_REGISTER.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACEClientEvents());
-        modEventBus.addListener(this::setupClient);
 
         modEventBus.addListener(this::setup);
 
@@ -122,9 +123,6 @@ public class AlexsCavesExemplified {
         }
     }
 
-    private void setupClient(FMLClientSetupEvent event) {
-        event.enqueueWork(PROXY::clientInit);
-    }
 
 
 

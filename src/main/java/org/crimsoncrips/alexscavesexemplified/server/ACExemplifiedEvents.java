@@ -6,8 +6,11 @@ import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
 import com.github.alexmodguy.alexscaves.server.entity.item.MeltedCaramelEntity;
+import com.github.alexmodguy.alexscaves.server.entity.item.MovingMetalBlockEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.*;
+import com.github.alexmodguy.alexscaves.server.entity.util.FallingBlockEntityAccessor;
+import com.github.alexmodguy.alexscaves.server.entity.util.MagnetUtil;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.item.HazmatArmorItem;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
@@ -40,6 +43,7 @@ import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.animal.Parrot;
+import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.monster.warden.Warden;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
@@ -66,6 +70,8 @@ import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.BoundroidMagnetism;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 
@@ -81,7 +87,7 @@ import static net.minecraft.world.entity.EntityType.*;
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, bus = Mod.EventBusSubscriber.Bus.FORGE)
 public class ACExemplifiedEvents {
 
-    private static final AttributeModifier FAST_FALLING = new AttributeModifier(UUID.randomUUID(), "Fast falling acceleration reduction", 0.1, AttributeModifier.Operation.ADDITION); // Add -0.07 to 0.08 so we get the vanilla default of 0.01
+    private static final AttributeModifier FAST_FALLING = new AttributeModifier(UUID.fromString("A5B6CF2A-2F7C-31EF-9022-7C3E7D5E6ABA"), "Fast falling acceleration reduction", 0.1, AttributeModifier.Operation.ADDITION); // Add -0.07 to 0.08 so we get the vanilla default of 0.01
 
     @SubscribeEvent
     public void onEntityFinalizeSpawn(MobSpawnEvent.FinalizeSpawn event) {
@@ -177,7 +183,7 @@ public class ACExemplifiedEvents {
         }
 
 
-        
+
 
     }
 
@@ -388,11 +394,11 @@ public class ACExemplifiedEvents {
     }
 
     @SubscribeEvent
-    public void mobBreathe(LivingBreatheEvent livingTickEvent) {
-        LivingEntity livingEntity = livingTickEvent.getEntity();
+    public void mobBreathe(LivingBreatheEvent breatheEvent) {
+        LivingEntity livingEntity = breatheEvent.getEntity();
         Level level = livingEntity.level();
         if (ACExemplifiedConfig.PRIMORDIAL_OXYGEN_ENABLED && livingEntity instanceof Player player && level.getBiome(player.getOnPos()).is(ACBiomeRegistry.PRIMORDIAL_CAVES)){
-            livingTickEvent.setConsumeAirAmount(livingTickEvent.getConsumeAirAmount() + 2);
+            breatheEvent.setConsumeAirAmount(breatheEvent.getConsumeAirAmount() + 2);
         }
 
         if (ACExemplifiedConfig.ABYSSAL_CRUSH_ENABLED && livingEntity instanceof Player player && level.getBiome(player.blockPosition()).is(ACBiomeRegistry.ABYSSAL_CHASM)){
@@ -406,7 +412,7 @@ public class ACExemplifiedEvents {
             int diving = getDivingAmount(livingEntity);
             if (level.random.nextDouble() < (0.1 - (0.020 * diving))){
                 if (aboveWater > 50 && diving < 10){
-                    livingTickEvent.setConsumeAirAmount(livingTickEvent.getConsumeAirAmount() + (int) (0.025 * (aboveWater - 40)));
+                    breatheEvent.setConsumeAirAmount(breatheEvent.getConsumeAirAmount() + (int) (0.025 * (aboveWater - 40)));
                 }
             }
 
@@ -425,6 +431,7 @@ public class ACExemplifiedEvents {
             Vec3 particlePos = livingEntity.position().add((level.random.nextFloat() - 0.5F) * 2.5F, 0F, (level.random.nextFloat() - 0.5F) * 2.5F);
             level.addParticle(ACParticleRegistry.PROTON.get(), particlePos.x, particlePos.y, particlePos.z, livingEntity.getX(), livingEntity.getY(0.5F), livingEntity.getZ());
         }
+
 
         if (livingEntity instanceof SeaPigEntity seaPigEntity && level.random.nextDouble() < 0.01 && ACExemplifiedConfig.POISONOUS_SKIN_ENABLED) {
             for (LivingEntity entity : seaPigEntity.level().getEntitiesOfClass(LivingEntity.class, seaPigEntity.getBoundingBox().inflate(0.5))) {

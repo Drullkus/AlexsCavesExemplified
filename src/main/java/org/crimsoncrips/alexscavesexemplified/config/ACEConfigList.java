@@ -116,6 +116,7 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue NAVAL_NUCLEARITY_ENABLED;
     public final  ForgeConfigSpec.BooleanValue LOCATABLE_CAVES_ENABLED;
     public final  ForgeConfigSpec.BooleanValue CATASTROPHE_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue BOUNDED_MAGNETISM_ENABLED;
 
 
 
@@ -188,8 +189,8 @@ public class ACEConfigList {
         builder.push("Licowitch");
         this.LICOWITCH_VENGEANCE_ENABLED = buildBoolean(builder, "LICOWITCH_VENGEANCE_ENABLED", " ", true, "Whether licowitches attack villagers and iron golems");
         builder.pop();
-        
-        
+
+
 
         builder.pop();
         builder.push("Forlorn Hollows");
@@ -289,6 +290,10 @@ public class ACEConfigList {
         this.HEAVY_GRAVITY_ENABLED = buildBoolean(builder, "HEAVY_GRAVITY_ENABLED", " ", true, "Entities holding heavy-weight item will increase falling speed");
         this.SHOCKING_THERAPY_ENABLED = buildBoolean(builder, "SHOCKING_THERAPY_ENABLED", " ", true, "Tesla bulbs rarely directly shock nearby intruders");
         this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command & Conquer");
+
+        builder.push("Boundroid");
+        this.BOUNDED_MAGNETISM_ENABLED = buildBoolean(builder, "BOUNDED_MAGNETISM_ENABLED", " ", true, "Boundroid attracts magnetic items");
+        builder.pop();
         builder.pop();
 
         builder.push("Abyssal Chasm");
@@ -296,9 +301,6 @@ public class ACEConfigList {
         this.ECOLOGICAL_REPUTATION_ENABLED = buildBoolean(builder, "ECOLOGICAL_REPUTATION_ENABLED", " ", true, "Whether messing with the ecosystem reduces deep one reputation");
         this.ABYSSAL_LIGHT_CHECK_ENABLED = buildBoolean(builder, "ABYSSAL_LIGHT_CHECK_ENABLED", " ", true, "Whether abyssal mobs interact with entities holding light");
         this.DEEP_WEAKENED_ENABLED = buildBoolean(builder, "DEEP_WEAKENED_ENABLED", " ", true, "Whether deep ones wilt when outside of abyssal chasm");
-
-        builder.push("Floater");
-        builder.pop();
         builder.push("Mine Guardian");
         this.REMINEDING_ENABLED = buildBoolean(builder, "REMINEDING_ENABLED", " ", true, "Whether mine guardians can be made and owned");
         this.NOON_GUARDIAN_ENABLED = buildBoolean(builder, "NOON_GUARDIAN_ENABLED", " ", true, "Noon variant");

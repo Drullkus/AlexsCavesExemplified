@@ -54,7 +54,7 @@ public abstract class ACEMineRendererRenderMixin extends RenderLayer<MineGuardia
         }
 
         VertexConsumer ivertexbuilder4 = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(accesor.alexsCavesExemplified$getVariant() > 0 ? TEXTURE_NUCLEAR_EXPLODE : TEXTURE_EXPLODE));
-        ((MineGuardianModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder4, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F,accesor.alexsCavesExemplified$getVariant() > 0 ? explodeProgress / 3 : explodeProgress);
+        ((MineGuardianModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder4, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, explodeProgress);
 
 
         if (accesor.alexsCavesExemplified$getVariant() == 1) {
