@@ -16,7 +16,7 @@ import java.util.concurrent.CompletableFuture;
 
 @Mod.EventBusSubscriber(modid = AlexsCavesExemplified.MODID, bus = Mod.EventBusSubscriber.Bus.MOD)
 public class ACEDatagen {
-    @SubscribeEvent
+
     public static void generateData(GatherDataEvent event) {
         boolean isServer = event.includeServer();
         DataGenerator generator = event.getGenerator();
