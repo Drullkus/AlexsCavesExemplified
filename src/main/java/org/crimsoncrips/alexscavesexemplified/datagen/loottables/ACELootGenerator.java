@@ -14,7 +14,7 @@ public class ACELootGenerator extends LootTableProvider  {
     //Props to Drull and TF for assistance//
     public ACELootGenerator(PackOutput output) {
         super(output, ACELootTables.allBuiltin(), List.of(
-                new LootTableProvider.SubProviderEntry(ACEManualLoot::new, LootContextParamSets.EMPTY)
+                new LootTableProvider.SubProviderEntry(ACEManualLoot::new, LootContextParamSets.PIGLIN_BARTER)
         ));
     }
 

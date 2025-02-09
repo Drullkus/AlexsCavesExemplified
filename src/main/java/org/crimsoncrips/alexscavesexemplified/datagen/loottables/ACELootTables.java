@@ -33,6 +33,7 @@ public class ACELootTables {
 	private static final Set<ResourceLocation> ACE_LOOT_TABLES = Sets.newHashSet();
 
 
+
 	public static final ResourceLocation UNDERZEALOT_TRADE = register("entities/trade");
 
 	public final ResourceLocation lootTable;

@@ -73,6 +73,7 @@ import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.datagen.ACEFeatures;
+import org.crimsoncrips.alexscavesexemplified.datagen.loottables.ACELootTables;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.NucleeperXtra;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
@@ -209,34 +210,40 @@ public class ACExemplifiedEvents {
             }
         }
 
-        if (target instanceof UnderzealotEntity underzealot) {
-            for (Mob leashedEntities : level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(10))) {
-                if (leashedEntities.getLeashHolder() == player &&  leashedEntities instanceof UnderzealotSacrifice) {
-                    if (underzealot.getPassengers().isEmpty() && !underzealot.isPraying()){
-                        leashedEntities.dropLeash(true,true);
-                        leashedEntities.startRiding(underzealot);
+        if (target instanceof UnderzealotEntity underzealot && level instanceof ServerLevel serverLevel) {
 
-                        boolean respect = (player.getItemBySlot(EquipmentSlot.CHEST).is(ACItemRegistry.CLOAK_OF_DARKNESS.get()) && player.getItemBySlot(EquipmentSlot.HEAD).is(ACItemRegistry.HOOD_OF_DARKNESS.get()));
-                        if (AlexsCavesExemplified.COMMON_CONFIG.UNDERZEALOT_RESPECT_ENABLED.get() && level instanceof ServerLevel serverLevel){
+            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/trade");
 
+            LootParams ctx = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, underzealot).create(LootContextParamSets.PIGLIN_BARTER);
+            ObjectArrayList<ItemStack> rewards = level.getServer().getLootData().getLootTable(sacrificeLocation).getRandomItems(ctx);
 
-                            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/trade.json");
-                            LootTable loottable = level.getServer().getLootData().getLootTable(sacrificeLocation);
-                            ObjectArrayList<ItemStack> items = loottable.getRandomItems((new LootParams.Builder(serverLevel)).create(LootContextParamSets.EMPTY));
+            rewards.forEach(stack -> underzealot.spawnAtLocation(stack, 1.0F));
 
 
-                            if (!items.isEmpty()){
-                                System.out.println("TEST");
-                                for (ItemStack itemstack : items) {
-                                    BehaviorUtils.throwItem(underzealot, itemstack, player.position().add(0.0D, 1.0D, 0.0D));
-                                }
-                            }
-                        } else {
-
-                        }
-                    }
-                }
-            }
+//            for (Mob leashedEntities : level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(10))) {
+//                if (leashedEntities.getLeashHolder() == player &&  leashedEntities instanceof UnderzealotSacrifice) {
+//                    if (underzealot.getPassengers().isEmpty() && !underzealot.isPraying()){
+//                        leashedEntities.dropLeash(true,true);
+//                        leashedEntities.startRiding(underzealot);
+//
+//                        boolean respect = (player.getItemBySlot(EquipmentSlot.CHEST).is(ACItemRegistry.CLOAK_OF_DARKNESS.get()) && player.getItemBySlot(EquipmentSlot.HEAD).is(ACItemRegistry.HOOD_OF_DARKNESS.get()));
+//                        if (AlexsCavesExemplified.COMMON_CONFIG.UNDERZEALOT_RESPECT_ENABLED.get() && level instanceof ServerLevel serverLevel){
+//
+//
+//                            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/trade");
+//                            LootTable loottable = level.getServer().getLootData().getLootTable(sacrificeLocation);
+//                            ObjectArrayList<ItemStack> items = loottable.getRandomItems((new LootParams.Builder(serverLevel)).create(LootContextParamSets.EMPTY));
+//
+//
+//                            if (!items.isEmpty()){
+//                                BehaviorUtils.throwItem(underzealot, items.get(0), player.position().add(0.0D, 1.0D, 0.0D));
+//                            }
+//                        } else {
+//
+//                        }
+//                    }
+//                }
+//            }
         }
 
         if (AlexsCavesExemplified.COMMON_CONFIG.GLUTTONY_ENABLED.get() && player.isCrouching()) {
