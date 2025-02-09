@@ -1,28 +1,15 @@
 package org.crimsoncrips.alexscavesexemplified.server.goals;
 
-import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetItemGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.TremorsaurusEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.VallumraptorEntity;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
-import com.google.common.base.Predicate;
-import net.minecraft.commands.arguments.EntityAnchorArgument;
-import net.minecraft.core.BlockPos;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Mob;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.TamableAnimal;
-import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.item.ItemEntity;
-import net.minecraft.world.item.ItemStack;
-import net.minecraft.world.level.LevelReader;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.AABB;
-import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.TremorConsumption;
 
-import javax.annotation.Nullable;
 import java.util.Collections;
 import java.util.List;
 
@@ -70,7 +57,7 @@ public class ACETremorDroppedEatBlock extends MobTargetItemGoal {
                     tremorsaurus.heal(4);
                     tremorsaurus.playSound(ACSoundRegistry.TREMORSAURUS_BITE.get(), 1F, 1F);
                     targetEntity.kill();
-                    if (ACExemplifiedConfig.SEETHED_TAMING_ENABLED && tremorsaurus.level().getRandom().nextDouble() < 0.08) {
+                    if (AlexsCavesExemplified.COMMON_CONFIG.SEETHED_TAMING_ENABLED.get() && tremorsaurus.level().getRandom().nextDouble() < 0.08) {
                         tickAccesor.alexsCavesExemplified$setSeethed(true);
                     }
                 }

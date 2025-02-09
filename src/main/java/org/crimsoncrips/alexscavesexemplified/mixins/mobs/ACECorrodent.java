@@ -2,16 +2,13 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
-import com.github.alexmodguy.alexscaves.server.entity.ai.MobTargetItemGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.TremorsaurusEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
 import com.github.alexmodguy.alexscaves.server.entity.util.UnderzealotSacrifice;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
 import com.mojang.datafixers.util.Pair;
-import net.minecraft.world.InteractionHand;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,9 +21,9 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEKnawingGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -55,12 +52,12 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         CorrodentEntity corrodent = (CorrodentEntity)(Object)this;
-        if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get()){
             corrodent.targetSelector.addGoal(2, new MobTarget3DGoal(corrodent, Player.class, false,10, livingEntity -> {
                 return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && (livingEntity instanceof Player player && !CuriosCompat.hasLight(player));
             }));
         }
-        if (ACExemplifiedConfig.KNAWING_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.KNAWING_ENABLED.get()){
             corrodent.targetSelector.addGoal(1, new ACEKnawingGoal(corrodent, false));
         }
 
@@ -74,14 +71,14 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
 
     @Override
     public boolean isValidSacrifice(int distanceFromGround) {
-        return ACExemplifiedConfig.CORRODENT_CONVERSION_ENABLED && this.getHealth() <= 0.50F * this.getMaxHealth() ;
+        return AlexsCavesExemplified.COMMON_CONFIG.CORRODENT_CONVERSION_ENABLED.get() && this.getHealth() <= 0.50F * this.getMaxHealth() ;
     }
 
 
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
-        if (isBeingSacrificed && this.isPassenger() && !level().isClientSide && ACExemplifiedConfig.CORRODENT_CONVERSION_ENABLED) {
+        if (isBeingSacrificed && this.isPassenger() && !level().isClientSide && AlexsCavesExemplified.COMMON_CONFIG.CORRODENT_CONVERSION_ENABLED.get()) {
             sacrificeTime--;
             if (sacrificeTime < 10) {
                 this.level().broadcastEntityEvent(this, (byte) 61);
@@ -103,7 +100,7 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
         }
 
         LivingEntity target = this.getTarget();
-        if (ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED && target != this.getLastAttacker() && target != null) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get() && target != this.getLastAttacker() && target != null) {
             if (CuriosCompat.hasLight(target)) {
                 this.setTarget(null);
             }
@@ -113,7 +110,7 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 8))
     private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
-        return !ACExemplifiedConfig.FORLORN_LIGHT_EFFECT_ENABLED;
+        return !AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get();
     }
 
     @Override

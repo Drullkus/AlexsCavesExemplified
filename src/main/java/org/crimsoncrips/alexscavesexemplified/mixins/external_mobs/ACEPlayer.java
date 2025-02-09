@@ -1,30 +1,23 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.external_mobs;
 
 import com.github.alexmodguy.alexscaves.AlexsCaves;
-import com.github.alexmodguy.alexscaves.server.entity.living.CaniacEntity;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.message.WorldEventMessage;
-import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
-import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
-import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
-import net.minecraft.world.damagesource.DamageSource;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.server.ACEDamageTypes;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -60,7 +53,7 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
             lastAte[0] = pFood.getItem();
         }
 
-        if (ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.OVERTUNED_CONSUMPTION_ENABLED.get()) {
             if (pFood.is(ACItemRegistry.SHARPENED_CANDY_CANE.get())) {
                 this.hurt(this.damageSources().generic(), 1);
             }
@@ -97,7 +90,7 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
         Player player = (Player)(Object)this;
         Level level = this.level();
 
-        if (lastAte[0] != null && lastAte[1] != null && ACExemplifiedConfig.OVERTUNED_CONSUMPTION_ENABLED) {
+        if (lastAte[0] != null && lastAte[1] != null && AlexsCavesExemplified.COMMON_CONFIG.OVERTUNED_CONSUMPTION_ENABLED.get()) {
             String[] foodItems = {"purple_soda_bottle", "frostmint"};
             String firstFood = foodItems[random.nextInt(0, 2)];
             if (lastAte[0].toString().equals(firstFood) && lastAte[1].toString().equals(foodItems[random.nextInt(0, 2)]) && !lastAte[1].toString().equals(firstFood)) {
@@ -118,7 +111,7 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
 
 
     private void sweetCounter(int value){
-        if (ACExemplifiedConfig.SWEET_PUNISHMENT_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.SWEET_PUNISHMENT_ENABLED.get()) {
             sweets = sweets + value;
             if (sweets == 8 && this.level().isClientSide) {
                 if (this.level().getRandom().nextBoolean()) {

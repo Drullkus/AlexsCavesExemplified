@@ -4,16 +4,13 @@ import com.github.alexmodguy.alexscaves.client.model.TeslaBulbModel;
 import com.github.alexmodguy.alexscaves.client.render.ACRenderTypes;
 import com.github.alexmodguy.alexscaves.client.render.blockentity.TelsaBulbBlockRenderer;
 import com.github.alexmodguy.alexscaves.server.block.blockentity.TeslaBulbBlockEntity;
-import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
-import net.minecraft.client.model.geom.ModelPart;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.Entity;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.TeslaCharge;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -35,7 +32,7 @@ public abstract class ACETeslaBulbRenderMixin<T extends TeslaBulbBlockEntity> im
 
     @Inject(method = "render(Lcom/github/alexmodguy/alexscaves/server/block/blockentity/TeslaBulbBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/client/model/TeslaBulbModel;setupAnim(Lnet/minecraft/world/entity/Entity;FFFFF)V"), cancellable = true)
     private void alexsCavesExemplified$render(T teslaBulb, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, CallbackInfo ci, @Local(ordinal = 1) float r, @Local(ordinal = 2) float g, @Local(ordinal = 3) float b) {
-        if(ACExemplifiedConfig.TESLA_COILED_ENABLED){
+        if(AlexsCavesExemplified.COMMON_CONFIG.TESLA_COILED_ENABLED.get()){
             ci.cancel();
             MODEL.setupAnim((Entity)null, 0.0F, teslaBulb.getExplodeProgress(partialTicks), (float)teslaBulb.age + partialTicks, 0.0F, 0.0F);
             int charge = ((TeslaCharge)teslaBulb).getCharge();
@@ -46,7 +43,7 @@ public abstract class ACETeslaBulbRenderMixin<T extends TeslaBulbBlockEntity> im
 
     @Inject(method = "render(Lcom/github/alexmodguy/alexscaves/server/block/blockentity/TeslaBulbBlockEntity;FLcom/mojang/blaze3d/vertex/PoseStack;Lnet/minecraft/client/renderer/MultiBufferSource;II)V", at = @At(value = "HEAD"),remap = false)
     private void alexsCavesExemplified$render1(T teslaBulb, float partialTicks, PoseStack poseStack, MultiBufferSource bufferIn, int combinedLightIn, int combinedOverlayIn, CallbackInfo ci) {
-        if(ACExemplifiedConfig.TESLA_COILED_ENABLED){
+        if(AlexsCavesExemplified.COMMON_CONFIG.TESLA_COILED_ENABLED.get()){
             poseStack.clear();
 
         }

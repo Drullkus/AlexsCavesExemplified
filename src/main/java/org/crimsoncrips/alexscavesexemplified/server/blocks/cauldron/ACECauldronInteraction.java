@@ -1,15 +1,12 @@
 package org.crimsoncrips.alexscavesexemplified.server.blocks.cauldron;
 
-import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
-import com.google.common.collect.Maps;
 import it.unimi.dsi.fastutil.objects.Object2ObjectOpenHashMap;
 import java.util.Map;
 import java.util.function.Predicate;
 import net.minecraft.Util;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.sounds.SoundEvent;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
@@ -18,24 +15,15 @@ import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.item.DyeableLeatherItem;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.ItemUtils;
 import net.minecraft.world.item.Items;
-import net.minecraft.world.item.alchemy.PotionUtils;
-import net.minecraft.world.item.alchemy.Potions;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
-import net.minecraft.world.level.block.ShulkerBoxBlock;
-import net.minecraft.world.level.block.entity.BannerBlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
-import org.crimsoncrips.alexscavesexemplified.server.item.ACEItemRegistry;
 
 public interface ACECauldronInteraction {
     Map<Item, ACECauldronInteraction> EMPTY = newInteractionMap();
@@ -60,7 +48,7 @@ public interface ACECauldronInteraction {
 
     static void bootStrap() {
         addDefaultInteractions(EMPTY);
-        if (ACExemplifiedConfig.LIQUID_REPLICATION_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.LIQUID_REPLICATION_ENABLED.get()) {
             EMPTY.put(ACItemRegistry.PURPLE_SODA_BOTTLE.get(), (p_175732_, p_175733_, p_175734_, p_175735_, p_175736_, p_175737_) -> {
                 if (!p_175733_.isClientSide) {
                     p_175735_.setItemInHand(p_175736_, ItemUtils.createFilledResult(p_175737_, p_175735_, new ItemStack(Items.GLASS_BOTTLE)));

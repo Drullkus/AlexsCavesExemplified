@@ -5,7 +5,7 @@ import com.github.alexmodguy.alexscaves.server.entity.living.TremorzillaEntity;
 import com.github.alexthe666.citadel.animation.Animation;
 import com.github.alexthe666.citadel.client.model.AdvancedEntityModel;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.Gammafied;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
@@ -28,7 +28,7 @@ public abstract class ACETremorzillaModelMixin extends AdvancedEntityModel<Tremo
     private float onlyFlyIfAllowed(float original) {
         Gammafied myAccessor = (Gammafied) tremorzilla;
         if (myAccessor != null) {
-            return ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && myAccessor.isAnimationBeaming() ? (float) (original * 0.1) : original;
+            return AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && myAccessor.isAnimationBeaming() ? (float) (original * 0.1) : original;
         } return original;
     }
 

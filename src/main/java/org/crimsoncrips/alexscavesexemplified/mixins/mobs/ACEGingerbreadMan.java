@@ -4,7 +4,7 @@ import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntit
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEHurtByTargetGoal;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -23,12 +23,12 @@ public abstract class ACEGingerbreadMan extends Monster {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         GingerbreadManEntity gingerbreadMan = (GingerbreadManEntity)(Object)this;
-        if (ACExemplifiedConfig.HIVE_MIND_ENABLED) gingerbreadMan.targetSelector.addGoal(1, (new ACEHurtByTargetGoal(gingerbreadMan)).setAlertOthers(new Class[0]));
+        if (AlexsCavesExemplified.COMMON_CONFIG.HIVE_MIND_ENABLED.get()) gingerbreadMan.targetSelector.addGoal(1, (new ACEHurtByTargetGoal(gingerbreadMan)).setAlertOthers(new Class[0]));
     }
 
     @Override
     public boolean isSensitiveToWater() {
-        return ACExemplifiedConfig.GINGER_DISINTEGRATE_ENABLED;
+        return AlexsCavesExemplified.COMMON_CONFIG.GINGER_DISINTEGRATE_ENABLED.get();
     }
 
 

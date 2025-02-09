@@ -5,7 +5,7 @@ import net.minecraft.client.model.FrogModel;
 import net.minecraft.client.model.HierarchicalModel;
 import net.minecraft.world.entity.animal.frog.Frog;
 import net.minecraft.world.level.block.Block;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -21,7 +21,7 @@ public abstract class ACEModelFrog<T extends Frog> extends HierarchicalModel<T> 
     @Inject(method = "setupAnim(Lnet/minecraft/world/entity/animal/frog/Frog;FFFFF)V", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/model/FrogModel;animate(Lnet/minecraft/world/entity/AnimationState;Lnet/minecraft/client/animation/AnimationDefinition;F)V",ordinal = 0),cancellable = true)
     private void tick(T frog, float pLimbSwing, float pLimbSwingAmount, float pAgeInTicks, float pNetHeadYaw, float pHeadPitch, CallbackInfo ci) {
         Block block = frog.level().getBlockState(frog.blockPosition()).getBlock();
-        if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && frog.isNoAi() && block == ACBlockRegistry.AMBER.get()) ci.cancel();
+        if (AlexsCavesExemplified.COMMON_CONFIG.PRESERVED_AMBER_ENABLED.get() && frog.isNoAi() && block == ACBlockRegistry.AMBER.get()) ci.cancel();
     }
 
 

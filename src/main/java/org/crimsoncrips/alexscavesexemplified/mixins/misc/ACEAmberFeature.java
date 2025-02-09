@@ -17,8 +17,8 @@ import net.minecraft.world.level.levelgen.feature.Feature;
 import net.minecraft.world.level.levelgen.feature.configurations.NoneFeatureConfiguration;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.fml.ModList;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -37,7 +37,7 @@ public abstract class ACEAmberFeature extends Feature<NoneFeatureConfiguration> 
 
     @Inject(method = "drawOrb", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/WorldGenLevel;setBlock(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;I)Z"))
     private static void drawOrb(WorldGenLevel level, BlockPos center, RandomSource random, BlockState blockState, int radiusX, int radiusY, int radiusZ, CallbackInfo ci, @Local(ordinal = 1) BlockPos fill) {
-        if (random.nextDouble() < 0.02 && ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && level.ensureCanWrite(fill) && level.ensureCanWrite(center)) {
+        if (random.nextDouble() < 0.02 && AlexsCavesExemplified.COMMON_CONFIG.PRESERVED_AMBER_ENABLED.get() && level.ensureCanWrite(fill) && level.ensureCanWrite(center)) {
             ServerLevel servLevel = level.getLevel();
             switch (random.nextInt(0, 4)) {
                 case 0:

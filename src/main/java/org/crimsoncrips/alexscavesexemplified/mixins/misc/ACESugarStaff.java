@@ -13,7 +13,6 @@ import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.sounds.SoundEvent;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResultHolder;
@@ -31,7 +30,7 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 
 
@@ -49,7 +48,7 @@ public abstract class ACESugarStaff extends Item {
             player.swing(hand);
             Entity lookingAtEntity = SeaStaffItem.getClosestLookingAtEntityFor(level, player, (double)32.0F);
 
-            if (player.getItemInHand(InteractionHand.OFF_HAND).is(ACItemRegistry.RADIANT_ESSENCE.get()) && ACExemplifiedConfig.RADIANT_WRATH_ENABLED){
+            if (player.getItemInHand(InteractionHand.OFF_HAND).is(ACItemRegistry.RADIANT_ESSENCE.get()) && AlexsCavesExemplified.COMMON_CONFIG.RADIANT_WRATH_ENABLED.get()){
                 if(hex){
                     int humunguous = itemstack.getEnchantmentLevel(ACEnchantmentRegistry.HUMUNGOUS_HEX.get());
 

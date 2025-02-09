@@ -3,10 +3,7 @@ package org.crimsoncrips.alexscavesexemplified.server.blocks.cauldron;
 import java.util.Map;
 
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
-import com.github.alexmodguy.alexscaves.server.block.ACSoundTypes;
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
-import net.minecraft.core.cauldron.CauldronInteraction;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.InteractionHand;
@@ -18,21 +15,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.PointedDripstoneBlock;
 import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.level.material.Fluid;
-import net.minecraft.world.level.material.Fluids;
-import net.minecraft.world.level.material.MapColor;
 import net.minecraft.world.level.pathfinder.PathComputationType;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.BooleanOp;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
-import org.jetbrains.annotations.NotNull;
 
 public class ACECauldron extends Block {
     private static final int SIDE_THICKNESS = 2;
@@ -70,7 +62,7 @@ public class ACECauldron extends Block {
 
     @Override
     public void randomTick(BlockState pState, ServerLevel pLevel, BlockPos pPos, RandomSource pRandom) {
-        if (!ACExemplifiedConfig.LIQUID_REPLICATION_ENABLED)
+        if (!AlexsCavesExemplified.COMMON_CONFIG.LIQUID_REPLICATION_ENABLED.get())
             return;
         BlockPos blockAbove = pPos.above();
         while (pLevel.getBlockState(blockAbove).isAir() && blockAbove.getY() < pLevel.getMaxBuildHeight()) {

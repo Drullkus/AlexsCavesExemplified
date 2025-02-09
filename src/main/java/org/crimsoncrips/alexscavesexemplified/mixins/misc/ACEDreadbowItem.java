@@ -19,13 +19,11 @@ import net.minecraft.world.item.enchantment.Enchantments;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
-
-import java.util.Properties;
 
 import static com.github.alexmodguy.alexscaves.server.item.DreadbowItem.*;
 
@@ -78,7 +76,7 @@ public abstract class ACEDreadbowItem extends ProjectileWeaponItem {
                             double power = 1;
                             int punch = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, itemStack);
                             boolean flaming = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, itemStack) == 1;
-                            if (ACExemplifiedConfig.VANILLA_ADAPTIONS_ENABLED){
+                            if (AlexsCavesExemplified.COMMON_CONFIG.VANILLA_ADAPTIONS_ENABLED.get()){
                                 if (powerLevel > 0){
                                     power = (powerLevel * 0.5 + 0.5) * 0.5;
                                 }
@@ -145,7 +143,7 @@ public abstract class ACEDreadbowItem extends ProjectileWeaponItem {
     public void onUseTick(Level level, LivingEntity living, ItemStack itemStack, int timeUsing) {
         super.onUseTick(level, living, itemStack, timeUsing);
         if (living instanceof Player player) {
-            int delay = (ACExemplifiedConfig.RATATATATATA_ENABLED) ? 1 : 3;
+            int delay = (AlexsCavesExemplified.COMMON_CONFIG.RATATATATATA_ENABLED.get()) ? 1 : 3;
             if (itemStack.getEnchantmentLevel(ACEnchantmentRegistry.RELENTLESS_DARKNESS.get()) > 0 && timeUsing % delay == 0) {
                 boolean respite = itemStack.getEnchantmentLevel(ACEnchantmentRegistry.SHADED_RESPITE.get()) > 0 && !DarknessIncarnateEffect.isInLight(living, 11);
                 player.playSound(ACSoundRegistry.DREADBOW_RELEASE.get());
@@ -165,7 +163,7 @@ public abstract class ACEDreadbowItem extends ProjectileWeaponItem {
                     double power = 1;
                     int punch = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, itemStack);
                     boolean flaming = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, itemStack) == 1;
-                    if (ACExemplifiedConfig.VANILLA_ADAPTIONS_ENABLED){
+                    if (AlexsCavesExemplified.COMMON_CONFIG.VANILLA_ADAPTIONS_ENABLED.get()){
                         if (powerLevel > 0){
                             power = (powerLevel * 0.5 + 0.5) * 0.5;
                         }
@@ -208,7 +206,7 @@ public abstract class ACEDreadbowItem extends ProjectileWeaponItem {
         double power = 1;
         int punch = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.PUNCH_ARROWS, bowStack);
         boolean flaming = EnchantmentHelper.getItemEnchantmentLevel(Enchantments.FLAMING_ARROWS, bowStack) == 1;
-        if (ACExemplifiedConfig.VANILLA_ADAPTIONS_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.VANILLA_ADAPTIONS_ENABLED.get()){
             if (powerLevel > 0){
                 power = (powerLevel * 0.5 + 0.5) * 0.5;
             }
@@ -230,7 +228,7 @@ public abstract class ACEDreadbowItem extends ProjectileWeaponItem {
     @Unique
     private static int loadTime(ItemStack stack) {
         if(stack.getEnchantmentLevel(ACEnchantmentRegistry.RELENTLESS_DARKNESS.get()) > 0){
-            return ACExemplifiedConfig.RATATATATATA_ENABLED ?  1 : 5;
+            return AlexsCavesExemplified.COMMON_CONFIG.RATATATATATA_ENABLED.get() ?  1 : 5;
         }else{
             return 40 - 8 * stack.getEnchantmentLevel(ACEnchantmentRegistry.DARK_NOCK.get());
         }

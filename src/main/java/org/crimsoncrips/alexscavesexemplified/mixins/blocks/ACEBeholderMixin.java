@@ -13,7 +13,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.ACEReflectionUtil;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,7 +38,7 @@ public class ACEBeholderMixin extends BlockEntity {
     @Inject(method = "tick", at = @At(value = "INVOKE_ASSIGN", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/BeholderBlockEntity;getUsingEntity()Lnet/minecraft/world/entity/Entity;"), cancellable = true,remap = false)
     private static void alexsCavesExemplified$tick(Level level, BlockPos blockPos, BlockState state, BeholderBlockEntity entity, CallbackInfo ci) {
 
-        if (ACExemplifiedConfig.BEHOLDENT_STALKING_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.BEHOLDENT_STALKING_ENABLED.get()) {
             ci.cancel();
 
             List<Player> list = level.getEntitiesOfClass(Player.class, new AABB(blockPos.offset(-5, -5, -5), blockPos.offset(5, 5, 5)));

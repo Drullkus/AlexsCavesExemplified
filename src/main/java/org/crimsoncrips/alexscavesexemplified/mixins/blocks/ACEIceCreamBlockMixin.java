@@ -10,7 +10,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.item.ACEItemRegistry;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -30,7 +30,7 @@ public class ACEIceCreamBlockMixin extends Block {
     }
 
     public void attemptIcecreamSpawn(Level level, BlockPos blockPos){
-        if (level.getBlockState(blockPos).getBlock() instanceof IceCreamBlock && ACExemplifiedConfig.ICE_CREAM_CONE_ENABLED){
+        if (level.getBlockState(blockPos).getBlock() instanceof IceCreamBlock && AlexsCavesExemplified.COMMON_CONFIG.ICE_CREAM_CONE_ENABLED.get()){
             Block topIcecream = level.getBlockState(blockPos).getBlock();
 
             if (level.getBlockState(blockPos.below(1)).is(topIcecream))

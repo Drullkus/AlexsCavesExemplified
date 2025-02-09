@@ -3,11 +3,9 @@ package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 import com.github.alexmodguy.alexscaves.AlexsCaves;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.enchantment.ACEnchantmentRegistry;
-import com.github.alexmodguy.alexscaves.server.entity.living.TremorzillaEntity;
 import com.github.alexmodguy.alexscaves.server.item.HazmatArmorItem;
 import com.github.alexmodguy.alexscaves.server.item.RaygunItem;
 import com.github.alexmodguy.alexscaves.server.message.UpdateEffectVisualityEntityMessage;
-import com.github.alexmodguy.alexscaves.server.misc.ACDamageTypes;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import net.minecraft.core.BlockPos;
@@ -18,7 +16,6 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.projectile.ProjectileUtil;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
@@ -29,8 +26,7 @@ import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.common.Tags;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -55,7 +51,7 @@ public abstract class ACERaygunMixin extends Item {
         float time = i < 15 ? i / (float) 15 : 1F;
         HitResult realHitResult = ProjectileUtil.getHitResultOnViewVector(living, Entity::canBeHitByProjectile, 25.0F * time);
 
-        if(stack.getEnchantmentLevel(ACEnchantmentRegistry.X_RAY.get()) <= 0 && ACExemplifiedConfig.RERAYGUNNED_ENABLED){
+        if(stack.getEnchantmentLevel(ACEnchantmentRegistry.X_RAY.get()) <= 0 && AlexsCavesExemplified.COMMON_CONFIG.RERAYGUNNED_ENABLED.get()){
             if (realHitResult instanceof BlockHitResult blockHitResult) {
                 BlockPos pos = blockHitResult.getBlockPos();
                 if (stack.getEnchantmentLevel(ACEnchantmentRegistry.GAMMA_RAY.get()) > 0) {
@@ -92,7 +88,7 @@ public abstract class ACERaygunMixin extends Item {
 
     @Inject(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;getType()Lnet/minecraft/world/entity/EntityType;"),locals = LocalCapture.CAPTURE_FAILHARD, cancellable = true)
     private void hazmatReduce(Level level, LivingEntity living, ItemStack stack, int timeUsing, CallbackInfo ci, int i, int realStart, float time, float maxDist, boolean xRay, HitResult realHitResult, HitResult blockOnlyHitResult, Vec3 xRayVec, Vec3 vec3, Vec3 vec31, float deltaX, float deltaY, float deltaZ, boolean gamma, ParticleOptions particleOptions, Direction blastHitDirection, Vec3 blastHitPos, AABB hitBox, int radiationLevel, Iterator var24, Entity entity, boolean flag, LivingEntity livingEntity) {
-          if (ACExemplifiedConfig.HAZMAT_AMPLIFIED_ENABLED){
+          if (AlexsCavesExemplified.COMMON_CONFIG.HAZMAT_AMPLIFIED_ENABLED.get()){
               ci.cancel();
               int hazmatLevel = HazmatArmorItem.getWornAmount(livingEntity);
               if (!livingEntity.getType().is(ACTagRegistry.RESISTS_RADIATION) && livingEntity.addEffect(new MobEffectInstance((MobEffect) ACEffectRegistry.IRRADIATED.get(), 800 / (hazmatLevel > 0 ? (hazmatLevel + 1) - radiationLevel : 1),radiationLevel - hazmatLevel + (gamma ? 2 : 0)))) {

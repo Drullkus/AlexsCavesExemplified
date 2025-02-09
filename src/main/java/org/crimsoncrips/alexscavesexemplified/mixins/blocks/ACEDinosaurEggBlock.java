@@ -12,7 +12,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraftforge.registries.RegistryObject;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -29,7 +29,7 @@ public class ACEDinosaurEggBlock {
 
     @Inject(method = "playerDestroy", at = @At("TAIL"))
     private void playerBreak(Level worldIn, Player player, BlockPos pos, BlockState state, BlockEntity te, ItemStack stack, CallbackInfo ci) {
-        if (!worldIn.isClientSide && ACExemplifiedConfig.DINOSAUR_EGG_ANGER_ENABLED) {
+        if (!worldIn.isClientSide && AlexsCavesExemplified.COMMON_CONFIG.DINOSAUR_EGG_ANGER_ENABLED.get()) {
             AABB bb = (new AABB(pos.getX(), pos.getY(), pos.getZ(), pos.getX() + 1, pos.getY() + 1, pos.getZ() + 1)).inflate(10.0F, 10.0F, 10.0F);
             if (player.isCreative())
                 return;

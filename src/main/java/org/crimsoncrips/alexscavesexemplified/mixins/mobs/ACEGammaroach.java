@@ -10,7 +10,7 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +34,7 @@ public abstract class ACEGammaroach extends PathfinderMob implements TargetsDrop
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         GammaroachEntity gammaroach = (GammaroachEntity)(Object)this;
-        if (ACExemplifiedConfig.GAMMAROACH_FOODING_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.GAMMAROACH_FOODING_ENABLED.get()) {
             gammaroach.targetSelector.addGoal(1, new MobTargetItemGoal<>(this, false));
         }
     }

@@ -6,7 +6,7 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -94,7 +94,7 @@ public abstract class ACESpinningPeppermintEntity extends Entity {
             this.setRot(this.getYRot(), this.getXRot());
             Entity owner = this.getOwner();
 
-            if (owner instanceof Player player && this.getPersistentData().getBoolean("PepperRadiant") && ACExemplifiedConfig.RADIANT_WRATH_ENABLED){
+            if (owner instanceof Player player && this.getPersistentData().getBoolean("PepperRadiant") && AlexsCavesExemplified.COMMON_CONFIG.RADIANT_WRATH_ENABLED.get()){
                 Entity seeking = this.getSeekingEntityId() == -1 ? null : this.level().getEntity(this.getSeekingEntityId());
                 Vec3 playerPos = player.position().add(0.0F, (player.getBbHeight() * 0.45F), 0.0F);
 
@@ -140,7 +140,7 @@ public abstract class ACESpinningPeppermintEntity extends Entity {
 
         }
 
-        if (owner != null && this.getPersistentData().getBoolean("PepperRadiant") && ACExemplifiedConfig.RADIANT_WRATH_ENABLED) {
+        if (owner != null && this.getPersistentData().getBoolean("PepperRadiant") && AlexsCavesExemplified.COMMON_CONFIG.RADIANT_WRATH_ENABLED.get()) {
             if (this.isStraight()) {
                 if (despawnsIn > 150) {
                     this.setYRot(180 + this.owner.getYHeadRot());

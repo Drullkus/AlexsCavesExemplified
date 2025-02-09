@@ -6,10 +6,8 @@ import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
 import net.minecraft.world.entity.animal.WaterAnimal;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.ACEDamageTypes;
-
-import java.util.UUID;
 
 public class ACERabial extends MobEffect {
 
@@ -22,7 +20,7 @@ public class ACERabial extends MobEffect {
     }
 
     public String getDescriptionId() {
-        if (ACExemplifiedConfig.RABIES_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.RABIES_ENABLED.get()) {
             return "alexscavesexemplified.potion.rabial";
         } else {
             return "alexscavesexemplified.feature_disabled";
@@ -37,7 +35,7 @@ public class ACERabial extends MobEffect {
             entity.hurt(ACEDamageTypes.causeEndRabialDamage(entity.level().registryAccess()), rabialLevel * 10);
         }
 
-        if (ACExemplifiedConfig.RABIES_ENABLED && entity.isInWaterRainOrBubble() && !(entity instanceof WaterAnimal)) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.RABIES_ENABLED.get() && entity.isInWaterRainOrBubble() && !(entity instanceof WaterAnimal)) {
             entity.hurt(ACEDamageTypes.causeRabialWaterDamage(entity.level().registryAccess()), 1.2F);
         }
     }

@@ -9,7 +9,7 @@ import net.minecraft.world.entity.animal.WaterAnimal;
 import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +27,7 @@ public abstract class ACEGossamerWorm extends WaterAnimal implements TargetsDrop
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         GossamerWormEntity gossamerWorm = (GossamerWormEntity)(Object)this;
-        if (ACExemplifiedConfig.GOSSAMER_FEEDING_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.GOSSAMER_FEEDING_ENABLED.get()){
             gossamerWorm.targetSelector.addGoal(1, new MobTargetItemGoal<>(this, false){
                 @Override
                 public void tick() {
@@ -40,7 +40,7 @@ public abstract class ACEGossamerWorm extends WaterAnimal implements TargetsDrop
 
     @Override
     public boolean canTargetItem(ItemStack itemStack) {
-        return ACExemplifiedConfig.GOSSAMER_FEEDING_ENABLED && itemStack.is(ACItemRegistry.MARINE_SNOW.get());
+        return AlexsCavesExemplified.COMMON_CONFIG.GOSSAMER_FEEDING_ENABLED.get() && itemStack.is(ACItemRegistry.MARINE_SNOW.get());
     }
 
     public void onGetItem(ItemEntity itemEntity) {

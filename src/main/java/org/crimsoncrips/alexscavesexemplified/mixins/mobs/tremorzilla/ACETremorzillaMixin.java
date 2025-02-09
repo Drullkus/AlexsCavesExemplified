@@ -23,8 +23,8 @@ import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistry;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.Gammafied;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Debug;
@@ -119,7 +119,7 @@ public abstract class ACETremorzillaMixin extends DinosaurEntity implements Gamm
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/DinosaurEntity;tick()V"))
     private void tick(CallbackInfo ci) {
         Level level = level();
-        if (!ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma()) {
+        if (!AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma()) {
             this.setGamma(false);
         }
         if (!sound && getAnimation() == ANIMATION_ROAR_2 && getAnimationTick() == 15 && isAnimationBeaming()){
@@ -171,37 +171,37 @@ public abstract class ACETremorzillaMixin extends DinosaurEntity implements Gamm
 
     @ModifyArg(method = "tickBreath", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addAlwaysVisibleParticle(Lnet/minecraft/core/particles/ParticleOptions;ZDDDDDD)V",ordinal = 2))
     private ParticleOptions protonAddition(ParticleOptions pParticleData) {
-        return (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma() ? ACEParticleRegistry.TREMORZILLA_GAMMA_PROTON.get() : this.getAltSkin() == 2 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_TECTONIC_PROTON.get() : (this.getAltSkin() == 1 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_RETRO_PROTON.get() : (ParticleOptions)ACParticleRegistry.TREMORZILLA_PROTON.get()));
+        return (AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma() ? ACEParticleRegistry.TREMORZILLA_GAMMA_PROTON.get() : this.getAltSkin() == 2 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_TECTONIC_PROTON.get() : (this.getAltSkin() == 1 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_RETRO_PROTON.get() : (ParticleOptions)ACParticleRegistry.TREMORZILLA_PROTON.get()));
     }
 
     @ModifyArg(method = "tickBreath", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addAlwaysVisibleParticle(Lnet/minecraft/core/particles/ParticleOptions;ZDDDDDD)V",ordinal = 0))
     private ParticleOptions explosionAddition(ParticleOptions pParticleData) {
-        return (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma() ? ACEParticleRegistry.TREMORZILLA_GAMMA_EXPLOSION.get() : this.getAltSkin() == 2 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_TECTONIC_EXPLOSION.get() : (this.getAltSkin() == 1 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_RETRO_EXPLOSION.get() : (ParticleOptions)ACParticleRegistry.TREMORZILLA_EXPLOSION.get()));
+        return (AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma() ? ACEParticleRegistry.TREMORZILLA_GAMMA_EXPLOSION.get() : this.getAltSkin() == 2 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_TECTONIC_EXPLOSION.get() : (this.getAltSkin() == 1 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_RETRO_EXPLOSION.get() : (ParticleOptions)ACParticleRegistry.TREMORZILLA_EXPLOSION.get()));
     }
 
     @ModifyArg(method = "tickBreath", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;addAlwaysVisibleParticle(Lnet/minecraft/core/particles/ParticleOptions;ZDDDDDD)V",ordinal = 1))
     private ParticleOptions lightningAddition(ParticleOptions pParticleData) {
-        return (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma() ? ACEParticleRegistry.TREMORZILLA_GAMMA_LIGHTNING.get() : this.getAltSkin() == 2 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_TECTONIC_LIGHTNING.get() : (this.getAltSkin() == 1 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_RETRO_LIGHTNING.get() : (ParticleOptions)ACParticleRegistry.TREMORZILLA_LIGHTNING.get()));
+        return (AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma() ? ACEParticleRegistry.TREMORZILLA_GAMMA_LIGHTNING.get() : this.getAltSkin() == 2 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_TECTONIC_LIGHTNING.get() : (this.getAltSkin() == 1 ? (ParticleOptions)ACParticleRegistry.TREMORZILLA_RETRO_LIGHTNING.get() : (ParticleOptions)ACParticleRegistry.TREMORZILLA_LIGHTNING.get()));
     }
 
     @ModifyConstant(method = "tick",constant = @Constant(intValue = 100,ordinal = 1))
     private int beamTime(int amount) {
-        return ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma() ? 250 : amount;
+        return AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma() ? 250 : amount;
     }
 
     @ModifyConstant(method = "tick",constant = @Constant(floatValue = 100.0F,ordinal = 0))
     private float beamLength(float constant) {
-        return ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma() ? 180 : constant;
+        return AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma() ? 180 : constant;
     }
 
     @ModifyConstant(method = "hurtEntitiesAround",constant = @Constant(intValue = 2),remap = false)
     private int modifyIrradiation(int amount) {
-        return ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma() ? 6 : amount;
+        return AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma() ? 6 : amount;
     }
 
     @Inject(method = "hurtEntitiesAround", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/entity/living/TremorzillaEntity;knockbackTarget(Lnet/minecraft/world/entity/Entity;DDDZ)V"),locals = LocalCapture.CAPTURE_FAILSOFT,remap = false)
     private void mobInteract(Vec3 center, float radius, float damageAmount, float knockbackAmount, boolean radioactive, boolean hurtsOtherKaiju, boolean stretchY, CallbackInfoReturnable<Boolean> cir, AABB aabb, boolean flag, DamageSource damageSource, Iterator var11, LivingEntity living) {
-        if (ACExemplifiedConfig.GAMMARATED_TREMORZILLA_ENABLED && isGamma()){
+        if (AlexsCavesExemplified.COMMON_CONFIG.GAMMARATED_TREMORZILLA_ENABLED.get() && isGamma()){
             living.setRemainingFireTicks(1000);
         }
     }

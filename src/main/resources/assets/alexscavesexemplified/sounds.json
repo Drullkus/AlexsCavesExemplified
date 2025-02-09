@@ -37,5 +37,13 @@
       }
     ],
     "subtitle": "alexscavesexemplified.sound.subtitle.sweet_punished"
+  },
+  "pspspsps": {
+    "sounds": [
+      {
+        "name": "alexscavesexemplified:entity/pspspsps"
+      }
+    ],
+    "subtitle": "alexscavesexemplified.sound.subtitle.pspspsps"
   }
 }

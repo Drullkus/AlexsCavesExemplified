@@ -10,13 +10,12 @@ import net.minecraft.core.Direction;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.GrassBlock;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
@@ -40,7 +39,7 @@ public abstract class ACEEnigmaticEngineMixin extends BlockEntity {
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/EnigmaticEngineBlockEntity;attemptAssembly()Z"),remap = false)
     private static void tick(Level level, BlockPos blockPos, BlockState state, EnigmaticEngineBlockEntity entity, CallbackInfo ci) {
 
-        if (ACExemplifiedConfig.REMINEDING_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.REMINEDING_ENABLED.get()){
 
             attemptMineAssembly(entity);
         }

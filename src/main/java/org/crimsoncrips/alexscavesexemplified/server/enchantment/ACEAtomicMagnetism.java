@@ -3,7 +3,7 @@ package org.crimsoncrips.alexscavesexemplified.server.enchantment;
 import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 
 public class ACEAtomicMagnetism extends Enchantment {
 
@@ -27,7 +27,7 @@ public class ACEAtomicMagnetism extends Enchantment {
 
     @Override
     public String getDescriptionId() {
-        if (ACExemplifiedConfig.RESISTOR_MAGNETISM_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.RESISTOR_MAGNETISM_ENABLED.get()) {
             return "enchantment.alexscavesexemplified.atomic_magnetism";
         } else {
             return "alexscavesexemplified.feature_disabled";

@@ -19,8 +19,8 @@ import net.minecraft.world.level.Explosion;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -52,13 +52,13 @@ public abstract class ACEItemEntity extends Entity {
         Level level = this.level();
         ItemStack item = this.getItem();
 
-        if (ACExemplifiedConfig.PURPLE_LEATHERED_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.PURPLE_LEATHERED_ENABLED.get()) {
             if (item.getItem() instanceof DyeableLeatherItem dyeableLeatherItem && this.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get())) {
                 dyeableLeatherItem.setColor(item, 0Xb839e6);
             }
         }
 
-        if (ACExemplifiedConfig.BREAKING_CANDY_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.BREAKING_CANDY_ENABLED.get()) {
             if (level.getBlockState(this.blockPosition()).is(Blocks.WATER_CAULDRON) && item.is(ACExexmplifiedTagRegistry.GELATINABLE) && level.getBlockState(this.blockPosition().below()).is(ACExexmplifiedTagRegistry.GELATIN_FIRE)) {
                 for (ItemEntity itemEntity : this.level().getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(0.1))) {
                     ItemStack nearBone = itemEntity.getItem();
@@ -80,7 +80,7 @@ public abstract class ACEItemEntity extends Entity {
             }
         }
 
-        if (ACExemplifiedConfig.AMPLIFIED_FROSTMINT_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.AMPLIFIED_FROSTMINT_ENABLED.get()){
             if (item.is(ACItemRegistry.FROSTMINT_SPEAR.get()) || item.is(ACBlockRegistry.FROSTMINT.get().asItem())) {
                 if (blockState.getFluidState().getFluidType() == ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get() && !level.isClientSide) {
                     FrostmintExplosion explosion = new FrostmintExplosion(level, this, this.getX() + 0.5F, this.getY() + 0.5F, this.getZ() + 0.5F, 4.0F, Explosion.BlockInteraction.DESTROY_WITH_DECAY, false);
@@ -94,7 +94,7 @@ public abstract class ACEItemEntity extends Entity {
             }
         }
 
-        if (ACExemplifiedConfig.DROPPED_SATING_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.DROPPED_SATING_ENABLED.get()){
             ItemStack stack = this.getItem();
             if (stack.getItem() instanceof SackOfSatingItem){
                 for (ItemEntity itemEntity : this.level().getEntitiesOfClass(ItemEntity.class, this.getBoundingBox().inflate(1))) {

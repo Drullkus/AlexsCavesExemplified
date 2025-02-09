@@ -10,7 +10,7 @@ import net.minecraft.world.entity.projectile.AbstractArrow;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -28,12 +28,12 @@ public abstract class ACEDarkArrow extends AbstractArrow {
     @Inject(method = "onHitEntity", at = @At("TAIL"))
     private void hitEntity(EntityHitResult entityHitResult, CallbackInfo ci) {
         if (entityHitResult.getEntity() instanceof LivingEntity livingEntity) {
-            if (entityHitResult.getEntity().level().getRandom().nextDouble() < 0.01 && ACExemplifiedConfig.DARKNESS_APPLYED_ENABLED){
+            if (entityHitResult.getEntity().level().getRandom().nextDouble() < 0.01 && AlexsCavesExemplified.COMMON_CONFIG.DARKNESS_APPLYED_ENABLED.get()){
                 livingEntity.addEffect(new MobEffectInstance(MobEffects.DARKNESS, 100, 0));
 
             }
 
-            if (ACExemplifiedConfig.VANILLA_ADAPTIONS_ENABLED){
+            if (AlexsCavesExemplified.COMMON_CONFIG.VANILLA_ADAPTIONS_ENABLED.get()){
                 if (this.isOnFire()) {
                     livingEntity.setSecondsOnFire(5);
                 }

@@ -18,7 +18,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.ACEReflectionUtil;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -44,7 +44,7 @@ public abstract class ACEVolcanicCoreBlockEntity extends BlockEntity{
     private static void registerGoals(Level level, BlockPos blockPos, BlockState state, VolcanicCoreBlockEntity entity, CallbackInfo ci) {
 
 
-        if ((int) ACEReflectionUtil.getField(entity, "bossSpawnCooldown") > 0 && ACExemplifiedConfig.VOLCANIC_SACRIFICE_ENABLED) {
+        if ((int) ACEReflectionUtil.getField(entity, "bossSpawnCooldown") > 0 && AlexsCavesExemplified.COMMON_CONFIG.VOLCANIC_SACRIFICE_ENABLED.get()) {
 
             Vec3 vec3 = Vec3.atCenterOf(blockPos);
             AABB itemAABB = new AABB(vec3.subtract(20, 100, 20), vec3.add(20, 100, 20));

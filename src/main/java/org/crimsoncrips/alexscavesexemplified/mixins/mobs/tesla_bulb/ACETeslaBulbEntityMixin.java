@@ -23,7 +23,7 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.TeslaCharge;
 import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
 import org.spongepowered.asm.mixin.Mixin;
@@ -45,7 +45,7 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/level/Level;setBlockAndUpdate(Lnet/minecraft/core/BlockPos;Lnet/minecraft/world/level/block/state/BlockState;)Z"))
     private static void alexsCavesExemplified$tick1(Level level, BlockPos blockPos, BlockState state, TeslaBulbBlockEntity entity, CallbackInfo ci) {
-        if(ACExemplifiedConfig.TESLA_COILED_ENABLED){
+        if(AlexsCavesExemplified.COMMON_CONFIG.TESLA_COILED_ENABLED.get()){
             level.playLocalSound(blockPos, ACESoundRegistry.TESLA_FIRE.get(), SoundSource.BLOCKS, 2, 1, false);
         }
     }
@@ -79,7 +79,7 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
     @Inject(method = "tick", at = @At(value = "HEAD"),remap = false)
     private static void alexsCavesExemplified$tick2(Level level, BlockPos blockPos, BlockState state, TeslaBulbBlockEntity entity, CallbackInfo ci) {
-        if(ACExemplifiedConfig.SHOCKING_THERAPY_ENABLED){
+        if(AlexsCavesExemplified.COMMON_CONFIG.SHOCKING_THERAPY_ENABLED.get()){
             TeslaCharge tickAccesor = (TeslaCharge)(Object)entity;
 
             LivingEntity target = null;
@@ -97,7 +97,7 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
 
 
                 tickAccesor.setCharge(tickAccesor.getCharge() + 1);
-                if (tickAccesor.getCharge() == 5 && ACExemplifiedConfig.TESLA_COILED_ENABLED){
+                if (tickAccesor.getCharge() == 5 && AlexsCavesExemplified.COMMON_CONFIG.TESLA_COILED_ENABLED.get()){
                     level.playLocalSound(blockPos, ACESoundRegistry.TESLA_POWERUP.get(), SoundSource.AMBIENT, 2, 1, false);
                 }
                 if (tickAccesor.getCharge() > 30 && tickAccesor.getCharge() < 35){
@@ -113,13 +113,13 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
                         target.setRemainingFireTicks(30);
                     }
                 }
-                if (tickAccesor.getCharge() == 33 && ACExemplifiedConfig.TESLA_COILED_ENABLED){
+                if (tickAccesor.getCharge() == 33 && AlexsCavesExemplified.COMMON_CONFIG.TESLA_COILED_ENABLED.get()){
                     target.playSound( ACESoundRegistry.TESLA_FIRE.get());
                 }
                 if (tickAccesor.getCharge() > 45) {
-                    tickAccesor.setCharge(-300);
+                    tickAccesor.setCharge(-200 + entity.getLevel().getRandom().nextInt(0,300));
                 }
-            } else tickAccesor.setCharge(-20);
+            } else tickAccesor.setCharge(-20 + entity.getLevel().getRandom().nextInt(0,100));
 
 
 

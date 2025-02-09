@@ -22,23 +22,19 @@ import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
 import net.minecraft.world.entity.ai.goal.Goal;
 import net.minecraft.world.entity.ai.goal.GoalSelector;
-import net.minecraft.world.entity.item.PrimedTnt;
 import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.GameRules;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEMineGuardianHurtBy;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Constant;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyConstant;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
@@ -66,7 +62,7 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void alexsCavesExemplified$tick(CallbackInfo ci) {
-        if (!ACExemplifiedConfig.REMINEDING_ENABLED && !Objects.equals(alexsCavesExemplified$getOwner(), "-1")){
+        if (!AlexsCavesExemplified.COMMON_CONFIG.REMINEDING_ENABLED.get() && !Objects.equals(alexsCavesExemplified$getOwner(), "-1")){
             alexsCavesExemplified$setOwner("-1");
         }
         if (alexsCavesExemplified$getVariant() >= 1){
@@ -85,11 +81,11 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
                 this.level().addParticle(ACParticleRegistry.PROTON.get(), this.getX(), this.getY() + 0.5, this.getZ(), this.getX(), this.getY(), this.getZ());
             }
 
-            if (!ACExemplifiedConfig.NAVAL_NUCLEARITY_ENABLED){
+            if (!AlexsCavesExemplified.COMMON_CONFIG.NAVAL_NUCLEARITY_ENABLED.get()){
                 alexsCavesExemplified$setVariant(0);
             }
         }
-        if (ACExemplifiedConfig.NOON_GUARDIAN_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.NOON_GUARDIAN_ENABLED.get()){
             if (this.getName().getString().equals("Noon") && alexsCavesExemplified$getVariant() == 0){
                 this.alexsCavesExemplified$setVariant(-1);
             }
@@ -137,7 +133,7 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
 
     @Inject(method = "isValidTarget", at = @At("HEAD"),cancellable = true,remap = false)
     private void alexsCavesExemplified$isValidTarget(Entity entity, CallbackInfoReturnable<Boolean> cir) {
-        if(ACExemplifiedConfig.REMINEDING_ENABLED && entity instanceof Player player){
+        if(AlexsCavesExemplified.COMMON_CONFIG.REMINEDING_ENABLED.get() && entity instanceof Player player){
             cir.setReturnValue(canAttack(player) && !Objects.equals(player.getUUID().toString(), alexsCavesExemplified$getOwner()));
         }
     }
@@ -174,14 +170,14 @@ public abstract class ACEMineGuardian extends Monster implements MineGuardianXtr
 
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 2))
     private boolean alexsCavesExemplified$registerGoals(GoalSelector instance, int pPriority, Goal pGoal) {
-        return !ACExemplifiedConfig.REMINEDING_ENABLED;
+        return !AlexsCavesExemplified.COMMON_CONFIG.REMINEDING_ENABLED.get();
     }
 
 
     @Override
     protected InteractionResult mobInteract(Player pPlayer, InteractionHand pHand) {
         ItemStack itemHeld = pPlayer.getItemInHand(pHand);
-        if (ACExemplifiedConfig.NAVAL_NUCLEARITY_ENABLED && itemHeld.is(ACBlockRegistry.NUCLEAR_BOMB.get().asItem()) && alexsCavesExemplified$getVariant() == 0){
+        if (AlexsCavesExemplified.COMMON_CONFIG.NAVAL_NUCLEARITY_ENABLED.get() && itemHeld.is(ACBlockRegistry.NUCLEAR_BOMB.get().asItem()) && alexsCavesExemplified$getVariant() == 0){
             alexsCavesExemplified$setVariant(random.nextBoolean() ? 1 : 2);
             if (!pPlayer.isCreative()){
                 itemHeld.shrink(1);

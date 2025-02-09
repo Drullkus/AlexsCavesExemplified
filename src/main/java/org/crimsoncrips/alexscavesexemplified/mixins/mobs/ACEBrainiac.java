@@ -4,7 +4,6 @@ import com.github.alexmodguy.alexscaves.client.particle.ACParticleRegistry;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
-import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -16,7 +15,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEPickupDroppedBarrels;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.BrainiacPowered;
 import org.spongepowered.asm.mixin.Mixin;
@@ -38,7 +37,7 @@ public abstract class ACEBrainiac extends Monster implements BrainiacPowered, Ta
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         BrainiacEntity brainiac = (BrainiacEntity)(Object)this;
-        if (ACExemplifiedConfig.WASTE_PICKUP_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.WASTE_PICKUP_ENABLED.get()){
             brainiac.targetSelector.addGoal(4, new ACEPickupDroppedBarrels<>(brainiac,true));
         }
     }
@@ -67,9 +66,9 @@ public abstract class ACEBrainiac extends Monster implements BrainiacPowered, Ta
     private void postAttack(LivingEntity entity, CallbackInfo ci) {
         ci.cancel();
         if (entity != null && entity.isAlive()) {
-            entity.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 400,ACExemplifiedConfig.WASTE_POWERUP_ENABLED && isPowered() ? 1 : 0));
+            entity.addEffect(new MobEffectInstance(ACEffectRegistry.IRRADIATED.get(), 400,AlexsCavesExemplified.COMMON_CONFIG.WASTE_POWERUP_ENABLED.get() && isPowered() ? 1 : 0));
         }
-        if (ACExemplifiedConfig.WASTE_POWERUP_ENABLED && isPowered()){
+        if (AlexsCavesExemplified.COMMON_CONFIG.WASTE_POWERUP_ENABLED.get() && isPowered()){
             setPowered(false);
         }
     }
@@ -78,7 +77,7 @@ public abstract class ACEBrainiac extends Monster implements BrainiacPowered, Ta
     private void tick(CallbackInfo ci) {
         BrainiacEntity brainiac = (BrainiacEntity)(Object)this;
         Level level = brainiac.level();
-        if (ACExemplifiedConfig.WASTE_POWERUP_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.WASTE_POWERUP_ENABLED.get()){
             if (isPowered()){
                 Vec3 particlePos = brainiac.position().add((level.random.nextFloat() - 0.5F) * 2.5F, 0F, (level.random.nextFloat() - 0.5F) * 2.5F);
                 level.addParticle(ACParticleRegistry.PROTON.get(), particlePos.x, particlePos.y, particlePos.z, brainiac.getX(), brainiac.getY(0.5F), brainiac.getZ());

@@ -27,30 +27,30 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 public abstract class ACENucleeperRenderRenderMixin extends RenderLayer<NucleeperEntity, NucleeperModel> {
 
 
-    public ACENucleeperRenderRenderMixin(RenderLayerParent<NucleeperEntity, NucleeperModel> pRenderer) {
-        super(pRenderer);
-    }
+
 
     private static final ResourceLocation TEXTURE_EXPLODE = new ResourceLocation("alexscaves:textures/entity/nucleeper/nucleeper_explode.png");
-    private static final ResourceLocation TEXTURE_DISABLED_BUTTONS = new ResourceLocation("alexscavesexemplified:textures/entity/nucleeper/disabled_buttons.png");
     private static final ResourceLocation TEXTURE_BROKEN_GLASS = new ResourceLocation("alexscavesexemplified:textures/entity/nucleeper/broken_glass.png");
 
     private static final ResourceLocation TEXTURE_GLOW = new ResourceLocation("alexscaves:textures/entity/nucleeper/nucleeper_glow.png");
+    private static final ResourceLocation TEXTURE_RUSTED_GLOW = new ResourceLocation("alexscavesexemplified:textures/entity/nucleeper/nucleeper_rusted_glow.png");
+
     private static final ResourceLocation TEXTURE_GLASS = new ResourceLocation("alexscaves:textures/entity/nucleeper/nucleeper_glass.png");
+
     private static final ResourceLocation TEXTURE_BUTTONS_0 = new ResourceLocation("alexscaves:textures/entity/nucleeper/nucleeper_buttons_0.png");
     private static final ResourceLocation TEXTURE_BUTTONS_1 = new ResourceLocation("alexscaves:textures/entity/nucleeper/nucleeper_buttons_1.png");
     private static final ResourceLocation TEXTURE_BUTTONS_2 = new ResourceLocation("alexscaves:textures/entity/nucleeper/nucleeper_buttons_2.png");
-
-
+    
+    public ACENucleeperRenderRenderMixin(RenderLayerParent<NucleeperEntity, NucleeperModel> pRenderer) {
+        super(pRenderer);
+    }
 
 
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, NucleeperEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         float alpha = (float)((double)1.0F + Math.sin((double)(ageInTicks * 0.3F))) * 0.25F + 0.5F;
         float explodeProgress = entitylivingbaseIn.getExplodeProgress(partialTicks);
-        if (!((NucleeperXtra)entitylivingbaseIn).alexsCavesExemplified$isRusted()) {
-            VertexConsumer ivertexbuilder1 = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(TEXTURE_GLOW));
-            ((NucleeperModel) this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder1, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, alpha);
-        }
+        VertexConsumer ivertexbuilder1 = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(((NucleeperXtra)entitylivingbaseIn).alexsCavesExemplified$isRusted() ? TEXTURE_RUSTED_GLOW : TEXTURE_GLOW));
+        ((NucleeperModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder1, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, alpha);
         VertexConsumer ivertexbuilder2 = bufferIn.getBuffer(ForgeRenderTypes.getUnlitTranslucent(((NucleeperXtra)entitylivingbaseIn).alexsCavesExemplified$isRusted() ? TEXTURE_BROKEN_GLASS : TEXTURE_GLASS));
         ((NucleeperModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder2, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
         int buttonDiv = entitylivingbaseIn.tickCount / 5 % 6;
@@ -59,7 +59,7 @@ public abstract class ACENucleeperRenderRenderMixin extends RenderLayer<Nucleepe
         }
 
         ResourceLocation buttons;
-        if (!((NucleeperXtra)entitylivingbaseIn).alexsCavesExemplified$isRusted()){
+        if (!((NucleeperXtra)entitylivingbaseIn).alexsCavesExemplified$isDefused()){
             if (buttonDiv < 2) {
                 buttons = TEXTURE_BUTTONS_0;
             } else if (buttonDiv < 4) {
@@ -68,11 +68,10 @@ public abstract class ACENucleeperRenderRenderMixin extends RenderLayer<Nucleepe
                 buttons = TEXTURE_BUTTONS_2;
             }
             VertexConsumer ivertexbuilder3 = bufferIn.getBuffer(RenderType.eyes(buttons));
-            (this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder3, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
+            ((NucleeperModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder3, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
 
         }
-
-         VertexConsumer ivertexbuilder4 = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(TEXTURE_EXPLODE));
+        VertexConsumer ivertexbuilder4 = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(TEXTURE_EXPLODE));
         ((NucleeperModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder4, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, explodeProgress);
     }
 

@@ -1,13 +1,12 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 
 import com.github.alexmodguy.alexscaves.server.potion.SugarRushEffect;
-import net.minecraft.sounds.SoundEvents;
 import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.level.Level;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.server.ACEDamageTypes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -30,7 +29,7 @@ public class ACESugarRush extends MobEffect {
 
     @Inject(method = "applyEffectTick", at = @At("HEAD"))
     private void alexsCavesExemplified$applyEffectTick(LivingEntity entity, int amplifier, CallbackInfo ci) {
-        if (lastDuration <= 2 && ACExemplifiedConfig.SUGAR_CRASH_ENABLED) {
+        if (lastDuration <= 2 && AlexsCavesExemplified.COMMON_CONFIG.SUGAR_CRASH_ENABLED.get()) {
             int sugarcrashLevel = amplifier + 1;
             entity.addEffect(new MobEffectInstance(ACEEffects.SUGAR_CRASH.get(), 400, amplifier));
             entity.hurt(ACEDamageTypes.causeSugarCrash(entity.level().registryAccess()), sugarcrashLevel * 2);

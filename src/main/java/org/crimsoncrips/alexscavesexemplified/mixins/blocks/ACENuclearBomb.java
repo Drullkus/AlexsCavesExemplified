@@ -4,7 +4,7 @@ import com.github.alexmodguy.alexscaves.server.block.NuclearBombBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.material.PushReaction;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.jetbrains.annotations.Nullable;
 import org.spongepowered.asm.mixin.Mixin;
 
@@ -19,6 +19,6 @@ public abstract class ACENuclearBomb extends Block {
 
     @Override
     public @Nullable PushReaction getPistonPushReaction(BlockState state) {
-        return (ACExemplifiedConfig.NUCLEAR_PISTONATION_ENABLED) ? PushReaction.DESTROY : PushReaction.NORMAL;
+        return (AlexsCavesExemplified.COMMON_CONFIG.NUCLEAR_PISTONATION_ENABLED.get()) ? PushReaction.NORMAL : PushReaction.DESTROY;
     }
 }

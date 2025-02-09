@@ -1,12 +1,8 @@
-package org.crimsoncrips.alexscavesexemplified.config;
+package org.crimsoncrips.alexscavesexemplified.server;
 
-import net.minecraft.world.entity.npc.Villager;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.LavaCauldronBlock;
-import net.minecraft.world.level.block.LayeredCauldronBlock;
 import net.minecraftforge.common.ForgeConfigSpec;
 
-public class ACEConfigList {
+public class ACEServerConfig {
     public final ForgeConfigSpec.BooleanValue GLUTTONY_ENABLED;
     public final ForgeConfigSpec.BooleanValue REGULAR_REFERENCE_ENABLED;
     public final ForgeConfigSpec.BooleanValue REDOABLE_SPELUNKY_ENABLED;
@@ -115,14 +111,16 @@ public class ACEConfigList {
     public final  ForgeConfigSpec.BooleanValue DEFUSION_ENABLED;
     public final  ForgeConfigSpec.BooleanValue NAVAL_NUCLEARITY_ENABLED;
     public final  ForgeConfigSpec.BooleanValue LOCATABLE_CAVES_ENABLED;
-    public final  ForgeConfigSpec.BooleanValue CATASTROPHE_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue CATTASTROPHE_ENABLED;
     public final  ForgeConfigSpec.BooleanValue BOUNDED_MAGNETISM_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue RUSTED_NUCLEEPER_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue DARK_OFFERING_ENABLED;
 
 
 
 
 
-    public ACEConfigList(final ForgeConfigSpec.Builder builder) {
+    public ACEServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
          this.REDOABLE_SPELUNKY_ENABLED = buildBoolean(builder, "REDOABLE_SPELUNKY_ENABLED", " ", true, "Whether it gives you back the tablet when exiting the spelunky table");
          this.SPELUNKY_ATTEMPTS_AMOUNT = buildInt(builder, "SPELUNKY_ATTEMPTS_AMOUNT", " ", 5, 1, Integer.MAX_VALUE, "Amount of tries you get for the spelunky table per tablet");
@@ -208,8 +206,10 @@ public class ACEConfigList {
 
         builder.pop();
         builder.push("Underzealot");
-        this.UNDERZEALOT_RESPECT_ENABLED = buildBoolean(builder, "UNDERZEALOT_RESPECT_ENABLED", " ", true, "Whether underzealot respect those that wear the darkness");
         this.EXTINGUISH_CAMPFIRES_ENABLED = buildBoolean(builder, "EXTINGUISH_CAMPFIRES_ENABLED", " ", true, "Whether underzealots extinguish campfires");
+        this.UNDERZEALOT_RESPECT_ENABLED = buildBoolean(builder, "UNDERZEALOT_RESPECT_ENABLED", " ", true, "Whether underzealot respect those that wear the darkness");
+        builder.push("Underzealot Respect");
+        this.DARK_OFFERING_ENABLED = buildBoolean(builder, "DARK_OFFERING_ENABLED", " ", true, "Allow you to offer sacrifices to underzealots when neutral to them");
 
         builder.pop();
         builder.push("Vesper");
@@ -250,6 +250,7 @@ public class ACEConfigList {
         builder.push("Nucleeper");
         this.NUCLEAR_CHAIN_ENABLED = buildBoolean(builder, "NUCLEAR_CHAIN_ENABLED", " ", true, "Whether nucleepers explode when they die from explosions");
         this.DEFUSION_ENABLED = buildBoolean(builder, "DEFUSION_ENABLED", " ", true, "Whether nucleepers can be defused");
+        this.RUSTED_NUCLEEPER_ENABLED = buildBoolean(builder, "RUSTED_NUCLEEPER_ENABLED", " ", true, "Rusted Nucleepers are slower and weaker");
 
         builder.pop();
         builder.push("Radgill");
@@ -321,7 +322,7 @@ public class ACEConfigList {
         this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", false, "Allows parrots explode with cookie block");
         this.SWEET_PUNISHMENT_ENABLED = buildBoolean(builder, "SWEET_PUNISHMENT_ENABLED", " ", false, "Punished for too much sweets");
         this.TOUGH_ROACHES_ENABLED = buildBoolean(builder, "TOUGH_ROACHES_ENABLED", " ", false, "Roaches are nuke proof");
-        this.CATASTROPHE_ENABLED = buildBoolean(builder, "CATASTROPHE_ENABLED", " ", false, "dont ever say pspsps to cats");
+        this.CATTASTROPHE_ENABLED = buildBoolean(builder, "CATTASTROPHE_ENABLED", " ", false, "dont ever say pspsps to cats");
 
 
     }

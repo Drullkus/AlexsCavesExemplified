@@ -13,7 +13,7 @@ import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.EntityCollisionContext;
 import net.minecraft.world.phys.shapes.Shapes;
 import net.minecraft.world.phys.shapes.VoxelShape;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Final;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
@@ -32,7 +32,7 @@ public abstract class ACEPrimalMagma extends Block {
 
     public VoxelShape getCollisionShape(BlockState state, BlockGetter level, BlockPos blockPos, CollisionContext context) {
         if (state.getValue(ACTIVE) && context instanceof EntityCollisionContext entityCollisionContext) {
-            boolean aceThrough = entityCollisionContext.getEntity() instanceof AtlatitanEntity && ACExemplifiedConfig.VOLCANIC_SACRIFICE_ENABLED;
+            boolean aceThrough = entityCollisionContext.getEntity() instanceof AtlatitanEntity && AlexsCavesExemplified.COMMON_CONFIG.VOLCANIC_SACRIFICE_ENABLED.get();
             if (!(entityCollisionContext.getEntity() instanceof LuxtructosaurusEntity)) {
                 return entityCollisionContext.getEntity() instanceof ItemEntity || aceThrough  ? Shapes.empty() : SINK_SHAPE;
             }

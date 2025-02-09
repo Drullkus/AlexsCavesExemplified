@@ -16,9 +16,8 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ConverstionAmplified;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.Gammafied;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -59,7 +58,7 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
 
     @ModifyConstant(method = "tick",constant = @Constant(intValue = 100,ordinal = 0),remap = false)
     private static int alexsCavesExemplified$tick3(int amount, @Local(ordinal = 0, argsOnly = true) ConversionCrucibleBlockEntity bl1) {
-        if (ACExemplifiedConfig.OVERDRIVED_CONVERSION_ENABLED && ((ConverstionAmplified) bl1).alexsCavesExemplified$isOverdrived()){
+        if (AlexsCavesExemplified.COMMON_CONFIG.OVERDRIVED_CONVERSION_ENABLED.get() && ((ConverstionAmplified) bl1).alexsCavesExemplified$isOverdrived()){
             return 300;
         } else {
             return amount;
@@ -68,7 +67,7 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
 
     @Inject(method = "tick", at = @At(value = "TAIL"), remap = false)
     private static void alexsCavesExemplified$tick4(Level level, BlockPos pos, BlockState state, ConversionCrucibleBlockEntity entity, CallbackInfo ci) {
-        if (entity.tickCount % 5 == 0 && ACExemplifiedConfig.OVERDRIVED_CONVERSION_ENABLED && !entity.isWitchMode()) {
+        if (entity.tickCount % 5 == 0 && AlexsCavesExemplified.COMMON_CONFIG.OVERDRIVED_CONVERSION_ENABLED.get() && !entity.isWitchMode()) {
             for(ItemEntity item : ((ConverstionAmplified) entity).alexsCavesExemplified$getItemsAtAndAbove(level, pos)) {
                 if (entity.getConvertingToBiome() == null && item.getItem().is(ACItemRegistry.RADIANT_ESSENCE.get()) && !level.isClientSide && entity.getFilledLevel() <= 0){
                     entity.setFilledLevel(1);

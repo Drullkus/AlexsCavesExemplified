@@ -14,7 +14,7 @@ import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -82,7 +82,7 @@ public abstract class ACESpelunkeryScreenMixin extends AbstractContainerScreen<S
             this.level = 0;
             this.fullResetWords();
         } else if (this.finishedLevel && this.passLevelProgress >= 10.0F && this.attemptsLeft <= 0) {
-            if (ACExemplifiedConfig.NON_INSTA_LOSE_ENABLED) {
+            if (AlexsCavesExemplified.COMMON_CONFIG.NON_INSTA_LOSE_ENABLED.get()) {
                 if (level <= 0) {
                     AlexsCaves.NETWORK_WRAPPER.sendToServer(new SpelunkeryTableChangeMessage(false));
                     fullResetWords();
@@ -126,7 +126,7 @@ public abstract class ACESpelunkeryScreenMixin extends AbstractContainerScreen<S
 
     @ModifyReturnValue(method = "getRevealWordsAmount", at = @At("RETURN"),remap = false)
     private float revealWords(float original) {
-        if (ACExemplifiedConfig.BRAINDEAD_MODE_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.BRAINDEAD_MODE_ENABLED.get()) {
             return 1;
         } else {
             return original;
@@ -140,12 +140,12 @@ public abstract class ACESpelunkeryScreenMixin extends AbstractContainerScreen<S
 
     @ModifyConstant(method = "generateWords",constant = @Constant(intValue = 5),remap = false)
     private int modifyAmount(int amount) {
-        return ACExemplifiedConfig.SPELUNKY_ATTEMPTS_AMOUNT;
+        return AlexsCavesExemplified.COMMON_CONFIG.SPELUNKY_ATTEMPTS_AMOUNT.get();
     }
 
     @Override
     public void onClose() {
-        if (ACExemplifiedConfig.REDOABLE_SPELUNKY_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.REDOABLE_SPELUNKY_ENABLED.get()) {
             super.onClose();
         } else {
             if (hasPaper() && hasTablet() && hasClickedAnyWord() && level < 3) {

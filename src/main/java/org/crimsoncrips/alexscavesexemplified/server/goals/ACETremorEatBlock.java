@@ -12,8 +12,7 @@ import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.TeslaCharge;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.TremorConsumption;
 
 public class ACETremorEatBlock extends MoveToBlockGoal {
@@ -58,7 +57,7 @@ public class ACETremorEatBlock extends MoveToBlockGoal {
                     tremorsaurus.heal(4);
                     tremorsaurus.level().destroyBlock(blockPos, false);
                     tremorsaurus.playSound(ACSoundRegistry.TREMORSAURUS_BITE.get(), 1F, 1F);
-                    if (ACExemplifiedConfig.SEETHED_TAMING_ENABLED && tremorsaurus.level().getRandom().nextDouble() < 0.09) {
+                    if (AlexsCavesExemplified.COMMON_CONFIG.SEETHED_TAMING_ENABLED.get() && tremorsaurus.level().getRandom().nextDouble() < 0.09) {
                         tickAccesor.alexsCavesExemplified$setSeethed(true);
                     }
                 }

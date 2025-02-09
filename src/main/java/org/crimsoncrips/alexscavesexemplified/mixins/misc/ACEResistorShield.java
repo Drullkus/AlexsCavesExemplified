@@ -7,7 +7,7 @@ import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -27,7 +27,7 @@ public class ACEResistorShield extends ShieldItem {
 
     @Inject(method = "onUseTick", at = @At("TAIL"))
     private void getMaxLoadTime(Level level, LivingEntity living, ItemStack stack, int timeUsing, CallbackInfo ci) {
-        if (ACExemplifiedConfig.RESISTOR_MAGNETISM_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.RESISTOR_MAGNETISM_ENABLED.get()) {
             int i = this.getUseDuration(stack) - timeUsing;
             boolean scarlet = isScarlet(stack);
             for (ItemEntity entity : living.level().getEntitiesOfClass(ItemEntity.class, living.getBoundingBox().inflate(5, 1, 5))) {

@@ -4,10 +4,8 @@ import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.block.DinosaurChopBlock;
 import com.github.alexmodguy.alexscaves.server.block.ThinBoneBlock;
 import com.github.alexmodguy.alexscaves.server.entity.living.DinosaurEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.TremorsaurusEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.VallumraptorEntity;
-import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import net.minecraft.commands.arguments.EntityAnchorArgument;
 import net.minecraft.core.BlockPos;
 import net.minecraft.sounds.SoundEvents;
@@ -17,20 +15,17 @@ import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.MoveToBlockGoal;
 import net.minecraft.world.entity.ai.goal.target.NearestAttackableTargetGoal;
 import net.minecraft.world.entity.monster.Monster;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.crafting.Ingredient;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-
-import java.util.Iterator;
 
 import static com.github.alexmodguy.alexscaves.server.block.DinosaurChopBlock.BITES;
 
@@ -45,7 +40,7 @@ public abstract class ACEVallumraptor extends DinosaurEntity {
     @Inject(method = "registerGoals", at = @At("TAIL"))
     private void registerGoals(CallbackInfo ci) {
         VallumraptorEntity vallumraptor = (VallumraptorEntity)(Object)this;
-        if (ACExemplifiedConfig.DINOSAUR_EGG_ANGER_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.DINOSAUR_EGG_ANGER_ENABLED.get()){
             vallumraptor.targetSelector.addGoal(5, new NearestAttackableTargetGoal<>(vallumraptor, LivingEntity.class, 100, true, false,livingEntity -> {
                 return livingEntity.isHolding(Ingredient.of(ACBlockRegistry.VALLUMRAPTOR_EGG.get()));
             }){
@@ -56,7 +51,7 @@ public abstract class ACEVallumraptor extends DinosaurEntity {
             });
         }
 
-        if (ACExemplifiedConfig.SCAVENGING_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.SCAVENGING_ENABLED.get()){
             vallumraptor.goalSelector.addGoal(8, new MoveToBlockGoal(vallumraptor, 1.4, 20) {
                 @Override
                 public void tick() {

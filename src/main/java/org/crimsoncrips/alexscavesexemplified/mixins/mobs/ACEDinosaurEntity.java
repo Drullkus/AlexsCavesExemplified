@@ -10,7 +10,7 @@ import net.minecraft.world.entity.TamableAnimal;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -30,7 +30,7 @@ public abstract class ACEDinosaurEntity extends TamableAnimal {
 
     @Inject(method = "mobInteract", at = @At("HEAD"))
     private void registerGoals(Player player, InteractionHand hand, CallbackInfoReturnable<InteractionResult> cir) {
-        if (!ACExemplifiedConfig.PAINT_EFFECTS_ENABLED)
+        if (!AlexsCavesExemplified.COMMON_CONFIG.PAINT_EFFECTS_ENABLED.get())
             return;
 
         ItemStack itemstack = player.getItemInHand(hand);

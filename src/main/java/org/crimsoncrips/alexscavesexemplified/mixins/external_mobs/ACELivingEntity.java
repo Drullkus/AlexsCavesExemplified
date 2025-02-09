@@ -4,6 +4,7 @@ import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
+import com.llamalad7.mixinextras.injector.ModifyReturnValue;
 import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
 import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import net.minecraft.world.effect.MobEffectInstance;
@@ -16,8 +17,7 @@ import net.minecraft.world.entity.animal.frog.Tadpole;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraftforge.fml.ModList;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-import org.spongepowered.asm.mixin.Debug;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
@@ -38,7 +38,7 @@ public abstract class ACELivingEntity extends Entity {
 
     @WrapOperation(method = "causeFallDamage", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;calculateFallDamage(FF)I"))
     private int alexsCavesExemplified$causeFallDamage(LivingEntity instance, float f, float v, Operation<Integer> original) {
-        if (ACExemplifiedConfig.HEAVY_GRAVITY_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.HEAVY_GRAVITY_ENABLED.get()) {
             return original.call(instance, f, v * 1.5F);
         } else {
             return original.call(instance, f, v);
@@ -49,7 +49,7 @@ public abstract class ACELivingEntity extends Entity {
     private void baseTick(CallbackInfo ci) {
         LivingEntity livingEntity = (LivingEntity)(Object)this;
         Block block = livingEntity.level().getBlockState(livingEntity.blockPosition()).getBlock();
-        if (ACExemplifiedConfig.PRESERVED_AMBER_ENABLED && block != ACBlockRegistry.AMBER.get()) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.PRESERVED_AMBER_ENABLED.get() && block != ACBlockRegistry.AMBER.get()) {
             if (ModList.get().isLoaded("alexsmobs")) {
                 amberReset(livingEntity);
             }
@@ -94,12 +94,12 @@ public abstract class ACELivingEntity extends Entity {
 
     @ModifyExpressionValue(method = "aiStep", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/LivingEntity;isDeadOrDying()Z"))
     private boolean disableOriginal(boolean original) {
-        return ACExemplifiedConfig.CRYONIC_CAVITY_ENABLED;
+        return AlexsCavesExemplified.COMMON_CONFIG.CRYONIC_CAVITY_ENABLED.get();
     }
 
     @Inject(method = "aiStep", at = @At(value = "TAIL"))
     private void freezingAlterations(CallbackInfo ci) {
-        if (ACExemplifiedConfig.CRYONIC_CAVITY_ENABLED){
+        if (AlexsCavesExemplified.COMMON_CONFIG.CRYONIC_CAVITY_ENABLED.get()){
             if (!this.level().isClientSide && !this.isDeadOrDying()) {
                 int i = this.getTicksFrozen();
                 if (this.isInPowderSnow && this.canFreeze()) {

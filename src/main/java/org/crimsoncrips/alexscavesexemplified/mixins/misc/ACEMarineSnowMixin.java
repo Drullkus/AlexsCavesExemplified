@@ -7,7 +7,7 @@ import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.item.Item;
 import net.minecraft.world.item.context.UseOnContext;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -23,7 +23,7 @@ public class ACEMarineSnowMixin extends Item {
 
     @Inject(method = "useOn", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/context/UseOnContext;getLevel()Lnet/minecraft/world/level/Level;",ordinal = 8))
     private void registerGoals(UseOnContext context, CallbackInfoReturnable<InteractionResult> cir) {
-        if (ACExemplifiedConfig.ECOLOGICAL_REPUTATION_ENABLED && context.getLevel().getBiome(context.getClickedPos()).is(ACBiomeRegistry.ABYSSAL_CHASM)) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.ECOLOGICAL_REPUTATION_ENABLED.get() && context.getLevel().getBiome(context.getClickedPos()).is(ACBiomeRegistry.ABYSSAL_CHASM)) {
             for (LivingEntity deepOne : context.getPlayer().level().getEntitiesOfClass(LivingEntity.class, context.getPlayer().getBoundingBox().inflate(50))) {
                 if (deepOne instanceof DeepOneBaseEntity deepOneBaseEntity) {
                     deepOneBaseEntity.addReputation(context.getPlayer().getUUID(),1);

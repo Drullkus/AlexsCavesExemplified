@@ -1,19 +1,8 @@
 package org.crimsoncrips.alexscavesexemplified.server.goals;
 
-import java.util.EnumSet;
-import javax.annotation.Nullable;
-
 import com.github.alexmodguy.alexscaves.server.entity.living.TremorsaurusEntity;
-import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
-import net.minecraft.world.entity.LivingEntity;
-import net.minecraft.world.entity.PathfinderMob;
 import net.minecraft.world.entity.ai.goal.TemptGoal;
-import net.minecraft.world.entity.ai.targeting.TargetingConditions;
-import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.crafting.Ingredient;
-import net.minecraft.world.level.block.SpawnerBlock;
-import net.minecraft.world.level.block.entity.SpawnerBlockEntity;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 
 public class ACETremorTempt extends TemptGoal {
 

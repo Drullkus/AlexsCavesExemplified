@@ -4,10 +4,7 @@ import net.minecraft.world.effect.MobEffect;
 import net.minecraft.world.effect.MobEffectCategory;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.attributes.Attributes;
-import net.minecraft.world.level.block.SoulSandBlock;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
-
-import java.util.UUID;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 
 public class ACESugarCrash extends MobEffect {
 
@@ -19,7 +16,7 @@ public class ACESugarCrash extends MobEffect {
     }
 
     public String getDescriptionId() {
-        if (ACExemplifiedConfig.SUGAR_CRASH_ENABLED) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.SUGAR_CRASH_ENABLED.get()) {
             return "alexscavesexemplified.potion.sugar_crash";
         } else {
             return "alexscavesexemplified.feature_disabled";

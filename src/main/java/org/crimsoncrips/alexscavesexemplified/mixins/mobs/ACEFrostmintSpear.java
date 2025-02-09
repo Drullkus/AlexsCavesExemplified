@@ -1,13 +1,10 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
-import biomesoplenty.api.block.BOPBlocks;
 import com.github.alexmodguy.alexscaves.server.block.ACBlockRegistry;
 import com.github.alexmodguy.alexscaves.server.block.fluid.ACFluidRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.FrostmintSpearEntity;
-import com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.FrostmintExplosion;
 import com.github.alexmodguy.alexscaves.server.misc.ACAdvancementTriggerRegistry;
-import com.simibubi.create.AllFluids;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.EntityType;
@@ -19,11 +16,9 @@ import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.HitResult;
-import net.minecraft.world.phys.Vec3;
-import net.minecraftforge.fluids.FluidType;
 import net.minecraftforge.fml.ModList;
+import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
-import org.crimsoncrips.alexscavesexemplified.config.ACExemplifiedConfig;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -50,7 +45,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
 
     @Override
     public boolean ignoreExplosion() {
-        return ACExemplifiedConfig.RADIANT_WRATH_ENABLED && this.getPersistentData().getBoolean("FrostRadiant");
+        return AlexsCavesExemplified.COMMON_CONFIG.RADIANT_WRATH_ENABLED.get() && this.getPersistentData().getBoolean("FrostRadiant");
     }
 
 
@@ -58,7 +53,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
     private void tick(CallbackInfo ci) {
         Level level = this.level();
         if (this.isInFluidType()){
-            if (ACExemplifiedConfig.AMPLIFIED_FROSTMINT_ENABLED && this.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get()) && !level.isClientSide) {
+            if (AlexsCavesExemplified.COMMON_CONFIG.AMPLIFIED_FROSTMINT_ENABLED.get() && this.isInFluidType(ACFluidRegistry.PURPLE_SODA_FLUID_TYPE.get()) && !level.isClientSide) {
                 FrostmintExplosion explosion = new FrostmintExplosion(level, this, this.getX() + 0.5F, this.getY() + 0.5F, this.getZ() + 0.5F, 4.0F, Explosion.BlockInteraction.DESTROY_WITH_DECAY, false);
                 explosion.explode();
                 explosion.finalizeExplosion(true);
@@ -69,7 +64,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
             }
         }
 
-        if (ACExemplifiedConfig.RADIANT_WRATH_ENABLED && this.getPersistentData().getBoolean("FrostRadiant") && this.tickCount > 100){
+        if (AlexsCavesExemplified.COMMON_CONFIG.RADIANT_WRATH_ENABLED.get() && this.getPersistentData().getBoolean("FrostRadiant") && this.tickCount > 100){
             this.discard();
         }
     }
@@ -82,7 +77,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
         Level level = this.level();
 
 
-        if (!this.exploded && ACExemplifiedConfig.SOLIDIFIED_ENABLED) {
+        if (!this.exploded && AlexsCavesExemplified.COMMON_CONFIG.SOLIDIFIED_ENABLED.get()) {
             solidifyBlock(Blocks.WATER,Blocks.ICE,level,blockPos);
             solidifyBlock(Blocks.LAVA,Blocks.BASALT,level,blockPos);
             solidifyBlock(ACBlockRegistry.PURPLE_SODA.get(), ACBlockRegistry.SUGAR_GLASS.get(), level,blockPos);
