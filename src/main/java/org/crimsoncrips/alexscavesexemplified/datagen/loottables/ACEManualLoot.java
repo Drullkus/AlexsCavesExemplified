@@ -24,19 +24,16 @@ public class ACEManualLoot implements LootTableSubProvider {
 
         consumer.accept(ACELootTables.UNDERZEALOT_TRADE, LootTable.lootTable()
                 .withPool(LootPool.lootPool()
-                                .setRolls(ConstantValue.exactly(10))
-                                .add(LootItem.lootTableItem(ACBlockRegistry.THORNWOOD_BRANCH.get().asItem()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))))
-                                .add(LootItem.lootTableItem(ACBlockRegistry.THORNWOOD_LOG.get().asItem()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-                                )
-                .withPool(LootPool.lootPool()
-                        .setRolls(ConstantValue.exactly(7))
-                        .add(LootItem.lootTableItem(ACItemRegistry.MOTH_DUST.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4))))
-                        .add(LootItem.lootTableItem(ACItemRegistry.VESPER_WING.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))))
-                        .add(LootItem.lootTableItem(ACItemRegistry.CORRODENT_TEETH.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(0, 1))))
-                        )
-                .withPool(LootPool.lootPool()
+                        .setRolls(ConstantValue.exactly(5))
+                           .add(LootItem.lootTableItem(ACBlockRegistry.THORNWOOD_BRANCH.get().asItem()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 5))).setWeight(80))
+                           .add(LootItem.lootTableItem(ACBlockRegistry.THORNWOOD_LOG.get().asItem()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))).setWeight(70))
+                        .setRolls(ConstantValue.exactly(2))
+                           .add(LootItem.lootTableItem(ACItemRegistry.MOTH_DUST.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(2, 4))).setWeight(45))
+                           .add(LootItem.lootTableItem(ACItemRegistry.VESPER_WING.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 2))).setWeight(50))
+                           .add(LootItem.lootTableItem(ACItemRegistry.CORRODENT_TEETH.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 1))).setWeight(40))
                         .setRolls(ConstantValue.exactly(1))
-                        .add(LootItem.lootTableItem(ACItemRegistry.DESOLATE_DAGGER.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 1))))
+                           .add(LootItem.lootTableItem(ACItemRegistry.DESOLATE_DAGGER.get()).apply(SetItemCountFunction.setCount(UniformGenerator.between(1, 1))).setWeight(10))
+
                 ));
     }
 

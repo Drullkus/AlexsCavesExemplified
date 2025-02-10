@@ -210,40 +210,40 @@ public class ACExemplifiedEvents {
             }
         }
 
-        if (target instanceof UnderzealotEntity underzealot && level instanceof ServerLevel serverLevel) {
+        if (target instanceof UnderzealotEntity underzealot && underzealot.getPassengers().isEmpty() && !underzealot.isPraying() && AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get()) {
 
-            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/trade");
+            for (Mob leashedEntities : level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(10))) {
+                if (leashedEntities.getLeashHolder() == player && leashedEntities instanceof UnderzealotSacrifice) {
+                    leashedEntities.dropLeash(true,true);
+                    leashedEntities.startRiding(underzealot);
 
-            LootParams ctx = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, underzealot).create(LootContextParamSets.PIGLIN_BARTER);
-            ObjectArrayList<ItemStack> rewards = level.getServer().getLootData().getLootTable(sacrificeLocation).getRandomItems(ctx);
+                    boolean respect = (player.getItemBySlot(EquipmentSlot.CHEST).is(ACItemRegistry.CLOAK_OF_DARKNESS.get()) && player.getItemBySlot(EquipmentSlot.HEAD).is(ACItemRegistry.HOOD_OF_DARKNESS.get()));
+                    if (AlexsCavesExemplified.COMMON_CONFIG.UNDERZEALOT_RESPECT_ENABLED.get() && respect){
+                        if (level instanceof ServerLevel serverLevel){
+                            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/trade");
 
-            rewards.forEach(stack -> underzealot.spawnAtLocation(stack, 1.0F));
+                            LootParams ctx = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, underzealot).create(LootContextParamSets.PIGLIN_BARTER);
+                            ObjectArrayList<ItemStack> rewards = level.getServer().getLootData().getLootTable(sacrificeLocation).getRandomItems(ctx);
 
+                            rewards.forEach(stack -> BehaviorUtils.throwItem(underzealot, rewards.get(0), player.position().add(0.0D, 1.0D, 0.0D)));
+                        }
 
-//            for (Mob leashedEntities : level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(10))) {
-//                if (leashedEntities.getLeashHolder() == player &&  leashedEntities instanceof UnderzealotSacrifice) {
-//                    if (underzealot.getPassengers().isEmpty() && !underzealot.isPraying()){
-//                        leashedEntities.dropLeash(true,true);
-//                        leashedEntities.startRiding(underzealot);
-//
-//                        boolean respect = (player.getItemBySlot(EquipmentSlot.CHEST).is(ACItemRegistry.CLOAK_OF_DARKNESS.get()) && player.getItemBySlot(EquipmentSlot.HEAD).is(ACItemRegistry.HOOD_OF_DARKNESS.get()));
-//                        if (AlexsCavesExemplified.COMMON_CONFIG.UNDERZEALOT_RESPECT_ENABLED.get() && level instanceof ServerLevel serverLevel){
-//
-//
-//                            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/trade");
-//                            LootTable loottable = level.getServer().getLootData().getLootTable(sacrificeLocation);
-//                            ObjectArrayList<ItemStack> items = loottable.getRandomItems((new LootParams.Builder(serverLevel)).create(LootContextParamSets.EMPTY));
-//
-//
-//                            if (!items.isEmpty()){
-//                                BehaviorUtils.throwItem(underzealot, items.get(0), player.position().add(0.0D, 1.0D, 0.0D));
-//                            }
-//                        } else {
-//
-//                        }
-//                    }
-//                }
-//            }
+                        for(int i = 0; i < 5; ++i) {
+                            double d0 = underzealot.getRandom().nextGaussian() * 0.02D;
+                            double d1 = underzealot.getRandom().nextGaussian() * 0.02D;
+                            double d2 = underzealot.getRandom().nextGaussian() * 0.02D;
+                            underzealot.level().addParticle(ParticleTypes.HAPPY_VILLAGER, underzealot.getRandomX(1.0D), underzealot.getRandomY() + 1.0D, underzealot.getRandomZ(1.0D), d0, d1, d2);
+                        }
+                    } else {
+                        for(int i = 0; i < 5; ++i) {
+                            double d0 = underzealot.getRandom().nextGaussian() * 0.02D;
+                            double d1 = underzealot.getRandom().nextGaussian() * 0.02D;
+                            double d2 = underzealot.getRandom().nextGaussian() * 0.02D;
+                            underzealot.level().addParticle(ParticleTypes.ANGRY_VILLAGER, underzealot.getRandomX(1.0D), underzealot.getRandomY() + 1.0D, underzealot.getRandomZ(1.0D), d0, d1, d2);
+                        }
+                    }
+                }
+            }
         }
 
         if (AlexsCavesExemplified.COMMON_CONFIG.GLUTTONY_ENABLED.get() && player.isCrouching()) {

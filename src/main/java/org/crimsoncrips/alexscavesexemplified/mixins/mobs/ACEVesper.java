@@ -72,7 +72,7 @@ public abstract class ACEVesper extends Monster {
             this.goalSelector.addGoal(1, new VesperAttackGoal(vesper){
                 @Override
                 public boolean canContinueToUse() {
-                    return super.canContinueToUse() && getHealth() <= 0.2F * getMaxHealth();
+                    return super.canContinueToUse() && getHealth() <= 0.2F * getMaxHealth() && !vesper.isLeashed();
                 }
             });
         }
@@ -80,16 +80,18 @@ public abstract class ACEVesper extends Monster {
 
     @Inject(method = "tick", at = @At("TAIL"))
     private void tick(CallbackInfo ci) {
-        if (!AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get())
-            return;
         LivingEntity target = this.getTarget();
-        if (target == null)
-            return;
-        if (this.getLastHurtByMob() == target)
-            return;
-        if (CuriosCompat.hasLight(target)) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get() && target != null && target != getLastHurtByMob()){
+            if (CuriosCompat.hasLight(target)) {
+                this.setTarget(null);
+            }
+        }
+
+        if (AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get() && isLeashed()){
             this.setTarget(null);
         }
+
+
     }
 
     @Override

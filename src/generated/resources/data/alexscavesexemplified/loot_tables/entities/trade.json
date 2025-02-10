@@ -17,7 +17,8 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "alexscaves:thornwood_branch"
+          "name": "alexscaves:thornwood_branch",
+          "weight": 80
         },
         {
           "type": "minecraft:item",
@@ -32,14 +33,9 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "alexscaves:thornwood_log"
-        }
-      ],
-      "rolls": 10.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
+          "name": "alexscaves:thornwood_log",
+          "weight": 70
+        },
         {
           "type": "minecraft:item",
           "functions": [
@@ -53,7 +49,8 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "alexscaves:moth_dust"
+          "name": "alexscaves:moth_dust",
+          "weight": 45
         },
         {
           "type": "minecraft:item",
@@ -68,29 +65,9 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "alexscaves:vesper_wing"
+          "name": "alexscaves:vesper_wing",
+          "weight": 50
         },
-        {
-          "type": "minecraft:item",
-          "functions": [
-            {
-              "add": false,
-              "count": {
-                "type": "minecraft:uniform",
-                "max": 1.0,
-                "min": 0.0
-              },
-              "function": "minecraft:set_count"
-            }
-          ],
-          "name": "alexscaves:corrodent_teeth"
-        }
-      ],
-      "rolls": 7.0
-    },
-    {
-      "bonus_rolls": 0.0,
-      "entries": [
         {
           "type": "minecraft:item",
           "functions": [
@@ -104,7 +81,24 @@
               "function": "minecraft:set_count"
             }
           ],
-          "name": "alexscaves:desolate_dagger"
+          "name": "alexscaves:corrodent_teeth",
+          "weight": 40
+        },
+        {
+          "type": "minecraft:item",
+          "functions": [
+            {
+              "add": false,
+              "count": {
+                "type": "minecraft:uniform",
+                "max": 1.0,
+                "min": 1.0
+              },
+              "function": "minecraft:set_count"
+            }
+          ],
+          "name": "alexscaves:desolate_dagger",
+          "weight": 10
         }
       ],
       "rolls": 1.0

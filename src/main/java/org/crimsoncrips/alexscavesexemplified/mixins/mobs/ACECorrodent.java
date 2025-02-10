@@ -1,7 +1,9 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs;
 
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
+import com.github.alexmodguy.alexscaves.server.entity.ai.CorrodentAttackGoal;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
+import com.github.alexmodguy.alexscaves.server.entity.ai.VesperAttackGoal;
 import com.github.alexmodguy.alexscaves.server.entity.living.CorrodentEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.UnderzealotEntity;
 import com.github.alexmodguy.alexscaves.server.entity.util.TargetsDroppedItems;
@@ -38,9 +40,8 @@ import java.util.Objects;
 @Mixin(CorrodentEntity.class)
 public abstract class ACECorrodent extends Monster implements UnderzealotSacrifice, TargetsDroppedItems {
 
-    @Shadow public abstract void remove(RemovalReason removalReason);
 
-    @Shadow protected boolean isLandNavigator;
+
     private int sacrificeTime = 0;
     private boolean isBeingSacrificed = false;
 
@@ -50,15 +51,25 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
     }
 
     @Inject(method = "registerGoals", at = @At("TAIL"))
-    private void registerGoals(CallbackInfo ci) {
+    private void alexsCavesExemplified$registerGoals(CallbackInfo ci) {
         CorrodentEntity corrodent = (CorrodentEntity)(Object)this;
         if (AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get()){
             corrodent.targetSelector.addGoal(2, new MobTarget3DGoal(corrodent, Player.class, false,10, livingEntity -> {
                 return !livingEntity.isHolding(Ingredient.of(ACExexmplifiedTagRegistry.LIGHT)) && (livingEntity instanceof Player player && !CuriosCompat.hasLight(player));
             }));
         }
+
         if (AlexsCavesExemplified.COMMON_CONFIG.KNAWING_ENABLED.get()){
             corrodent.targetSelector.addGoal(1, new ACEKnawingGoal(corrodent, false));
+        }
+
+        if (AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get()){
+            this.goalSelector.addGoal(2, new CorrodentAttackGoal(corrodent){
+                @Override
+                public boolean canContinueToUse() {
+                    return super.canContinueToUse() && getHealth() <= 0.3F * getMaxHealth();
+                }
+            });
         }
 
 
@@ -71,13 +82,18 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
 
     @Override
     public boolean isValidSacrifice(int distanceFromGround) {
-        return AlexsCavesExemplified.COMMON_CONFIG.CORRODENT_CONVERSION_ENABLED.get() && this.getHealth() <= 0.50F * this.getMaxHealth() ;
+        return AlexsCavesExemplified.COMMON_CONFIG.CORRODENT_CONVERSION_ENABLED.get() && this.getHealth() <= 0.30F * this.getMaxHealth() ;
+    }
+
+    @Override
+    public boolean canBeLeashed(Player pPlayer) {
+        return super.canBeLeashed(pPlayer) || (AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get() && getHealth() <= 0.30F * getMaxHealth());
     }
 
 
 
     @Inject(method = "tick", at = @At("TAIL"))
-    private void tick(CallbackInfo ci) {
+    private void alexsCavesExemplified$tick(CallbackInfo ci) {
         if (isBeingSacrificed && this.isPassenger() && !level().isClientSide && AlexsCavesExemplified.COMMON_CONFIG.CORRODENT_CONVERSION_ENABLED.get()) {
             sacrificeTime--;
             if (sacrificeTime < 10) {
@@ -100,16 +116,25 @@ public abstract class ACECorrodent extends Monster implements UnderzealotSacrifi
         }
 
         LivingEntity target = this.getTarget();
-        if (AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get() && target != this.getLastAttacker() && target != null) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get() && target != null && target != getLastHurtByMob()){
             if (CuriosCompat.hasLight(target)) {
                 this.setTarget(null);
             }
         }
+
+        if (AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get() && isLeashed()){
+            this.setTarget(null);
+        }
     }
 
 
+    @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 2))
+    private boolean alexsCavesExemplified$Attack(GoalSelector instance, int pPriority, Goal pGoal) {
+        return !AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get();
+    }
+
     @WrapWithCondition(method = "registerGoals", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/entity/ai/goal/GoalSelector;addGoal(ILnet/minecraft/world/entity/ai/goal/Goal;)V",ordinal = 8))
-    private boolean nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
+    private boolean alexsCavesExemplified$nearestAttack(GoalSelector instance, int pPriority, Goal pGoal) {
         return !AlexsCavesExemplified.COMMON_CONFIG.FORLORN_LIGHT_EFFECT_ENABLED.get();
     }
 
