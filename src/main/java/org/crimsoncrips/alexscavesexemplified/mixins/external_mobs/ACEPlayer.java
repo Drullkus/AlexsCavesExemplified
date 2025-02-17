@@ -18,6 +18,7 @@ import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.ACEDamageTypes;
 import org.spongepowered.asm.mixin.Mixin;
+import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -29,6 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
 
 
+    @Shadow public abstract void displayClientMessage(Component pChatComponent, boolean pActionBar);
 
     @Unique
     private Item[] lastAte = new Item[2];
@@ -113,10 +115,13 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
     private void sweetCounter(int value){
         if (AlexsCavesExemplified.COMMON_CONFIG.SWEET_PUNISHMENT_ENABLED.get()) {
             sweets = sweets + value;
-            if (sweets == 8 && this.level().isClientSide) {
+            if (sweets == 8 && !this.level().isClientSide) {
                 if (this.level().getRandom().nextBoolean()) {
-                    this.sendSystemMessage(Component.nullToEmpty("Mom: That's enough candy for today child"));
-                } else this.sendSystemMessage(Component.nullToEmpty("Dad: That's enough candy for today child"));
+                    if (!this.level().isClientSide) {
+                        this.displayClientMessage(Component.translatable("item.alexscavesexemplified.locator_protection"), true);
+                    }
+                    this.displayClientMessage(Component.translatable("misc.alexscavesexemplified.candy_warn_0"), true);
+                } else this.displayClientMessage(Component.nullToEmpty("misc.alexscavesexemplified.candy_warn_1"), true);
             }
         }
     }

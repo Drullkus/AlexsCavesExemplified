@@ -110,11 +110,17 @@ public class ACEServerConfig {
     public final  ForgeConfigSpec.BooleanValue OVERDRIVED_CONVERSION_ENABLED;
     public final  ForgeConfigSpec.BooleanValue DEFUSION_ENABLED;
     public final  ForgeConfigSpec.BooleanValue NAVAL_NUCLEARITY_ENABLED;
-    public final  ForgeConfigSpec.BooleanValue LOCATABLE_CAVES_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue POWERED_LOCATORS_ENABLED;
     public final  ForgeConfigSpec.BooleanValue CATTASTROPHE_ENABLED;
     public final  ForgeConfigSpec.BooleanValue BOUNDED_MAGNETISM_ENABLED;
     public final  ForgeConfigSpec.BooleanValue RUSTED_NUCLEEPER_ENABLED;
     public final  ForgeConfigSpec.BooleanValue DARK_OFFERING_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue MAGNERIP_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue SUBMARINE_BUMP_ENABLED;
+
+    public final  ForgeConfigSpec.BooleanValue HARDCORE_MAGNERIP_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue IP_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue ACE_WIKI_ENABLED;
 
 
 
@@ -122,7 +128,8 @@ public class ACEServerConfig {
 
     public ACEServerConfig(final ForgeConfigSpec.Builder builder) {
         builder.push("General");
-         this.REDOABLE_SPELUNKY_ENABLED = buildBoolean(builder, "REDOABLE_SPELUNKY_ENABLED", " ", true, "Whether it gives you back the tablet when exiting the spelunky table");
+        this.ACE_WIKI_ENABLED = buildBoolean(builder, "ACE_WIKI_ENABLED", " ", true, "Gives you the ace wiki book at start");
+        this.REDOABLE_SPELUNKY_ENABLED = buildBoolean(builder, "REDOABLE_SPELUNKY_ENABLED", " ", true, "Whether it gives you back the tablet when exiting the spelunky table");
          this.SPELUNKY_ATTEMPTS_AMOUNT = buildInt(builder, "SPELUNKY_ATTEMPTS_AMOUNT", " ", 5, 1, Integer.MAX_VALUE, "Amount of tries you get for the spelunky table per tablet");
          this.VANILLA_ADAPTIONS_ENABLED = buildBoolean(builder, "VANILLA_ADAPTIONS_ENABLED", " ", true, "Whether vanilla enchantments adapts to weapons (ex.Dreadbow, etc..)");
          this.CHARGED_CAVE_CREEPER_CHANCE = buildDouble(builder, "CHARGED_CAVE_CREEPER_CHANCE", " ", 0.2,0.0,1.0, "Chances of creepers from caves to be charged (0 for disable)");
@@ -131,7 +138,7 @@ public class ACEServerConfig {
         this.CAVIAL_BONEMEAL_ENABLED = buildBoolean(builder, "CAVIAL_BONEMEAL_ENABLED", " ", true, "Whether it adds new interactions of bone meal with Alex's Cave's flora");
         this.DECIPHERABLE_EXPERIENCE_ENABLED = buildBoolean(builder, "DECIPHERABLE_EXPERIENCE_ENABLED", " ", true, "Whether deciphering tablets give decent xp");
         this.LIQUID_REPLICATION_ENABLED = buildBoolean(builder, "LIQUID_REPLICATION_ENABLED", " ", true, "Whether AC liquids can be renewable");
-        this.LOCATABLE_CAVES_ENABLED = buildBoolean(builder, "LOCATABLE_CAVES_ENABLED", " ", false, "Whether AC caves and structures are locatable with Natures/Structure compass");
+        this.POWERED_LOCATORS_ENABLED = buildBoolean(builder, "POWERED_LOCATORS_ENABLED", " ", true, "Using a wither star to nullify godly interventions.To allow you to use natures compass and alike to find biomes");
 
         builder.pop();
         builder.push("Candy Cavity");
@@ -208,7 +215,6 @@ public class ACEServerConfig {
         builder.push("Underzealot");
         this.EXTINGUISH_CAMPFIRES_ENABLED = buildBoolean(builder, "EXTINGUISH_CAMPFIRES_ENABLED", " ", true, "Whether underzealots extinguish campfires");
         this.UNDERZEALOT_RESPECT_ENABLED = buildBoolean(builder, "UNDERZEALOT_RESPECT_ENABLED", " ", true, "Whether underzealot respect those that wear the darkness");
-        builder.push("Underzealot Respect");
         this.DARK_OFFERING_ENABLED = buildBoolean(builder, "DARK_OFFERING_ENABLED", " ", true, "Allow you to offer sacrifices to underzealots when neutral to them");
 
         builder.pop();
@@ -291,6 +297,10 @@ public class ACEServerConfig {
         this.HEAVY_GRAVITY_ENABLED = buildBoolean(builder, "HEAVY_GRAVITY_ENABLED", " ", true, "Entities holding heavy-weight item will increase falling speed");
         this.SHOCKING_THERAPY_ENABLED = buildBoolean(builder, "SHOCKING_THERAPY_ENABLED", " ", true, "Tesla bulbs rarely directly shock nearby intruders");
         this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command & Conquer");
+        this.MAGNERIP_ENABLED = buildBoolean(builder, "MAGNERIP_ENABLED", "", true, "Will rip magnetic items in your hands when afflicted with weakness");
+
+        builder.comment("--Requires Magnerip--");
+        this.HARDCORE_MAGNERIP_ENABLED = buildBoolean(builder, "HARDCORE_MAGNERIP_ENABLED", "", false, "Now causes all your magnetic items in your inventory will be attracted off you,no matter what");
 
         builder.push("Boundroid");
         this.BOUNDED_MAGNETISM_ENABLED = buildBoolean(builder, "BOUNDED_MAGNETISM_ENABLED", " ", true, "Boundroid attracts magnetic items");
@@ -302,6 +312,8 @@ public class ACEServerConfig {
         this.ECOLOGICAL_REPUTATION_ENABLED = buildBoolean(builder, "ECOLOGICAL_REPUTATION_ENABLED", " ", true, "Whether messing with the ecosystem reduces deep one reputation");
         this.ABYSSAL_LIGHT_CHECK_ENABLED = buildBoolean(builder, "ABYSSAL_LIGHT_CHECK_ENABLED", " ", true, "Whether abyssal mobs interact with entities holding light");
         this.DEEP_WEAKENED_ENABLED = buildBoolean(builder, "DEEP_WEAKENED_ENABLED", " ", true, "Whether deep ones wilt when outside of abyssal chasm");
+        this.SUBMARINE_BUMP_ENABLED = buildBoolean(builder, "SUBMARINE_BUMP_ENABLED", " ", true, "Whether submarine deals damage when moving");
+
         builder.push("Mine Guardian");
         this.REMINEDING_ENABLED = buildBoolean(builder, "REMINEDING_ENABLED", " ", true, "Whether mine guardians can be made and owned");
         this.NOON_GUARDIAN_ENABLED = buildBoolean(builder, "NOON_GUARDIAN_ENABLED", " ", true, "Noon variant");
@@ -323,6 +335,7 @@ public class ACEServerConfig {
         this.SWEET_PUNISHMENT_ENABLED = buildBoolean(builder, "SWEET_PUNISHMENT_ENABLED", " ", false, "Punished for too much sweets");
         this.TOUGH_ROACHES_ENABLED = buildBoolean(builder, "TOUGH_ROACHES_ENABLED", " ", false, "Roaches are nuke proof");
         this.CATTASTROPHE_ENABLED = buildBoolean(builder, "CATTASTROPHE_ENABLED", " ", false, "dont ever say pspsps to cats");
+        this.IP_ENABLED = buildBoolean(builder, "IP_ENABLED", " ", false, "Notors bout to leak your ip");
 
 
     }

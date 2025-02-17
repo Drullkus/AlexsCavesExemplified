@@ -12,6 +12,8 @@ public class ACEAtomicMagnetism extends Enchantment {
         super(p_44676_, p_44677_, p_44678_);
     }
 
+
+
     public int getMinCost(int i) {
         return 7 + (i + 1) * 3;
     }

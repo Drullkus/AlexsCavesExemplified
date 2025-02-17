@@ -3,6 +3,7 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs.mine_guardian;
 import com.github.alexmodguy.alexscaves.client.model.MineGuardianModel;
 import com.github.alexmodguy.alexscaves.client.render.ACRenderTypes;
 import com.github.alexmodguy.alexscaves.server.entity.living.MineGuardianEntity;
+import com.github.alexmodguy.alexscaves.server.event.CommonEvents;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -45,6 +46,8 @@ public abstract class ACEMineRendererRenderMixin extends RenderLayer<MineGuardia
             VertexConsumer nuclearGlowing = bufferIn.getBuffer(ACRenderTypes.getEyesAlphaEnabled(TEXTURE_NUCLEAR_AE));
             ((MineGuardianModel)this.getParentModel()).renderToBuffer(poseStack, nuclearGlowing, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, 0.4F + explodeProgress);
         }
+
+
 
     }
 

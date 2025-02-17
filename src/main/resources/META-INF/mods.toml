@@ -114,13 +114,6 @@ ordering="NONE"
 side="BOTH"
 
 [[dependencies."${mod_id}"]]
-modId="alexsmobsinteraction"
-mandatory=false
-versionRange="[4.3,)"
-ordering="NONE"
-side="BOTH"
-
-[[dependencies."${mod_id}"]]
 modId="supplementaries"
 mandatory=false
 versionRange="[forge_1.20-2.13.27,)"

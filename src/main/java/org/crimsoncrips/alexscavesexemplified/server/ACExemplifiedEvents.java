@@ -7,6 +7,7 @@ import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ai.MobTarget3DGoal;
 import com.github.alexmodguy.alexscaves.server.entity.item.MeltedCaramelEntity;
 import com.github.alexmodguy.alexscaves.server.entity.item.NuclearExplosionEntity;
+import com.github.alexmodguy.alexscaves.server.entity.item.SubmarineEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.*;
 import com.github.alexmodguy.alexscaves.server.entity.util.UnderzealotSacrifice;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
@@ -17,6 +18,9 @@ import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
+import com.github.alexthe666.alexsmobs.entity.util.VineLassoUtil;
+import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
+import com.github.alexthe666.citadel.Citadel;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
@@ -26,9 +30,11 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
+import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -63,6 +69,7 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.BonemealEvent;
+import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -74,12 +81,14 @@ import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.datagen.ACEFeatures;
 import org.crimsoncrips.alexscavesexemplified.datagen.loottables.ACELootTables;
+import org.crimsoncrips.alexscavesexemplified.misc.ACEUtils;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.NucleeperXtra;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
+import vazkii.patchouli.common.item.PatchouliItems;
 
 import java.util.*;
 
@@ -213,34 +222,35 @@ public class ACExemplifiedEvents {
         if (target instanceof UnderzealotEntity underzealot && underzealot.getPassengers().isEmpty() && !underzealot.isPraying() && AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get()) {
 
             for (Mob leashedEntities : level.getEntitiesOfClass(Mob.class, player.getBoundingBox().inflate(10))) {
-                if (leashedEntities.getLeashHolder() == player && leashedEntities instanceof UnderzealotSacrifice) {
-                    leashedEntities.dropLeash(true,true);
+                boolean lasso = ModList.get().isLoaded("alexsmobs") && AMCompat.isLeashed(leashedEntities,player);
+                if ((leashedEntities.getLeashHolder() == player || lasso) && leashedEntities instanceof UnderzealotSacrifice) {
+                    if (lasso){
+                        leashedEntities.spawnAtLocation(new ItemStack(AMItemRegistry.VINE_LASSO.get()));
+                        VineLassoUtil.lassoTo(null, leashedEntities);
+                    } else {
+                        leashedEntities.dropLeash(true,true);
+                    }
                     leashedEntities.startRiding(underzealot);
 
                     boolean respect = (player.getItemBySlot(EquipmentSlot.CHEST).is(ACItemRegistry.CLOAK_OF_DARKNESS.get()) && player.getItemBySlot(EquipmentSlot.HEAD).is(ACItemRegistry.HOOD_OF_DARKNESS.get()));
+                    boolean happy;
                     if (AlexsCavesExemplified.COMMON_CONFIG.UNDERZEALOT_RESPECT_ENABLED.get() && respect){
                         if (level instanceof ServerLevel serverLevel){
-                            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/trade");
-
-                            LootParams ctx = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, underzealot).create(LootContextParamSets.PIGLIN_BARTER);
+                            ResourceLocation sacrificeLocation = new ResourceLocation(AlexsCavesExemplified.MODID, "entities/underzealot_trade");
+                            LootParams ctx = new LootParams.Builder(serverLevel).withParameter(LootContextParams.THIS_ENTITY, underzealot).create(LootContextParamSets.EMPTY);
                             ObjectArrayList<ItemStack> rewards = level.getServer().getLootData().getLootTable(sacrificeLocation).getRandomItems(ctx);
 
                             rewards.forEach(stack -> BehaviorUtils.throwItem(underzealot, rewards.get(0), player.position().add(0.0D, 1.0D, 0.0D)));
                         }
-
-                        for(int i = 0; i < 5; ++i) {
-                            double d0 = underzealot.getRandom().nextGaussian() * 0.02D;
-                            double d1 = underzealot.getRandom().nextGaussian() * 0.02D;
-                            double d2 = underzealot.getRandom().nextGaussian() * 0.02D;
-                            underzealot.level().addParticle(ParticleTypes.HAPPY_VILLAGER, underzealot.getRandomX(1.0D), underzealot.getRandomY() + 1.0D, underzealot.getRandomZ(1.0D), d0, d1, d2);
-                        }
+                        happy = true;
                     } else {
-                        for(int i = 0; i < 5; ++i) {
-                            double d0 = underzealot.getRandom().nextGaussian() * 0.02D;
-                            double d1 = underzealot.getRandom().nextGaussian() * 0.02D;
-                            double d2 = underzealot.getRandom().nextGaussian() * 0.02D;
-                            underzealot.level().addParticle(ParticleTypes.ANGRY_VILLAGER, underzealot.getRandomX(1.0D), underzealot.getRandomY() + 1.0D, underzealot.getRandomZ(1.0D), d0, d1, d2);
-                        }
+                        happy = false;
+                    }
+                    for(int i = 0; i < 5; ++i) {
+                        double d0 = underzealot.getRandom().nextGaussian() * 0.02D;
+                        double d1 = underzealot.getRandom().nextGaussian() * 0.02D;
+                        double d2 = underzealot.getRandom().nextGaussian() * 0.02D;
+                        underzealot.level().addParticle((happy ? ParticleTypes.HAPPY_VILLAGER : ParticleTypes.ANGRY_VILLAGER), underzealot.getRandomX(1.0D), underzealot.getRandomY() + 1.0D, underzealot.getRandomZ(1.0D), d0, d1, d2);
                     }
                 }
             }
@@ -449,8 +459,8 @@ public class ACExemplifiedEvents {
                 aboveWater++;
             }
 
-            int diving = getDivingAmount(livingEntity);
-            if (level.random.nextDouble() < (0.1 - (0.020 * diving))){
+            int diving = ACEUtils.getDivingAmount(livingEntity);
+            if (level.random.nextDouble() < (0.1 - (0.020 * diving)) && !(player.getVehicle() instanceof SubmarineEntity)){
                 if (aboveWater > 50 && diving < 10){
                     breatheEvent.setConsumeAirAmount(breatheEvent.getConsumeAirAmount() + (int) (0.025 * (aboveWater - 40)));
                 }
@@ -473,6 +483,7 @@ public class ACExemplifiedEvents {
         }
 
 
+
         if (livingEntity instanceof SeaPigEntity seaPigEntity && level.random.nextDouble() < 0.01 && AlexsCavesExemplified.COMMON_CONFIG.POISONOUS_SKIN_ENABLED.get()) {
             for (LivingEntity entity : seaPigEntity.level().getEntitiesOfClass(LivingEntity.class, seaPigEntity.getBoundingBox().inflate(0.5))) {
                 if (entity != seaPigEntity && entity.getBbHeight() <= 3.5F && !(entity instanceof SeaPigEntity)) {
@@ -488,9 +499,9 @@ public class ACExemplifiedEvents {
                 pos = pos.above();
                 aboveWater++;
             }
-            int diving = getDivingAmount(livingEntity);
+            int diving = ACEUtils.getDivingAmount(livingEntity);
 
-            if (level.random.nextDouble() < (0.1 - (0.020 * diving))){
+            if (level.random.nextDouble() < (0.1 - (0.020 * diving)) && !(player.getVehicle() instanceof SubmarineEntity)){
                 if (aboveWater > 50 && diving < 10){
                     player.hurt(ACEDamageTypes.causeDepthDamage(level.registryAccess()), (float) (0.025 * (aboveWater - 40)));
                 }
@@ -895,24 +906,23 @@ public class ACExemplifiedEvents {
         }
     }
 
+    @SubscribeEvent
+    public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+        Player player = event.getEntity();
+        CompoundTag playerData = event.getEntity().getPersistentData();
+        CompoundTag data = playerData.getCompound(Player.PERSISTED_NBT_TAG);
 
-    public static int getDivingAmount(LivingEntity entity) {
-        int i = 0;
-        if (entity.getItemBySlot(EquipmentSlot.HEAD).is((Item)ACItemRegistry.DIVING_HELMET.get())) {
-            ++i;
+        ItemStack book = new ItemStack(PatchouliItems.BOOK);
+        book.getOrCreateTag().putString("patchouli:book","alexscavesexemplified:ace_exemplified_wiki");
+
+        if (!data.getBoolean("ace_book") && AlexsCavesExemplified.COMMON_CONFIG.ACE_WIKI_ENABLED.get()) {
+            player.addItem(book);
+            data.putBoolean("ace_book", true);
+            playerData.put(Player.PERSISTED_NBT_TAG, data);
         }
-        if (entity.getItemBySlot(EquipmentSlot.CHEST).is((Item)ACItemRegistry.DIVING_CHESTPLATE.get())) {
-            ++i;
-        }
-        if (entity.getItemBySlot(EquipmentSlot.LEGS).is((Item)ACItemRegistry.DIVING_LEGGINGS.get())) {
-            ++i;
-        }
-        if (entity.getItemBySlot(EquipmentSlot.FEET).is((Item)ACItemRegistry.DIVING_BOOTS.get())) {
-            ++i;
-        }
-        i = i + CreateCompat.createDivingSuit(entity);
-        return i;
     }
+
+
 
 
 

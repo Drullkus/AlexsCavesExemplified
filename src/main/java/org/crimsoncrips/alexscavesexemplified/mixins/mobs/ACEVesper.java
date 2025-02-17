@@ -124,7 +124,7 @@ public abstract class ACEVesper extends Monster {
     }
 
     @ModifyReturnValue(method = "isValidSacrifice", at = @At("RETURN"),remap = false)
-    private boolean revealWords(boolean original) {
+    private boolean alexsCavesExemplified$isValidSacrifice(boolean original) {
         return original && (!AlexsCavesExemplified.COMMON_CONFIG.DARK_OFFERING_ENABLED.get() || !this.isLeashed());
     }
 

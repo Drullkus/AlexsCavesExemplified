@@ -1,7 +1,7 @@
 package org.crimsoncrips.alexscavesexemplified.compat;
 
-import com.crimsoncrips.alexsmobsinteraction.enchantment.AMIEnchantmentRegistry;
 import com.github.alexthe666.alexsmobs.entity.*;
+import com.github.alexthe666.alexsmobs.entity.util.VineLassoUtil;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
 import net.minecraft.world.entity.EquipmentSlot;
@@ -41,6 +41,9 @@ public class AMCompat {
             }
             return fly;
         }
+    }
+    public static boolean isLeashed(LivingEntity lassoed,Player holder){
+        return VineLassoUtil.getLassoedTo(lassoed) == holder;
     }
 
     public static Class AMmob(boolean raccoon){

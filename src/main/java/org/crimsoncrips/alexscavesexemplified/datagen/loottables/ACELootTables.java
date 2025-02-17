@@ -34,7 +34,7 @@ public class ACELootTables {
 
 
 
-	public static final ResourceLocation UNDERZEALOT_TRADE = register("entities/trade");
+	public static final ResourceLocation UNDERZEALOT_TRADE = register("entities/underzealot_trade");
 
 	public final ResourceLocation lootTable;
 

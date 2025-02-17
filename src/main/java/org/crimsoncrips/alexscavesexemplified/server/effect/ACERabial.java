@@ -21,7 +21,7 @@ public class ACERabial extends MobEffect {
 
     public String getDescriptionId() {
         if (AlexsCavesExemplified.COMMON_CONFIG.RABIES_ENABLED.get()) {
-            return "alexscavesexemplified.potion.rabial";
+            return "effect.alexscavesexemplified.rabial.title";
         } else {
             return "alexscavesexemplified.feature_disabled";
         }
