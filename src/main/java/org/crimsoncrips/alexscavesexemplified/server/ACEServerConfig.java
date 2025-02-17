@@ -328,13 +328,13 @@ public class ACEServerConfig {
         builder.pop();
         builder.pop();
         builder.push("Goofy Mode");
-        this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Whether Relentless Darkness dreadbow has no cooldown on its firing");
-        this.NUCLEAR_PISTONATION_ENABLED = buildBoolean(builder, "NUCLEAR_PISTONATION_ENABLED", " ", false, "Whether Nuclear Bombs can be pushed by piston (therefore duplicatable)");
-        this.BRAINDEAD_MODE_ENABLED = buildBoolean(builder, "BRAINDEAD_MODE_ENABLED", " ", false, "Whether the spelunkery table text is revealed already for easy answering");
-        this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", false, "Allows parrots explode with cookie block");
+        this.RATATATATATA_ENABLED = buildBoolean(builder, "RATATATATATA_ENABLED", " ", false, "Dreadbow go RATATATA");
+        this.NUCLEAR_PISTONATION_ENABLED = buildBoolean(builder, "NUCLEAR_PISTONATION_ENABLED", " ", false, "Pushable Nukes (therefore duplicatable)");
+        this.BRAINDEAD_MODE_ENABLED = buildBoolean(builder, "BRAINDEAD_MODE_ENABLED", " ", false, "Spelunkery XRAY");
+        this.COOKIE_CRUMBLE_ENABLED = buildBoolean(builder, "COOKIE_CRUMBLE_ENABLED", " ", false, "Parrots explode with cookie block");
         this.SWEET_PUNISHMENT_ENABLED = buildBoolean(builder, "SWEET_PUNISHMENT_ENABLED", " ", false, "Punished for too much sweets");
         this.TOUGH_ROACHES_ENABLED = buildBoolean(builder, "TOUGH_ROACHES_ENABLED", " ", false, "Roaches are nuke proof");
-        this.CATTASTROPHE_ENABLED = buildBoolean(builder, "CATTASTROPHE_ENABLED", " ", false, "dont ever say pspsps to cats");
+        this.CATTASTROPHE_ENABLED = buildBoolean(builder, "CATTASTROPHE_ENABLED", " ", false, "dont pspsps the cat");
         this.IP_ENABLED = buildBoolean(builder, "IP_ENABLED", " ", false, "Notors bout to leak your ip");
 
 
