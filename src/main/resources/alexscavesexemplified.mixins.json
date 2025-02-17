@@ -27,6 +27,7 @@
     "misc.ACEDreadbowItem",
     "misc.ACEEnigmaticEngineMixin",
     "misc.ACEHullbreakerGoalMixin",
+    "misc.ACEItemRenderer",
     "misc.ACEMagnetUtilMixin",
     "misc.ACEMarineSnowMixin",
     "misc.ACENuclearExplosion",
