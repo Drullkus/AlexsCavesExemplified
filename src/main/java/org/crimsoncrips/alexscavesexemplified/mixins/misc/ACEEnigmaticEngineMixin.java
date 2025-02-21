@@ -66,10 +66,12 @@ public abstract class ACEEnigmaticEngineMixin extends BlockEntity {
         }
         if (assembleIn != null) {
             for (BlockPos pos : BlockPos.betweenClosed(blockPos.getX() - 1, blockPos.getY() - 1, blockPos.getZ() - 1, blockPos.getX() + 1, blockPos.getY() + 1, blockPos.getZ() + 1)) {
-                level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                if (level.getBlockState(pos).isCollisionShapeFullBlock(level,pos)){
+                    level.setBlockAndUpdate(pos, Blocks.AIR.defaultBlockState());
+                }
             }
             Player owner = null;
-            for (Player player : level.getEntitiesOfClass(Player.class, new AABB(blockPos.offset(-32, -16, -32), blockPos.offset(32, 16, 32)))) {
+            for (Player player : level.getEntitiesOfClass(Player.class, new AABB(blockPos.offset(-6, -6, -6), blockPos.offset(6, 6, 6)))) {
                 owner = player;
             }
             if(!level.isClientSide){

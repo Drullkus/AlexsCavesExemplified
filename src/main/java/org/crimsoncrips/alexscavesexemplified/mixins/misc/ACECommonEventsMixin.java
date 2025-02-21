@@ -40,7 +40,7 @@ import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 public class ACECommonEventsMixin {
 
 
-    @Inject(method = "checkAndDestroyExploitItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"), remap = false, cancellable = true)
+    @Inject(method = "checkAndDestroyExploitItem", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;shrink(I)V"), cancellable = true)
     private static void onStep(Player player, EquipmentSlot slot, CallbackInfo ci, @Local ItemStack itemInHand) {
         if(AlexsCavesExemplified.COMMON_CONFIG.POWERED_LOCATORS_ENABLED.get()){
             if(!itemInHand.getOrCreateTag().getBoolean("WitherProtection")){

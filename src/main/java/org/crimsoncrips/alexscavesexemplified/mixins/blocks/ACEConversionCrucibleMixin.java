@@ -28,7 +28,7 @@ public abstract class ACEConversionCrucibleMixin extends BaseEntityBlock {
         super(pProperties);
     }
 
-    @Inject(method = "use", at = @At(value = "HEAD"), remap = false, cancellable = true)
+    @Inject(method = "use", at = @At(value = "HEAD"), cancellable = true)
     private void alexsCavesExemplified$use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn, BlockHitResult hit, CallbackInfoReturnable<InteractionResult> cir) {
         ItemStack playerItem = player.getItemInHand(handIn);
         if (worldIn.getBlockEntity(pos) instanceof ConversionCrucibleBlockEntity crucible && !player.isShiftKeyDown()) {

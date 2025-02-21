@@ -38,6 +38,7 @@ public class ACEAcidMixin extends LiquidBlock {
         if (AlexsCavesExemplified.COMMON_CONFIG.RUSTED_NUCLEEPER_ENABLED.get() && entity instanceof NucleeperEntity nucleeper && !((NucleeperXtra)nucleeper).alexsCavesExemplified$isRusted()) {
             ((NucleeperXtra)nucleeper).alexsCavesExemplified$setRusted(true);
             entity.playSound( ACSoundRegistry.ACID_BURN.get());
+
         }
     }
 

@@ -65,7 +65,7 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
         }
     }
 
-    @Inject(method = "tick", at = @At(value = "TAIL"), remap = false)
+    @Inject(method = "tick", at = @At(value = "TAIL"),remap = false)
     private static void alexsCavesExemplified$tick4(Level level, BlockPos pos, BlockState state, ConversionCrucibleBlockEntity entity, CallbackInfo ci) {
         if (entity.tickCount % 5 == 0 && AlexsCavesExemplified.COMMON_CONFIG.OVERDRIVED_CONVERSION_ENABLED.get() && !entity.isWitchMode()) {
             for(ItemEntity item : ((ConverstionAmplified) entity).alexsCavesExemplified$getItemsAtAndAbove(level, pos)) {
@@ -86,7 +86,7 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
         return isWitchMode() || (overdrived && getWantItem().is(ACItemRegistry.BIOME_TREAT.get())) ? witchRainbowColor : biomeColor;
     }
 
-    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/ConversionCrucibleBlockEntity;convertBiome()V"), remap = false)
+    @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/ConversionCrucibleBlockEntity;convertBiome()V"),remap = false)
     private static void alexsCavesExemplified$tick5(Level level, BlockPos pos, BlockState state, ConversionCrucibleBlockEntity entity, CallbackInfo ci) {
         ((ConverstionAmplified) entity).alexsCavesExemplified$setOverdrived(false);
     }
@@ -103,12 +103,12 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
         return overdrived;
     }
 
-    @Inject(method = "loadAdditional", at = @At(value = "TAIL"), remap = false)
+    @Inject(method = "loadAdditional", at = @At(value = "TAIL"),remap = false)
     private void alexsCavesExemplified$loadAdditional(CompoundTag compound, CallbackInfo ci) {
         this.overdrived = compound.getBoolean("Overdrived");
     }
 
-    @Inject(method = "saveAdditional", at = @At(value = "TAIL"), remap = false)
+    @Inject(method = "saveAdditional", at = @At(value = "TAIL"))
     private void alexsCavesExemplified$saveAdditional(CompoundTag compound, CallbackInfo ci) {
         compound.putBoolean("Overdrived", this.overdrived);
     }

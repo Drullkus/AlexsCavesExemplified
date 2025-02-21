@@ -15,6 +15,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import org.apache.commons.lang3.tuple.Pair;
+import org.crimsoncrips.alexscavesexemplified.client.ACEClientConfig;
 import org.crimsoncrips.alexscavesexemplified.client.ACEClientEvents;
 import org.crimsoncrips.alexscavesexemplified.client.particle.ACEParticleRegistry;
 import org.crimsoncrips.alexscavesexemplified.datagen.ACEDatagen;
@@ -39,21 +40,21 @@ public class AlexsCavesExemplified {
 
     public static final ACEServerConfig COMMON_CONFIG;
     private static final ForgeConfigSpec COMMON_CONFIG_SPEC;
-//    public static final ACEClientConfig CLIENT_CONFIG;
-//    private static final ForgeConfigSpec CLIENT_CONFIG_SPEC;
+    public static final ACEClientConfig CLIENT_CONFIG;
+    private static final ForgeConfigSpec CLIENT_CONFIG_SPEC;
 
     static {
         final Pair<ACEServerConfig, ForgeConfigSpec> serverPair = new ForgeConfigSpec.Builder().configure(ACEServerConfig::new);
         COMMON_CONFIG = serverPair.getLeft();
         COMMON_CONFIG_SPEC = serverPair.getRight();
-//        final Pair<ACEClientConfig, ForgeConfigSpec> clientPair = new ForgeConfigSpec.Builder().configure(ACEClientConfig::new);
-//        CLIENT_CONFIG = clientPair.getLeft();
-//        CLIENT_CONFIG_SPEC = clientPair.getRight();
+        final Pair<ACEClientConfig, ForgeConfigSpec> clientPair = new ForgeConfigSpec.Builder().configure(ACEClientConfig::new);
+        CLIENT_CONFIG = clientPair.getLeft();
+        CLIENT_CONFIG_SPEC = clientPair.getRight();
     }
 
     public AlexsCavesExemplified() {
         ModLoadingContext.get().registerConfig(ModConfig.Type.COMMON, COMMON_CONFIG_SPEC, "ace-general.toml");
-//        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC, "ace-client.toml");
+        ModLoadingContext.get().registerConfig(ModConfig.Type.CLIENT, CLIENT_CONFIG_SPEC, "ace-client.toml");
 
 
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

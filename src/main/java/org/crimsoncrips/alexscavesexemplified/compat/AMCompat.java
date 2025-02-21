@@ -4,11 +4,9 @@ import com.github.alexthe666.alexsmobs.entity.*;
 import com.github.alexthe666.alexsmobs.entity.util.VineLassoUtil;
 import net.minecraft.world.effect.MobEffectInstance;
 import net.minecraft.world.effect.MobEffects;
-import net.minecraft.world.entity.EquipmentSlot;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.phys.Vec3;
 
 public class AMCompat {
     public static void amberReset(LivingEntity entity) {
@@ -46,8 +44,15 @@ public class AMCompat {
         return VineLassoUtil.getLassoedTo(lassoed) == holder;
     }
 
-    public static Class AMmob(boolean raccoon){
-        return raccoon ? EntityRaccoon.class : EntityBlueJay.class;
+    public static Class amMob(int num){
+        return switch (num) {
+            case 1 -> EntityRaccoon.class;
+            case 2 -> EntityBlueJay.class;
+            case 3 -> EntityFly.class;
+            case 4 -> EntityTiger.class;
+            case 5 -> EntityCockroach.class;
+            default -> LivingEntity.class;
+        };
     }
     public static boolean fly (LivingEntity livingEntity){
         return livingEntity instanceof EntityFly;
@@ -58,4 +63,11 @@ public class AMCompat {
     public static boolean cockroach (LivingEntity livingEntity){
         return livingEntity instanceof EntityCockroach;
     }
+
+    public static Class<EntityRaccoon> entityRaccoon(){return EntityRaccoon.class;}
+
+    public static boolean gumbeeperCheck(LivingEntity living){
+        return living instanceof EntityRaccoon entityRaccoon && entityRaccoon.isRigby();
+    }
+
 }

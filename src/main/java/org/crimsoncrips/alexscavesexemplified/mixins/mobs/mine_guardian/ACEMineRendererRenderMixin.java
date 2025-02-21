@@ -6,6 +6,7 @@ import com.github.alexmodguy.alexscaves.server.entity.living.MineGuardianEntity;
 import com.github.alexmodguy.alexscaves.server.event.CommonEvents;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.entity.LivingEntityRenderer;
@@ -14,6 +15,8 @@ import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.MineGuardianXtra;
 import org.spongepowered.asm.mixin.Mixin;
+
+import java.util.Objects;
 
 @Mixin(targets = "com.github.alexmodguy.alexscaves.client.render.entity.MineGuardianRenderer$LayerGlow")
 public abstract class ACEMineRendererRenderMixin extends RenderLayer<MineGuardianEntity, MineGuardianModel> {
@@ -28,13 +31,14 @@ public abstract class ACEMineRendererRenderMixin extends RenderLayer<MineGuardia
     private static final ResourceLocation TEXTURE_NUCLEAR_EXPLODE = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_guardian_explode.png");
     private static final ResourceLocation TEXTURE_NUCLEAR_AE = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/nuclear_guardian_glow.png");
 
+    private static final ResourceLocation TEXTURE_OWNED = new ResourceLocation("alexscavesexemplified:textures/entity/mine_guardian/texture_owned_eye.png");
 
     public void render(PoseStack poseStack, MultiBufferSource bufferIn, int packedLightIn, MineGuardianEntity entitylivingbaseIn, float limbSwing, float limbSwingAmount, float partialTicks, float ageInTicks, float netHeadYaw, float headPitch) {
         MineGuardianXtra accesor = (MineGuardianXtra) entitylivingbaseIn;
 
         float explodeProgress = entitylivingbaseIn.getExplodeProgress(partialTicks);
         if (!entitylivingbaseIn.isEyeClosed() && accesor.alexsCavesExemplified$getVariant() != -1) {
-            VertexConsumer ivertexbuilder1 = bufferIn.getBuffer(RenderType.eyes(accesor.alexsCavesExemplified$getVariant() > 0 ? TEXTURE_NUCLEAR_EYE : TEXTURE_EYE));
+            VertexConsumer ivertexbuilder1 = bufferIn.getBuffer(RenderType.eyes(Minecraft.getInstance().player.getStringUUID().equals(accesor.alexsCavesExemplified$getOwner()) ? TEXTURE_OWNED : accesor.alexsCavesExemplified$getVariant() > 0 ? TEXTURE_NUCLEAR_EYE : TEXTURE_EYE));
             ((MineGuardianModel)this.getParentModel()).renderToBuffer(poseStack, ivertexbuilder1, packedLightIn, LivingEntityRenderer.getOverlayCoords(entitylivingbaseIn, 0.0F), 1.0F, 1.0F, 1.0F, 1.0F);
         }
 

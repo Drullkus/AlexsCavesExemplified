@@ -80,6 +80,7 @@
     "external_mobs.preserved_amber.ACEModelFly",
     "external_mobs.preserved_amber.ACEModelFrog",
     "external_mobs.preserved_amber.ACEModelTadpole",
+    "misc.ACEGuiMixin",
     "misc.ACESpelunkeryScreenMixin",
     "mobs.base_deep_entity.deep_knight.ACEDeepKnightRendererMixin",
     "mobs.base_deep_entity.deep_mage.ACEDeepMageRendererMixin",
@@ -99,5 +100,8 @@
   ],
   "injectors": {
     "defaultRequire": 1
+  },
+  "mixinextras": {
+    "minVersion": "0.5.0-beta.5"
   }
 }

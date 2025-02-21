@@ -906,21 +906,21 @@ public class ACExemplifiedEvents {
         }
     }
 
-    @SubscribeEvent
-    public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
-        Player player = event.getEntity();
-        CompoundTag playerData = event.getEntity().getPersistentData();
-        CompoundTag data = playerData.getCompound(Player.PERSISTED_NBT_TAG);
-
-        ItemStack book = new ItemStack(PatchouliItems.BOOK);
-        book.getOrCreateTag().putString("patchouli:book","alexscavesexemplified:ace_exemplified_wiki");
-
-        if (!data.getBoolean("ace_book") && AlexsCavesExemplified.COMMON_CONFIG.ACE_WIKI_ENABLED.get()) {
-            player.addItem(book);
-            data.putBoolean("ace_book", true);
-            playerData.put(Player.PERSISTED_NBT_TAG, data);
-        }
-    }
+//    @SubscribeEvent
+//    public static void playerLogin(PlayerEvent.PlayerLoggedInEvent event) {
+//        Player player = event.getEntity();
+//        CompoundTag playerData = event.getEntity().getPersistentData();
+//        CompoundTag data = playerData.getCompound(Player.PERSISTED_NBT_TAG);
+//
+//        ItemStack book = new ItemStack(PatchouliItems.BOOK);
+//        book.getOrCreateTag().putString("patchouli:book","alexscavesexemplified:ace_exemplified_wiki");
+//
+//        if (!data.getBoolean("ace_book") && AlexsCavesExemplified.COMMON_CONFIG.ACE_WIKI_ENABLED.get()) {
+//            player.addItem(book);
+//            data.putBoolean("ace_book", true);
+//            playerData.put(Player.PERSISTED_NBT_TAG, data);
+//        }
+//    }
 
 
 
