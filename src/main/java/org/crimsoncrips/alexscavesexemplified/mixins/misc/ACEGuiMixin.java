@@ -98,9 +98,8 @@ public abstract class ACEGuiMixin {
 
 
                     pGuiGraphics.pose().pushPose();
-                    double movement = 5 * Math.sin((minecraft.player.tickCount * (random.nextDouble() * Math.PI * 2)));
-                    pGuiGraphics.pose().translate(movement,0,0);
-
+                    double movement = 3 * Math.sin(minecraft.player.tickCount * 0.05 + i1 * 8549.4451F);
+                    pGuiGraphics.pose().translate(movement,movement,0);
                     this.renderSlot(pGuiGraphics, j1, k1, pPartialTick, player, player.getInventory().items.get(i1), l++);
                     pGuiGraphics.pose().popPose();
                 }
