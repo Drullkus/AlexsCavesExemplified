@@ -17,7 +17,7 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ConverstionAmplified;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ConversionAmplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.*;
@@ -28,7 +28,7 @@ import java.util.stream.Collectors;
 
 
 @Mixin(ConversionCrucibleBlockEntity.class)
-public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity implements ConverstionAmplified {
+public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity implements ConversionAmplified {
 
 
     @Shadow private ItemStack wantStack;
@@ -48,17 +48,17 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
 
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/ConversionCrucibleBlockEntity;recursivelySpreadBiomeBlocks(Ljava/util/List;Lnet/minecraft/core/BlockPos;II)V"),index = 2,remap = false)
     private static int alexsCavesExemplified$1(int maxDistance, @Local(ordinal = 0, argsOnly = true) ConversionCrucibleBlockEntity bl1) {
-        return ((ConverstionAmplified) bl1).alexsCavesExemplified$isOverdrived() ? 50 : maxDistance;
+        return ((ConversionAmplified) bl1).alexsCavesExemplified$isOverdrived() ? 50 : maxDistance;
     }
 
     @ModifyArg(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/ConversionCrucibleBlockEntity;recursivelySpreadBiomeBlocks(Ljava/util/List;Lnet/minecraft/core/BlockPos;II)V"),index = 3,remap = false)
     private static int alexsCavesExemplified$tick2(int distanceIn, @Local(ordinal = 0, argsOnly = true) ConversionCrucibleBlockEntity bl1) {
-        return ((ConverstionAmplified) bl1).alexsCavesExemplified$isOverdrived() ? 50 : distanceIn;
+        return ((ConversionAmplified) bl1).alexsCavesExemplified$isOverdrived() ? 50 : distanceIn;
     }
 
     @ModifyConstant(method = "tick",constant = @Constant(intValue = 100,ordinal = 0),remap = false)
     private static int alexsCavesExemplified$tick3(int amount, @Local(ordinal = 0, argsOnly = true) ConversionCrucibleBlockEntity bl1) {
-        if (AlexsCavesExemplified.COMMON_CONFIG.OVERDRIVED_CONVERSION_ENABLED.get() && ((ConverstionAmplified) bl1).alexsCavesExemplified$isOverdrived()){
+        if (AlexsCavesExemplified.COMMON_CONFIG.OVERDRIVED_CONVERSION_ENABLED.get() && ((ConversionAmplified) bl1).alexsCavesExemplified$isOverdrived()){
             return 300;
         } else {
             return amount;
@@ -68,14 +68,14 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
     @Inject(method = "tick", at = @At(value = "TAIL"),remap = false)
     private static void alexsCavesExemplified$tick4(Level level, BlockPos pos, BlockState state, ConversionCrucibleBlockEntity entity, CallbackInfo ci) {
         if (entity.tickCount % 5 == 0 && AlexsCavesExemplified.COMMON_CONFIG.OVERDRIVED_CONVERSION_ENABLED.get() && !entity.isWitchMode()) {
-            for(ItemEntity item : ((ConverstionAmplified) entity).alexsCavesExemplified$getItemsAtAndAbove(level, pos)) {
+            for(ItemEntity item : ((ConversionAmplified) entity).alexsCavesExemplified$getItemsAtAndAbove(level, pos)) {
                 if (entity.getConvertingToBiome() == null && item.getItem().is(ACItemRegistry.RADIANT_ESSENCE.get()) && !level.isClientSide && entity.getFilledLevel() <= 0){
                     entity.setFilledLevel(1);
-                    ((ConverstionAmplified) entity).alexsCavesExemplified$setStack(ACItemRegistry.BIOME_TREAT.get().getDefaultInstance());
+                    ((ConversionAmplified) entity).alexsCavesExemplified$setStack(ACItemRegistry.BIOME_TREAT.get().getDefaultInstance());
                     item.getItem().shrink(1);
                     level.playSound(null, pos, ACSoundRegistry.CONVERSION_CRUCIBLE_ACTIVATE.get(), SoundSource.BLOCKS);
                     entity.markUpdated();
-                    ((ConverstionAmplified) entity).alexsCavesExemplified$setOverdrived(true);
+                    ((ConversionAmplified) entity).alexsCavesExemplified$setOverdrived(true);
                 }
             }
         }
@@ -88,7 +88,7 @@ public abstract class ACEConversionCrucibleEntityMixin extends BlockEntity imple
 
     @Inject(method = "tick", at = @At(value = "INVOKE", target = "Lcom/github/alexmodguy/alexscaves/server/block/blockentity/ConversionCrucibleBlockEntity;convertBiome()V"),remap = false)
     private static void alexsCavesExemplified$tick5(Level level, BlockPos pos, BlockState state, ConversionCrucibleBlockEntity entity, CallbackInfo ci) {
-        ((ConverstionAmplified) entity).alexsCavesExemplified$setOverdrived(false);
+        ((ConversionAmplified) entity).alexsCavesExemplified$setOverdrived(false);
     }
 
     public void alexsCavesExemplified$setStack(ItemStack wantStack) {

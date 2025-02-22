@@ -121,6 +121,7 @@ public class ACEServerConfig {
     public final  ForgeConfigSpec.BooleanValue HARDCORE_MAGNERIP_ENABLED;
     public final  ForgeConfigSpec.BooleanValue IP_ENABLED;
     public final  ForgeConfigSpec.BooleanValue ACE_WIKI_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue SCALABLE_HOLOGRAM_ENABLED;
 
 
 
@@ -298,6 +299,8 @@ public class ACEServerConfig {
         this.SHOCKING_THERAPY_ENABLED = buildBoolean(builder, "SHOCKING_THERAPY_ENABLED", " ", true, "Tesla bulbs rarely directly shock nearby intruders");
         this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command & Conquer");
         this.MAGNERIP_ENABLED = buildBoolean(builder, "MAGNERIP_ENABLED", "", true, "Will rip magnetic items in your hands when afflicted with weakness");
+        this.SCALABLE_HOLOGRAM_ENABLED = buildBoolean(builder, "SCALABLE_HOLOGRAM_ENABLED", "", true, "Scalable Holograms with Azurite/Scarlet ingots");
+
 
         builder.comment("--Requires Magnerip--");
         this.HARDCORE_MAGNERIP_ENABLED = buildBoolean(builder, "HARDCORE_MAGNERIP_ENABLED", "", false, "Now causes all your magnetic items in your inventory will be attracted off you,no matter what");

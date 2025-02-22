@@ -2,6 +2,8 @@ package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 
 import com.github.alexmodguy.alexscaves.server.level.biome.ACBiomeRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
+import com.llamalad7.mixinextras.injector.wrapoperation.Operation;
+import com.llamalad7.mixinextras.injector.wrapoperation.WrapOperation;
 import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.datafixers.util.Pair;
@@ -9,14 +11,20 @@ import net.minecraft.client.AttackIndicatorStatus;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.inventory.AbstractContainerScreen;
+import net.minecraft.client.gui.screens.inventory.MenuAccess;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
+import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.RandomSource;
 import net.minecraft.world.entity.HumanoidArm;
 import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.Slot;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.level.block.DoorBlock;
+import net.minecraft.world.level.block.piston.PistonBaseBlock;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Final;
@@ -27,40 +35,41 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
-@Debug(export = true)
+import static java.lang.Math.cos;
+import static java.lang.Math.sin;
+
 @Mixin(AbstractContainerScreen.class)
-public abstract class ACEAbstractContainerScreenMixin {
-
-    Minecraft minecraft = Minecraft.getInstance();
+public abstract class ACEAbstractContainerScreenMixin<T extends AbstractContainerMenu> extends Screen implements MenuAccess<T> {
 
 
-    @Inject(method = "renderFloatingItem", at = @At(value = "INVOKE", target = "Lcom/mojang/blaze3d/vertex/PoseStack;translate(FFF)V"))
-    private void alexsMobsInteraction$renderFloatingItem(GuiGraphics pGuiGraphics, ItemStack pStack, int pX, int pY, String pText, CallbackInfo ci){
-        if(magneticMove(pStack)){
-            double x = 5D * Math.cos(minecraft.player.tickCount * 0.1 + 1 * 4638.361D + 164.35D);
-            double y = 5D * Math.sin(-minecraft.player.tickCount * 0.1 + 1 * 1641.532D - 584.35D);
-            pGuiGraphics.pose().translate(x, y, 0);
-        }
+    @Shadow @Final protected T menu;
+
+    protected ACEAbstractContainerScreenMixin(Component pTitle) {
+        super(pTitle);
     }
 
-//    @Inject(method = "renderSlot", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/GuiGraphics;renderItem(Lnet/minecraft/world/item/ItemStack;III)V"))
-//    private void alexsMobsInteraction$renderSlot(GuiGraphics pGuiGraphics, Slot pSlot, CallbackInfo ci, @Local(ordinal = 0) ItemStack itemstack){
-//        if(magneticMove(itemstack)){
-//            double x = 2D * Math.sin(minecraft.player.tickCount * 0.1 * itemstack.getBarWidth() * 4638.361D + 164.35D);
-//            double y = 2D * Math.sin(minecraft.player.tickCount * 0.1 * itemstack.getBarWidth() * 4638.361D + 584.35D);
-//            pGuiGraphics.pose().translate(x, y, 0);
-//        }
-//    }
+    @WrapOperation(method = "render", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/gui/screens/inventory/AbstractContainerScreen;renderSlot(Lnet/minecraft/client/gui/GuiGraphics;Lnet/minecraft/world/inventory/Slot;)V"))
+    private void alexsCavesExemplified$renderHotbar1(AbstractContainerScreen instance, GuiGraphics pGuiGraphics, Slot i1, Operation<Void> original, @Local(ordinal = 4) int k) {
+        ItemStack itemStack = this.menu.slots.get(k).getItem();
+        if(magneticMove(itemStack)){
+            int t = minecraft.player.tickCount;
+            double speed = 0.1;
+            pGuiGraphics.pose().pushPose();
+
+            //Thank you Reimnop for the giga nerd math code
+            double x = -sin(speed * t) * cos(0.1 * t + (k + itemStack.getBarWidth()) * 4638.361D + 164.35D) + cos(speed * t);
+            double y = cos(speed * t) * cos(0.1 * t + (k + itemStack.getBarWidth()) * 4638.361D + 364.35D) + sin(speed * t);
+            pGuiGraphics.pose().translate(x, y, 0);
+        }
+        original.call(instance, pGuiGraphics, i1);
+        if(magneticMove(itemStack)){
+            pGuiGraphics.pose().popPose();
+        }
+    }
 
 
 
     public boolean magneticMove(ItemStack itemStack){
         return itemStack.is(ACTagRegistry.MAGNETIC_ITEMS) && minecraft.player.level().getBiome(minecraft.player.blockPosition()).is(ACBiomeRegistry.MAGNETIC_CAVES) && AlexsCavesExemplified.CLIENT_CONFIG.MAGNETIC_MOVEMENT_ENABLED.get();
     }
-
-
-    
-
-
-
 }

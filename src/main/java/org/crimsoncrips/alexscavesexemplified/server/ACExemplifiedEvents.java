@@ -20,7 +20,6 @@ import com.github.alexmodguy.alexscaves.server.potion.ACEffectRegistry;
 import com.github.alexthe666.alexsmobs.effect.AMEffectRegistry;
 import com.github.alexthe666.alexsmobs.entity.util.VineLassoUtil;
 import com.github.alexthe666.alexsmobs.item.AMItemRegistry;
-import com.github.alexthe666.citadel.Citadel;
 import it.unimi.dsi.fastutil.objects.ObjectArrayList;
 import net.mehvahdjukaar.supplementaries.reg.ModParticles;
 import net.mehvahdjukaar.supplementaries.reg.ModRegistry;
@@ -30,11 +29,9 @@ import net.minecraft.core.particles.ItemParticleOption;
 import net.minecraft.core.particles.ParticleOptions;
 import net.minecraft.core.particles.ParticleTypes;
 import net.minecraft.core.registries.Registries;
-import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.chat.Component;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.server.level.ServerLevel;
-import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
 import net.minecraft.sounds.SoundSource;
 import net.minecraft.util.RandomSource;
@@ -46,11 +43,9 @@ import net.minecraft.world.entity.*;
 import net.minecraft.world.entity.ai.attributes.AttributeInstance;
 import net.minecraft.world.entity.ai.attributes.AttributeModifier;
 import net.minecraft.world.entity.ai.behavior.BehaviorUtils;
-import net.minecraft.world.entity.animal.Animal;
 import net.minecraft.world.entity.animal.Cat;
 import net.minecraft.world.entity.animal.Ocelot;
 import net.minecraft.world.entity.animal.Parrot;
-import net.minecraft.world.entity.item.ItemEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.*;
 import net.minecraft.world.level.GameRules;
@@ -59,9 +54,7 @@ import net.minecraft.world.level.block.*;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.gameevent.GameEvent;
 import net.minecraft.world.level.levelgen.placement.PlacedFeature;
-import net.minecraft.world.level.storage.loot.LootContext;
 import net.minecraft.world.level.storage.loot.LootParams;
-import net.minecraft.world.level.storage.loot.LootTable;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParamSets;
 import net.minecraft.world.level.storage.loot.parameters.LootContextParams;
 import net.minecraft.world.phys.Vec3;
@@ -69,7 +62,6 @@ import net.minecraftforge.event.ServerChatEvent;
 import net.minecraftforge.event.entity.EntityJoinLevelEvent;
 import net.minecraftforge.event.entity.living.*;
 import net.minecraftforge.event.entity.player.BonemealEvent;
-import net.minecraftforge.event.entity.player.PlayerEvent;
 import net.minecraftforge.event.entity.player.PlayerInteractEvent;
 import net.minecraftforge.event.level.BlockEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
@@ -77,18 +69,15 @@ import net.minecraftforge.fml.ModList;
 import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.compat.AMCompat;
-import org.crimsoncrips.alexscavesexemplified.compat.CreateCompat;
 import org.crimsoncrips.alexscavesexemplified.compat.CuriosCompat;
 import org.crimsoncrips.alexscavesexemplified.datagen.ACEFeatures;
-import org.crimsoncrips.alexscavesexemplified.datagen.loottables.ACELootTables;
 import org.crimsoncrips.alexscavesexemplified.misc.ACEUtils;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEBaseInterface;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.NucleeperXtra;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
 import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
-import vazkii.patchouli.common.item.PatchouliItems;
 
 import java.util.*;
 
@@ -158,7 +147,7 @@ public class ACExemplifiedEvents {
                 if (player.isCrouching()) {
                     MobEffectInstance hunger = player.getEffect(MobEffects.HUNGER);
                     if (hunger != null) {
-                        ((PlayerSweets) player).alexsCavesExemplified$addSweets(1);
+                        ((ACEBaseInterface) player).addSweets(1);
 
                         if (!hunger.isInfiniteDuration()) {
                             player.removeEffect(MobEffects.HUNGER);
@@ -176,7 +165,7 @@ public class ACExemplifiedEvents {
 
 
                     } else if (player.getFoodData().needsFood()) {
-                        ((PlayerSweets) player).alexsCavesExemplified$addSweets( 1);
+                        ((ACEBaseInterface) player).addSweets(1);
 
                         player.getFoodData().eat(2, 2);
                         player.playSound(SoundEvents.GENERIC_EAT, 1F, 1F);

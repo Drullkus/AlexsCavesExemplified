@@ -2,10 +2,7 @@ package org.crimsoncrips.alexscavesexemplified.mixins.mobs.nucleeper;
 
 import com.github.alexmodguy.alexscaves.client.model.NucleeperModel;
 import com.github.alexmodguy.alexscaves.client.render.ACRenderTypes;
-import com.github.alexmodguy.alexscaves.client.render.entity.NucleeperRenderer;
-import com.github.alexmodguy.alexscaves.server.block.blockentity.ConversionCrucibleBlockEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.NucleeperEntity;
-import com.llamalad7.mixinextras.sugar.Local;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.blaze3d.vertex.VertexConsumer;
 import net.minecraft.client.renderer.MultiBufferSource;
@@ -15,13 +12,8 @@ import net.minecraft.client.renderer.entity.RenderLayerParent;
 import net.minecraft.client.renderer.entity.layers.RenderLayer;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraftforge.client.ForgeRenderTypes;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ConverstionAmplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.NucleeperXtra;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.ModifyArg;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(targets = "com.github.alexmodguy.alexscaves.client.render.entity.NucleeperRenderer$LayerGlow")
 public abstract class ACENucleeperRenderRenderMixin extends RenderLayer<NucleeperEntity, NucleeperModel> {

@@ -15,7 +15,7 @@ import net.minecraft.world.entity.monster.Monster;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.BoundroidMagnetism;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEBaseInterface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.Unique;
@@ -24,11 +24,9 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(BoundroidEntity.class)
-public abstract class ACEBoundroidMixin extends Monster implements BoundroidMagnetism {
+public abstract class ACEBoundroidMixin extends Monster implements ACEBaseInterface {
 
     @Shadow public int stopSlammingFor;
-
-    @Shadow public abstract boolean isSlamming();
 
     private static final EntityDataAccessor<Boolean> MAGNETIZING = SynchedEntityData.defineId(BoundroidEntity.class, EntityDataSerializers.BOOLEAN);
 
@@ -41,7 +39,7 @@ public abstract class ACEBoundroidMixin extends Monster implements BoundroidMagn
     @Inject(method = "tick", at = @At("TAIL"))
     private void alexsCavesExemplified$tick(CallbackInfo ci) {
         BoundroidEntity boundroidEntity = (BoundroidEntity) (Object) this;
-        if (alexsCavesExemplified$isMagnetizing() && boundroidEntity.getRandom().nextDouble() < 0.01){
+        if (isMagnetizing() && boundroidEntity.getRandom().nextDouble() < 0.01){
             for (int i = 0;i < 10;i++){
                 Vec3 vec3 = new Vec3((boundroidEntity.getRandom().nextFloat() - 0.5) * 0.3F, (boundroidEntity.getRandom().nextFloat() - 0.5) * 0.3F + boundroidEntity.getRandom().nextInt(-2,3), 2 * 0.5F + 2 * 0.5F * boundroidEntity.getRandom().nextFloat()).yRot((float) ((i / 10F) * Math.PI * 2)).add(boundroidEntity.position());
                 boundroidEntity.level().addParticle(ACParticleRegistry.SCARLET_SHIELD_LIGHTNING.get(), vec3.x, vec3.y, vec3.z, boundroidEntity.getX(), boundroidEntity.getY(), boundroidEntity.getZ());
@@ -53,16 +51,16 @@ public abstract class ACEBoundroidMixin extends Monster implements BoundroidMagn
 
             LivingEntity target = boundroidEntity.getTarget();
             BoundroidWinchEntity boundroidWinch = (BoundroidWinchEntity) boundroidEntity.getWinch();
-            if (alexsCavesExemplified$isMagnetizing() && target != null && MagnetUtil.isPulledByMagnets(target) && MagnetUtil.isPulledByMagnets(target) && boundroidWinch.distanceTo(target) < 3 && boundroidWinch.isLatched()) {
+            if (isMagnetizing() && target != null && MagnetUtil.isPulledByMagnets(target) && MagnetUtil.isPulledByMagnets(target) && boundroidWinch.distanceTo(target) < 3 && boundroidWinch.isLatched()) {
                 activateDelay = 100;
-                alexsCavesExemplified$setMagnetizing(false);
+                setMagnetizing(false);
                 stopSlammingFor = 110;
             }
-            if (activateDelay > 0 && !alexsCavesExemplified$isMagnetizing()) {
+            if (activateDelay > 0 && !isMagnetizing()) {
                 activateDelay--;
             }
-            if (activateDelay <= 0 && !alexsCavesExemplified$isMagnetizing() && !boundroidEntity.level().isClientSide()) {
-                alexsCavesExemplified$setMagnetizing(true);
+            if (activateDelay <= 0 && !isMagnetizing() && !boundroidEntity.level().isClientSide()) {
+                setMagnetizing(true);
             }
 
 
@@ -84,7 +82,7 @@ public abstract class ACEBoundroidMixin extends Monster implements BoundroidMagn
                         pull = new Vec3(0, 0, pull.z);
                     }
                     entity1.fallDistance = 0.0F;
-                    if (!MagnetUtil.isEntityOnMovingMetal(entity1) && alexsCavesExemplified$isMagnetizing()) {
+                    if (!MagnetUtil.isEntityOnMovingMetal(entity1) && isMagnetizing()) {
                         if (entity1 == boundroidEntity.getTarget()) {
                             stopSlammingFor = 30 + random.nextInt(20);
                         }
@@ -99,13 +97,13 @@ public abstract class ACEBoundroidMixin extends Monster implements BoundroidMagn
     }
 
 
-
-    public boolean alexsCavesExemplified$isMagnetizing() {
+    @Override
+    public boolean isMagnetizing() {
         return this.entityData.get(MAGNETIZING);
     }
 
-    @Unique
-    public void alexsCavesExemplified$setMagnetizing(boolean val){
+
+    public void setMagnetizing(boolean val){
         this.entityData.set(MAGNETIZING, Boolean.valueOf(val));
     }
 
@@ -116,12 +114,12 @@ public abstract class ACEBoundroidMixin extends Monster implements BoundroidMagn
 
     @Inject(method = "addAdditionalSaveData", at = @At("TAIL"))
     private void alexsCavesExemplified$add(CompoundTag compound, CallbackInfo ci) {
-        compound.putBoolean("Magnetizing", this.alexsCavesExemplified$isMagnetizing());
+        compound.putBoolean("Magnetizing", this.isMagnetizing());
     }
 
     @Inject(method = "readAdditionalSaveData", at = @At("TAIL"))
     private void alexsCavesExemplified$read(CompoundTag compound, CallbackInfo ci) {
-        this.alexsCavesExemplified$setMagnetizing(compound.getBoolean("Magnetizing"));
+        this.setMagnetizing(compound.getBoolean("Magnetizing"));
     }
 
 

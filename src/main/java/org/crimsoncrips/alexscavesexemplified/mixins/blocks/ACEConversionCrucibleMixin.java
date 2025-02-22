@@ -14,7 +14,7 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ConverstionAmplified;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ConversionAmplified;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.*;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
@@ -35,11 +35,11 @@ public abstract class ACEConversionCrucibleMixin extends BaseEntityBlock {
             if(playerItem.is(ACItemRegistry.RADIANT_ESSENCE.get())){
                 if(!worldIn.isClientSide){
                     crucible.setFilledLevel(1);
-                    ((ConverstionAmplified) crucible).alexsCavesExemplified$setStack(ACItemRegistry.BIOME_TREAT.get().getDefaultInstance());
+                    ((ConversionAmplified) crucible).alexsCavesExemplified$setStack(ACItemRegistry.BIOME_TREAT.get().getDefaultInstance());
                     playerItem.shrink(1);
                     worldIn.playSound(null, pos, ACSoundRegistry.CONVERSION_CRUCIBLE_ACTIVATE.get(), SoundSource.BLOCKS);
                     crucible.markUpdated();
-                    ((ConverstionAmplified) crucible).alexsCavesExemplified$setOverdrived(true);
+                    ((ConversionAmplified) crucible).alexsCavesExemplified$setOverdrived(true);
                 }
                 cir.setReturnValue(InteractionResult.SUCCESS);
             }

@@ -1,9 +1,7 @@
 package org.crimsoncrips.alexscavesexemplified.mixins.mobs.nucleeper;
 
-import com.github.alexmodguy.alexscaves.server.block.blockentity.ConversionCrucibleBlockEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.NucleeperEntity;
 import com.llamalad7.mixinextras.injector.v2.WrapWithCondition;
-import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.syncher.EntityDataAccessor;
 import net.minecraft.network.syncher.EntityDataSerializers;
@@ -19,7 +17,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Items;
 import net.minecraft.world.level.Level;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ConverstionAmplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.NucleeperXtra;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACENucleeperMelee;
 import org.spongepowered.asm.mixin.Mixin;

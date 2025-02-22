@@ -14,7 +14,7 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.PlayerSweets;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEBaseInterface;
 import org.crimsoncrips.alexscavesexemplified.server.ACExexmplifiedTagRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.ACEDamageTypes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -27,7 +27,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 
 @Mixin(Player.class)
-public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
+public abstract class ACEPlayer extends LivingEntity implements ACEBaseInterface {
 
 
     @Shadow public abstract void displayClientMessage(Component pChatComponent, boolean pActionBar);
@@ -42,7 +42,7 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
     }
 
     @Override
-    public void alexsCavesExemplified$addSweets(int sweets) {
+    public void addSweets(int sweets) {
         sweetCounter(sweets);
     }
 
@@ -72,7 +72,7 @@ public abstract class ACEPlayer extends LivingEntity implements PlayerSweets {
         }
 
         if (pFood.is(ACExexmplifiedTagRegistry.SWEETS)) {
-            alexsCavesExemplified$addSweets(1);
+            addSweets(1);
         }
     }
 

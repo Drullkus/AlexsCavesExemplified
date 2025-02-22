@@ -7,7 +7,7 @@ import net.minecraft.world.level.Level;
 
 import java.util.List;
 
-public interface ConverstionAmplified {
+public interface ConversionAmplified {
 
     void alexsCavesExemplified$setStack(ItemStack itemStack);
 

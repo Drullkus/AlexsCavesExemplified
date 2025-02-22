@@ -24,8 +24,8 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.AABB;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.TeslaCharge;
 import org.crimsoncrips.alexscavesexemplified.client.ACESoundRegistry;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEBaseInterface;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Unique;
 import org.spongepowered.asm.mixin.injection.At;
@@ -34,7 +34,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 
 @Mixin(TeslaBulbBlockEntity.class)
-public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements TeslaCharge {
+public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements ACEBaseInterface {
 
     @Unique
     private int charge;
@@ -80,7 +80,7 @@ public abstract class ACETeslaBulbEntityMixin extends BlockEntity implements Tes
     @Inject(method = "tick", at = @At(value = "HEAD"),remap = false)
     private static void alexsCavesExemplified$tick2(Level level, BlockPos blockPos, BlockState state, TeslaBulbBlockEntity entity, CallbackInfo ci) {
         if(AlexsCavesExemplified.COMMON_CONFIG.SHOCKING_THERAPY_ENABLED.get()){
-            TeslaCharge tickAccesor = (TeslaCharge)(Object)entity;
+            ACEBaseInterface tickAccesor = (ACEBaseInterface)entity;
 
             LivingEntity target = null;
             for (LivingEntity livingEntity : level.getEntitiesOfClass(LivingEntity.class, new AABB(blockPos.offset(-5, -5, -5), blockPos.offset(5, 5, 5)))) {

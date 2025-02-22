@@ -16,8 +16,8 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.phys.Vec3;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
+import org.crimsoncrips.alexscavesexemplified.misc.interfaces.ACEBaseInterface;
 import org.crimsoncrips.alexscavesexemplified.server.goals.ACEPickupDroppedBarrels;
-import org.crimsoncrips.alexscavesexemplified.misc.interfaces.BrainiacPowered;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -27,7 +27,7 @@ import static com.github.alexmodguy.alexscaves.server.entity.living.BrainiacEnti
 
 
 @Mixin(BrainiacEntity.class)
-public abstract class ACEBrainiac extends Monster implements BrainiacPowered, TargetsDroppedItems {
+public abstract class ACEBrainiac extends Monster implements ACEBaseInterface, TargetsDroppedItems {
 
     protected ACEBrainiac(EntityType<? extends Monster> pEntityType, Level pLevel) {
         super(pEntityType, pLevel);
