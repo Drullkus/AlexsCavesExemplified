@@ -40,7 +40,7 @@ public abstract class ACEHologramProjectorRenderMixin <T extends HologramProject
         ACEBaseInterface accesor = (ACEBaseInterface)projectorBlockEntity;
         int scale =  accesor.getProjectionScale();
         poseStack.scale(scale, (scale), scale);
-
+        poseStack.translate(0,-((scale - 1) * 0.5) ,0);
     }
 
 

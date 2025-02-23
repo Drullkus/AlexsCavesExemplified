@@ -3,6 +3,7 @@ package org.crimsoncrips.alexscavesexemplified.mixins.misc.projector;
 import com.github.alexmodguy.alexscaves.server.block.blockentity.HologramProjectorBlockEntity;
 import com.github.alexmodguy.alexscaves.server.item.ACItemRegistry;
 import com.github.alexmodguy.alexscaves.server.misc.ACSoundRegistry;
+import com.llamalad7.mixinextras.sugar.Local;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
@@ -28,6 +29,7 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
+import org.spongepowered.asm.mixin.injection.callback.LocalCapture;
 
 @Mixin(HologramProjectorBlockEntity.class)
 public abstract class ACEHologramProjectorEntityMixin extends BlockEntity implements ACEBaseInterface {
@@ -54,6 +56,22 @@ public abstract class ACEHologramProjectorEntityMixin extends BlockEntity implem
     @Inject(method = "saveAdditional", at = @At(value = "TAIL"))
     private void alexsCavesExemplified$saveAdditional(CompoundTag tag, CallbackInfo ci) {
         tag.putInt("ProjectionScale", projectionScale);
+    }
+
+    @Inject(method = "onDataPacket", at = @At(value = "TAIL"),remap = false)
+    private void alexsCavesExemplified$onDataPacket(Connection net, ClientboundBlockEntityDataPacket packet, CallbackInfo ci) {
+        if (packet != null && packet.getTag() != null && packet.getTag().contains("ProjectionScale")) {
+            projectionScale = packet.getTag().getInt("ProjectionScale");
+        }
+    }
+
+    @Inject(method = "getUpdateTag", at = @At(value = "RETURN"))
+    private void alexsCavesExemplified$getUpdateTag(CallbackInfoReturnable<CompoundTag> cir) {
+        CompoundTag tag = cir.getReturnValue();
+
+        if (tag != null) {
+            tag.putInt("ProjectionScale", projectionScale);
+        }
     }
 
 

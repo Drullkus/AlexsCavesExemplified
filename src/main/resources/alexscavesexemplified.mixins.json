@@ -26,6 +26,7 @@
     "misc.ACEConversionCrucibleEntityMixin",
     "misc.ACEDreadbowItem",
     "misc.ACEEnigmaticEngineMixin",
+    "misc.ACEGauntletItemMixin",
     "misc.ACEHullbreakerGoalMixin",
     "misc.ACEMagnetUtilMixin",
     "misc.ACEMarineSnowMixin",
@@ -73,6 +74,7 @@
     "mobs.mine_guardian.ACEMineGuardian",
     "mobs.nucleeper.ACENucleeperMixin",
     "mobs.submarine.ACESubmarineMixin",
+    "mobs.teletor.ACETeletorMixin",
     "mobs.tesla_bulb.ACETeslaBulbEntityMixin",
     "mobs.tesla_bulb.ACETeslaBulbRenderMixin",
     "mobs.tremorzilla.ACETremorzillaMixin",
@@ -98,6 +100,7 @@
     "mobs.nucleeper.ACENucleeperModelMixin",
     "mobs.nucleeper.ACENucleeperRenderMixin",
     "mobs.nucleeper.ACENucleeperRenderRenderMixin",
+    "mobs.teletor.ACETeletorRenderMixin",
     "mobs.tremorzilla.ACETremorzillaModelMixin",
     "mobs.tremorzilla.ACETremorzillaRenderGlowMixin",
     "mobs.tremorzilla.ACETremorzillaRenderMixin"

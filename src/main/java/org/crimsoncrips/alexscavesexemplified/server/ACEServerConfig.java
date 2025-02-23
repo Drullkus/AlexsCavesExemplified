@@ -122,6 +122,8 @@ public class ACEServerConfig {
     public final  ForgeConfigSpec.BooleanValue IP_ENABLED;
     public final  ForgeConfigSpec.BooleanValue ACE_WIKI_ENABLED;
     public final  ForgeConfigSpec.BooleanValue SCALABLE_HOLOGRAM_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue GALENA_GRAB_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue TELETOR_REARM_ENABLED;
 
 
 
@@ -300,6 +302,7 @@ public class ACEServerConfig {
         this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command & Conquer");
         this.MAGNERIP_ENABLED = buildBoolean(builder, "MAGNERIP_ENABLED", "", true, "Will rip magnetic items in your hands when afflicted with weakness");
         this.SCALABLE_HOLOGRAM_ENABLED = buildBoolean(builder, "SCALABLE_HOLOGRAM_ENABLED", "", true, "Scalable Holograms with Azurite/Scarlet ingots");
+        this.GALENA_GRAB_ENABLED = buildBoolean(builder, "GALENA_GRAB_ENABLED", "", true, "Galena Gauntlet can grab items and magnetized items from teletors");
 
 
         builder.comment("--Requires Magnerip--");
@@ -307,6 +310,10 @@ public class ACEServerConfig {
 
         builder.push("Boundroid");
         this.BOUNDED_MAGNETISM_ENABLED = buildBoolean(builder, "BOUNDED_MAGNETISM_ENABLED", " ", true, "Boundroid attracts magnetic items");
+        builder.pop();
+
+        builder.push("Teletor");
+        this.TELETOR_REARM_ENABLED = buildBoolean(builder, "TELETOR_REARM_ENABLED", " ", true, "Teletors rearm their magnetic weapons when unavailable with nearby magnetic weapons");
         builder.pop();
         builder.pop();
 
