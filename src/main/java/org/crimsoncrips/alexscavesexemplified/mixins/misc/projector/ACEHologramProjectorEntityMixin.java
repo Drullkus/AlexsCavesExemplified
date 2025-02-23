@@ -30,32 +30,33 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 public abstract class ACEHologramProjectorEntityMixin extends BlockEntity implements ACEBaseInterface {
 
 
+
+
+    @Unique
+    private int projectionScale = 1;
+
     public ACEHologramProjectorEntityMixin(BlockEntityType<?> pType, BlockPos pPos, BlockState pBlockState) {
         super(pType, pPos, pBlockState);
     }
 
-    @Unique
-    private int scale = 1;
 
 
     @Inject(method = "load", at = @At(value = "HEAD"))
     private void alexsCavesExemplified$load(CompoundTag tag, CallbackInfo ci) {
-        System.out.println("Load scale is :" + tag.getInt("Scale"));
-        scale = tag.getInt("Scale");
+        projectionScale = tag.getInt("ProjectionScale");
     }
 
     @Inject(method = "saveAdditional", at = @At(value = "HEAD"))
     private void alexsCavesExemplified$saveAdditional(CompoundTag tag, CallbackInfo ci) {
-        System.out.println("Save scale is :" + getProjectionScale());
-        tag.putInt("Scale", getProjectionScale());
+        tag.putInt("ProjectionScale", getProjectionScale());
     }
 
 
     public int getProjectionScale() {
-        return scale;
+        return projectionScale;
     }
 
     public void setProjectionScale(int val) {
-        scale = val;
+        projectionScale = val;
     }
 }
