@@ -26,7 +26,6 @@ public class ACEServerConfig {
     public final ForgeConfigSpec.BooleanValue GEOTHERMAL_EFFECTS_ENABLED;
     public final ForgeConfigSpec.BooleanValue RABIES_ENABLED;
     public final ForgeConfigSpec.BooleanValue AMPLIFIED_FROSTMINT_ENABLED;
-    public final ForgeConfigSpec.BooleanValue SOLIDIFIED_ENABLED;
     public final ForgeConfigSpec.BooleanValue CANIAC_SENSITIVITY_ENABLED;
     public final ForgeConfigSpec.BooleanValue IRRADIATION_WASHOFF_ENABLED;
     public final ForgeConfigSpec.BooleanValue GAMMAROACH_FOODING_ENABLED;
@@ -124,6 +123,7 @@ public class ACEServerConfig {
     public final  ForgeConfigSpec.BooleanValue SCALABLE_HOLOGRAM_ENABLED;
     public final  ForgeConfigSpec.BooleanValue GALENA_GRAB_ENABLED;
     public final  ForgeConfigSpec.BooleanValue TELETOR_REARM_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue CARAMERGING_ENABLED;
 
 
 
@@ -146,8 +146,7 @@ public class ACEServerConfig {
         builder.pop();
         builder.push("Candy Cavity");
         this.GLUTTONY_ENABLED = buildBoolean(builder, "GLUTTONY_ENABLED", " ", true, "Whether blocks inside candy cavity, can be eaten by right clicking");
-        this.AMPLIFIED_FROSTMINT_ENABLED = buildBoolean(builder, "AMPLIFIED_FROSTMINT_ENABLED", " ", true, "Item and spear entity explodes as well in Purple Soda");
-        this.SOLIDIFIED_ENABLED = buildBoolean(builder, "SOLIDIFIED_ENABLED", " ", true, "Frostmint Spears causes liquid blocks to freeze at the cost of the spear");
+        this.AMPLIFIED_FROSTMINT_ENABLED = buildBoolean(builder, "AMPLIFIED_FROSTMINT_ENABLED", " ", true, "Adds interactibility with frostmint items");
         this.PURPLE_LEATHERED_ENABLED = buildBoolean(builder, "PURPLE_LEATHERED_ENABLED", " ", true, "Whether purple soda, purples dyable armor");
         this.STICKY_SODA_ENABLED = buildBoolean(builder, "STICKY_SODA_ENABLED", " ", true, "Whether purple soda causes stickyness when in it");
         this.RADIANT_WRATH_ENABLED = buildBoolean(builder, "RADIANT_WRATH_ENABLED", " ", true, "Having Radiant Essence amplifies the attacks of Sugar Staff");
@@ -173,6 +172,8 @@ public class ACEServerConfig {
         builder.pop();
         builder.push("Caramel Cube");
         this.STICKY_CARAMEL_ENABLED = buildBoolean(builder, "STICKY_CARAMEL_ENABLED", " ", true, "Whether caramel cube's stickiness applies to its attacks");
+        this.CARAMERGING_ENABLED = buildBoolean(builder, "CARAMERGING_ENABLED", " ", true, "Whether caramel cubes merge with eachother");
+
         builder.pop();
         builder.push("Gingerbread Man");
         this.AMPUTATION_ENABLED = buildBoolean(builder, "AMPUTATION_ENABLED", " ", true, "Whether Gingerbread Men can be amputated with an axe");

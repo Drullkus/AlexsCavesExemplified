@@ -77,7 +77,7 @@ public abstract class ACEFrostmintSpear extends AbstractArrow {
         Level level = this.level();
 
 
-        if (!this.exploded && AlexsCavesExemplified.COMMON_CONFIG.SOLIDIFIED_ENABLED.get()) {
+        if (!this.exploded && AlexsCavesExemplified.COMMON_CONFIG.AMPLIFIED_FROSTMINT_ENABLED.get()) {
             solidifyBlock(Blocks.WATER,Blocks.ICE,level,blockPos);
             solidifyBlock(Blocks.LAVA,Blocks.BASALT,level,blockPos);
             solidifyBlock(ACBlockRegistry.PURPLE_SODA.get(), ACBlockRegistry.SUGAR_GLASS.get(), level,blockPos);
