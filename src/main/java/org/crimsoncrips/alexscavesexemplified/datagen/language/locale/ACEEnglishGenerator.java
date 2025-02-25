@@ -1,17 +1,13 @@
-package org.crimsoncrips.alexscavesexemplified.datagen.language;
+package org.crimsoncrips.alexscavesexemplified.datagen.language.locale;
 
-import com.mojang.datafixers.util.Pair;
 import net.minecraft.data.PackOutput;
-import net.minecraft.resources.ResourceLocation;
+import org.crimsoncrips.alexscavesexemplified.datagen.language.ACELangProvider;
 import org.crimsoncrips.alexscavesexemplified.server.blocks.ACEBlockRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.item.ACEItemRegistry;
 
-import java.util.HashMap;
-import java.util.Map;
+public class ACEEnglishGenerator extends ACELangProvider {
 
-public class ACELangGenerator extends ACELangProvider {
-
-	public ACELangGenerator(PackOutput output) {
+	public ACEEnglishGenerator(PackOutput output) {
 		super(output);
 	}
 
@@ -57,6 +53,7 @@ public class ACELangGenerator extends ACELangProvider {
 
 		this.addItem(ACEItemRegistry.ICE_CREAM_CONE, "Ice Cream Cone");
 
+		this.addEnchantmentDesc("magneticism","Magneticism", "Boosts Magnetic Caves related tools");
 
 
 	}

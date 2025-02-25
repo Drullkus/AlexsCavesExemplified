@@ -30,7 +30,7 @@ public class ACEServerConfig {
     public final ForgeConfigSpec.BooleanValue IRRADIATION_WASHOFF_ENABLED;
     public final ForgeConfigSpec.BooleanValue GAMMAROACH_FOODING_ENABLED;
     public final ForgeConfigSpec.DoubleValue CHARGED_CAVE_CREEPER_CHANCE;
-    public final ForgeConfigSpec.BooleanValue RESISTOR_MAGNETISM_ENABLED;
+    public final ForgeConfigSpec.BooleanValue MAGNETICISM_ENABLED;
     public final ForgeConfigSpec.BooleanValue PURPLE_LEATHERED_ENABLED;
     public final ForgeConfigSpec.BooleanValue FISH_MUTATION_ENABLED;
     public final ForgeConfigSpec.BooleanValue STICKY_CARAMEL_ENABLED;
@@ -124,6 +124,7 @@ public class ACEServerConfig {
     public final  ForgeConfigSpec.BooleanValue GALENA_GRAB_ENABLED;
     public final  ForgeConfigSpec.BooleanValue TELETOR_REARM_ENABLED;
     public final  ForgeConfigSpec.BooleanValue CARAMERGING_ENABLED;
+    public final  ForgeConfigSpec.BooleanValue SELF_DESTURCT_ENABLED;
 
 
 
@@ -297,7 +298,7 @@ public class ACEServerConfig {
 
 
         builder.push("Magnetic Caves");
-        this.RESISTOR_MAGNETISM_ENABLED = buildBoolean(builder, "RESISTOR_MAGNETISM_ENABLED", " ", true, "Resistor Shield attracts/repels magnetic items, or more..");
+        this.MAGNETICISM_ENABLED = buildBoolean(builder, "MAGNETICISM_ENABLED", " ", true, "Resistor Shield attracts/repels magnetic items, or more..");
         this.HEAVY_GRAVITY_ENABLED = buildBoolean(builder, "HEAVY_GRAVITY_ENABLED", " ", true, "Entities holding heavy-weight item will increase falling speed");
         this.SHOCKING_THERAPY_ENABLED = buildBoolean(builder, "SHOCKING_THERAPY_ENABLED", " ", true, "Tesla bulbs rarely directly shock nearby intruders");
         this.TESLA_COILED_ENABLED = buildBoolean(builder, "TESLA_COILED_ENABLED", " ", true, "Tesla bulbs have new added sfx from Command & Conquer");
@@ -312,9 +313,11 @@ public class ACEServerConfig {
         builder.push("Boundroid");
         this.BOUNDED_MAGNETISM_ENABLED = buildBoolean(builder, "BOUNDED_MAGNETISM_ENABLED", " ", true, "Boundroid attracts magnetic items");
         builder.pop();
-
         builder.push("Teletor");
         this.TELETOR_REARM_ENABLED = buildBoolean(builder, "TELETOR_REARM_ENABLED", " ", true, "Teletors rearm their magnetic weapons when unavailable with nearby magnetic weapons");
+        builder.pop();
+        builder.push("Notor");
+        this.SELF_DESTURCT_ENABLED = buildBoolean(builder, "SELF_DESTURCT_ENABLED", " ", true, "Notors self destruct when attacked");
         builder.pop();
         builder.pop();
 

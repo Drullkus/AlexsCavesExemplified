@@ -9,7 +9,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.datagen.advancement.ACEAdvancementProvider;
-import org.crimsoncrips.alexscavesexemplified.datagen.language.ACELangGenerator;
+import org.crimsoncrips.alexscavesexemplified.datagen.language.locale.ACEEnglishGenerator;
 import org.crimsoncrips.alexscavesexemplified.datagen.loottables.ACELootGenerator;
 
 import java.util.Collections;
@@ -32,7 +32,7 @@ public class ACEDatagen {
         generator.addProvider(event.includeServer(), new ACELootGenerator(output));
 
 
-        generator.addProvider(event.includeClient(), new ACELangGenerator(output));
+        generator.addProvider(event.includeClient(), new ACEEnglishGenerator(output));
     }
 
 }

@@ -27,11 +27,11 @@ public class ACEResistorShield extends ShieldItem {
 
     @Inject(method = "onUseTick", at = @At("TAIL"))
     private void getMaxLoadTime(Level level, LivingEntity living, ItemStack stack, int timeUsing, CallbackInfo ci) {
-        if (AlexsCavesExemplified.COMMON_CONFIG.RESISTOR_MAGNETISM_ENABLED.get()) {
+        if (AlexsCavesExemplified.COMMON_CONFIG.MAGNETICISM_ENABLED.get()) {
             int i = this.getUseDuration(stack) - timeUsing;
             boolean scarlet = isScarlet(stack);
             for (ItemEntity entity : living.level().getEntitiesOfClass(ItemEntity.class, living.getBoundingBox().inflate(5, 1, 5))) {
-                if (entity.distanceTo(living) <= 4 && (i >= 10 && i % 5 == 0) && (entity.getItem().is(ACTagRegistry.MAGNETIC_ITEMS) || stack.getEnchantmentLevel(ACEEnchants.ATOMIC_MAGNETISM.get()) > 0)) {
+                if (entity.distanceTo(living) <= 4 && (i >= 10 && i % 5 == 0) && (entity.getItem().is(ACTagRegistry.MAGNETIC_ITEMS) && stack.getEnchantmentLevel(ACEEnchants.MAGNETICISM.get()) > 0)) {
                     Vec3 arcVec = living.position().add(0, 0.65F * living.getBbHeight(), 0).subtract(entity.position());
                     if (scarlet) {
                         if (arcVec.length() > living.getBbWidth()) {

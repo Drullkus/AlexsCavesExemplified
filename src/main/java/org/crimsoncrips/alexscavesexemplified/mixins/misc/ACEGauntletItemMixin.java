@@ -3,11 +3,13 @@ package org.crimsoncrips.alexscavesexemplified.mixins.misc;
 import com.github.alexmodguy.alexscaves.server.enchantment.ACEnchantmentRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.ACEntityRegistry;
 import com.github.alexmodguy.alexscaves.server.entity.item.MagneticWeaponEntity;
+import com.github.alexmodguy.alexscaves.server.entity.living.GingerbreadManEntity;
 import com.github.alexmodguy.alexscaves.server.entity.living.TeletorEntity;
 import com.github.alexmodguy.alexscaves.server.item.GalenaGauntletItem;
 import com.github.alexmodguy.alexscaves.server.misc.ACTagRegistry;
 import com.llamalad7.mixinextras.injector.ModifyExpressionValue;
 import com.llamalad7.mixinextras.sugar.Local;
+import net.minecraft.world.InteractionHand;
 import net.minecraft.world.entity.Entity;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.item.ItemEntity;
@@ -21,6 +23,7 @@ import net.minecraft.world.phys.EntityHitResult;
 import net.minecraft.world.phys.HitResult;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 import org.crimsoncrips.alexscavesexemplified.misc.interfaces.Gammafied;
+import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;
 import org.spongepowered.asm.mixin.Debug;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -39,9 +42,10 @@ public abstract class ACEGauntletItemMixin extends Item {
     }
 
     @ModifyExpressionValue(method = "use", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;is(Lnet/minecraft/tags/TagKey;)Z"))
-    private boolean onlyFlyIfAllowed(boolean original,@Local Player player) {
+    private boolean onlyFlyIfAllowed(boolean original, @Local Player player, @Local InteractionHand interactionHand) {
+        ItemStack itemstack = player.getItemInHand(interactionHand);
         Entity itemLook = getClosestLookingAtEntityFor(player);
-        return original || ((itemLook instanceof ItemEntity item && item.getItem().is(ACTagRegistry.MAGNETIC_ITEMS) || (itemLook instanceof MagneticWeaponEntity magneticWeaponEntity && magneticWeaponEntity.getController() instanceof TeletorEntity)) && AlexsCavesExemplified.COMMON_CONFIG.GALENA_GRAB_ENABLED.get());
+        return original || ((itemLook instanceof ItemEntity item && item.getItem().is(ACTagRegistry.MAGNETIC_ITEMS) || (itemLook instanceof MagneticWeaponEntity magneticWeaponEntity && magneticWeaponEntity.getController() instanceof TeletorEntity)) && AlexsCavesExemplified.COMMON_CONFIG.GALENA_GRAB_ENABLED.get() && itemstack.getEnchantmentLevel(ACEEnchants.MAGNETICISM.get()) > 0);
     }
 
     @Inject(method = "onUseTick", at = @At(value = "INVOKE", target = "Lnet/minecraft/world/item/ItemStack;getEnchantmentLevel(Lnet/minecraft/world/item/enchantment/Enchantment;)I"))
@@ -51,32 +55,27 @@ public abstract class ACEGauntletItemMixin extends Item {
         if (living instanceof Player player){
             itemlook = getClosestLookingAtEntityFor(player);
         }
-        if (!level.getEntitiesOfClass(MagneticWeaponEntity.class, living.getBoundingBox().inflate(32, 32, 32)).isEmpty()) {
-            for(MagneticWeaponEntity magneticWeapon : level.getEntitiesOfClass(MagneticWeaponEntity.class, living.getBoundingBox().inflate(64, 64, 64))){
-                Entity controller = magneticWeapon.getController();
-                if(controller != null && controller.is(living)){
-                    otherMagneticWeaponsInUse = true;
-                    break;
-                }
+        for(MagneticWeaponEntity magneticWeapon : level.getEntitiesOfClass(MagneticWeaponEntity.class, living.getBoundingBox().inflate(48, 48, 48))){
+            Entity controller = magneticWeapon.getController();
+            if(controller != null && controller.is(living)){
+                otherMagneticWeaponsInUse = true;
+                break;
             }
+        }
 
-
-            if (!otherMagneticWeaponsInUse && AlexsCavesExemplified.COMMON_CONFIG.GALENA_GRAB_ENABLED.get()) {
-                System.out.println("Test");
-                if (itemlook instanceof MagneticWeaponEntity magneticWeaponEntity && magneticWeaponEntity.getController() instanceof TeletorEntity teletor && !otherStack.is(ACTagRegistry.TELETOR_SPAWNS_WITH)){
-                    magneticWeaponEntity.setControllerUUID(living.getUUID());
-                    teletor.setWeaponUUID(null);
-                }
-                if (itemlook instanceof ItemEntity item && grabableItems(item.getItem(),stack) && !grabableItems(otherStack,stack)) {
-                    ItemStack copy = item.getItem().copy();
-                    item.discard();
-                    MagneticWeaponEntity magneticWeapon = ACEntityRegistry.MAGNETIC_WEAPON.get().create(level);
-                    if(magneticWeapon != null){
-                        magneticWeapon.setItemStack(copy);
-                        magneticWeapon.setPos(item.position().add(0, 1, 0));
-                        magneticWeapon.setControllerUUID(living.getUUID());
-                        level.addFreshEntity(magneticWeapon);
-                    }
+        if (AlexsCavesExemplified.COMMON_CONFIG.GALENA_GRAB_ENABLED.get() && !otherMagneticWeaponsInUse && stack.getEnchantmentLevel(ACEEnchants.MAGNETICISM.get()) > 0) {
+            if (itemlook instanceof MagneticWeaponEntity magneticWeaponEntity && magneticWeaponEntity.getController() instanceof TeletorEntity teletor && !otherStack.is(ACTagRegistry.TELETOR_SPAWNS_WITH)){
+                magneticWeaponEntity.setControllerUUID(living.getUUID());
+                teletor.setWeaponUUID(null);
+            } else if (itemlook instanceof ItemEntity item && grabableItems(item.getItem(),stack) && !grabableItems(otherStack,stack)) {
+                ItemStack copy = item.getItem().copy();
+                item.discard();
+                MagneticWeaponEntity magneticWeapon = ACEntityRegistry.MAGNETIC_WEAPON.get().create(level);
+                if(magneticWeapon != null){
+                    magneticWeapon.setItemStack(copy);
+                    magneticWeapon.setPos(item.position().add(0, 1, 0));
+                    magneticWeapon.setControllerUUID(living.getUUID());
+                    level.addFreshEntity(magneticWeapon);
                 }
             }
         }

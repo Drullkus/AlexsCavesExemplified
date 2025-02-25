@@ -5,10 +5,10 @@ import net.minecraft.world.item.enchantment.Enchantment;
 import net.minecraft.world.item.enchantment.EnchantmentCategory;
 import org.crimsoncrips.alexscavesexemplified.AlexsCavesExemplified;
 
-public class ACEAtomicMagnetism extends Enchantment {
+public class ACEMagneticism extends Enchantment {
 
 
-    public ACEAtomicMagnetism(Rarity p_44676_, EnchantmentCategory p_44677_, EquipmentSlot... p_44678_) {
+    public ACEMagneticism(Rarity p_44676_, EnchantmentCategory p_44677_, EquipmentSlot... p_44678_) {
         super(p_44676_, p_44677_, p_44678_);
     }
 
@@ -29,8 +29,8 @@ public class ACEAtomicMagnetism extends Enchantment {
 
     @Override
     public String getDescriptionId() {
-        if (AlexsCavesExemplified.COMMON_CONFIG.RESISTOR_MAGNETISM_ENABLED.get()) {
-            return "enchantment.alexscavesexemplified.atomic_magnetism";
+        if (AlexsCavesExemplified.COMMON_CONFIG.MAGNETICISM_ENABLED.get()) {
+            return "enchantment.alexscavesexemplified.magneticism";
         } else {
             return "alexscavesexemplified.feature_disabled";
         }
