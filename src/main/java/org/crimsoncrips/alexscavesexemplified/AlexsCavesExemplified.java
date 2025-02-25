@@ -27,6 +27,7 @@ import org.crimsoncrips.alexscavesexemplified.server.effect.ACEEffects;
 import org.crimsoncrips.alexscavesexemplified.server.enchantment.ACEEnchants;
 import org.crimsoncrips.alexscavesexemplified.server.ACExemplifiedEvents;
 import org.crimsoncrips.alexscavesexemplified.loot.ACELootModifiers;
+import org.crimsoncrips.alexscavesexemplified.server.feature.ACEFeatureRegistry;
 import org.crimsoncrips.alexscavesexemplified.server.item.ACEItemRegistry;
 
 import java.util.Locale;
@@ -71,6 +72,7 @@ public class AlexsCavesExemplified {
         ACEEffects.EFFECT_REGISTER.register(modEventBus);
         ACESoundRegistry.DEF_REG.register(modEventBus);
         ACEEffects.POTION_REGISTER.register(modEventBus);
+        ACEFeatureRegistry.DEF_REG.register(modEventBus);
         MinecraftForge.EVENT_BUS.register(new ACEClientEvents());
 
         modEventBus.addListener(this::setup);

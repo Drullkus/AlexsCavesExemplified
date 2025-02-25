@@ -813,36 +813,16 @@ public class ACExemplifiedEvents {
         BlockState blockState = level.getBlockState(blockPos);
         RandomSource random = level.getRandom();
 
-        if (level.getBiome(blockPos).is(ACBiomeRegistry.PRIMORDIAL_CAVES) && AlexsCavesExemplified.COMMON_CONFIG.CAVIAL_BONEMEAL_ENABLED.get() && level.getBlockState(blockPos).is(Blocks.GRASS_BLOCK) && level instanceof ServerLevel serverLevel && entity == null){
+		if (level.getBiome(blockPos).is(ACBiomeRegistry.PRIMORDIAL_CAVES) && AlexsCavesExemplified.COMMON_CONFIG.CAVIAL_BONEMEAL_ENABLED.get() && level.getBlockState(blockPos).is(Blocks.GRASS_BLOCK) && level instanceof ServerLevel serverLevel && entity != null) {
             bonemealEvent.setCanceled(true);
 
             BlockPos $$4 = blockPos.above();
             BlockState $$5 = Blocks.GRASS.defaultBlockState();
             Optional<Holder.Reference<PlacedFeature>> placedFeature = level.registryAccess().registryOrThrow(Registries.PLACED_FEATURE).getHolder(ACEFeatures.PLACED_PRIMORDIAL_BONEMEAL);
 
-            label49:
-            for(int $$7 = 0; $$7 < 128; ++$$7) {
-                BlockPos $$8 = $$4;
-
-                for(int $$9 = 0; $$9 < $$7 / 16; ++$$9) {
-                    $$8 = $$8.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
-                    if (!level.getBlockState($$8.below()).is(Blocks.GRASS_BLOCK) || level.getBlockState($$8).isCollisionShapeFullBlock(level, $$8)) {
-                        continue label49;
-                    }
-                }
-
-                BlockState $$10 = level.getBlockState($$8);
-                if ($$10.is($$5.getBlock()) && random.nextInt(10) == 0) {
-                    ((BonemealableBlock)$$5.getBlock()).performBonemeal(serverLevel, random, $$8, $$10);
-                }
-
-                if ($$10.isAir() && placedFeature.isPresent()) {
-                    Holder<PlacedFeature> $$12 = placedFeature.get();
-
-
-                    ($$12.value()).place(serverLevel,serverLevel.getChunkSource().getGenerator(), random, $$8);
-                }
-            }
+			//noinspection OptionalIsPresent
+			if (placedFeature.isPresent())
+                tryPlacePrimordialBonemeal(serverLevel, $$4, random, level, $$5, placedFeature.get().value());
         }
 
 
@@ -856,6 +836,29 @@ public class ACExemplifiedEvents {
             }
         }
 
+    }
+
+    private void tryPlacePrimordialBonemeal(ServerLevel serverLevel, BlockPos placePos, RandomSource random, Level level, BlockState placeOn, PlacedFeature placedFeature) {
+        label49:
+        for(int tries = 0; tries < 128; ++tries) {
+            BlockPos tryPos = placePos;
+
+            for(int i = 0; i < tries / 16; ++i) {
+                tryPos = tryPos.offset(random.nextInt(3) - 1, (random.nextInt(3) - 1) * random.nextInt(3) / 2, random.nextInt(3) - 1);
+                if (!level.getBlockState(tryPos.below()).is(Blocks.GRASS_BLOCK) || level.getBlockState(tryPos).isCollisionShapeFullBlock(level, tryPos)) {
+                    continue label49;
+                }
+            }
+
+            BlockState blockAt = level.getBlockState(tryPos);
+            if (blockAt.is(placeOn.getBlock()) && random.nextInt(10) == 0) {
+                ((BonemealableBlock) placeOn.getBlock()).performBonemeal(serverLevel, random, tryPos, blockAt);
+            }
+
+			if (blockAt.isAir()) {
+                placedFeature.feature().value().place(serverLevel, serverLevel.getChunkSource().getGenerator(), random, tryPos);
+			}
+        }
     }
 
     @SubscribeEvent
